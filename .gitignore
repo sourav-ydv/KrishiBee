@@ -14,6 +14,8 @@ data/processed/*.csv
 data/processed/plots/
 data/final/*.csv
 data/final/*.json
+!data/final/feature_info.json
+!data/final/scaler_params.json
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/final/.gitkeep

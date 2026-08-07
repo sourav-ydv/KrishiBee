@@ -1,0 +1,64 @@
+{
+  "numeric_features": [
+    "sand_pct",
+    "clay_pct",
+    "silt_pct",
+    "soil_pH",
+    "nitrogen_ppm",
+    "organic_carbon_pct",
+    "bulk_density_gcm3",
+    "soil_moisture_pct",
+    "phosphorus_ppm",
+    "potassium_ppm",
+    "temperature_C",
+    "humidity_pct",
+    "rainfall_7day_mm",
+    "solar_radiation_MJ",
+    "wind_speed_ms",
+    "seed_size_mm",
+    "seed_weight_1000g",
+    "sowing_month",
+    "latitude",
+    "longitude"
+  ],
+  "categorical_features": [
+    "state",
+    "season",
+    "soil_texture_class",
+    "crop_name"
+  ],
+  "binary_features": [
+    "rain_expected"
+  ],
+  "target_regression": "optimal_depth_cm",
+  "target_classification": "depth_class",
+  "category_encodings": {
+    "state": {
+      "Haryana": 0,
+      "Madhya Pradesh": 1,
+      "Punjab": 2,
+      "Rajasthan": 3,
+      "Uttar Pradesh": 4
+    },
+    "season": {
+      "Kharif": 0,
+      "Rabi": 1
+    },
+    "soil_texture_class": {
+      "Clay": 0,
+      "Clay Loam": 1,
+      "Loam": 2,
+      "Sandy Loam": 3
+    },
+    "crop_name": {
+      "Chickpea": 0,
+      "Maize": 1,
+      "Mustard": 2,
+      "Pearl Millet": 3,
+      "Pigeon Pea": 4,
+      "Rice": 5,
+      "Soybean": 6,
+      "Wheat": 7
+    }
+  }
+}
