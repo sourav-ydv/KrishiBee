@@ -1,0 +1,22 @@
+=== STRUCTURAL VALIDATION ===
+
+[PASS] Texture sums to ~100% -- 0 rows outside [98,102]% sum
+[PASS] pH in valid range (3.5-10) -- 0 rows out of range
+[PASS] Depth within crop bounds (+/- overshoot) -- 0 rows out of bounds
+[PASS] No missing values -- 0 missing cells total
+[PASS] No exact duplicate rows -- 0 duplicate rows
+[PASS] Soil moisture in plausible range -- 0 rows out of range
+
+=== WITHIN-CROP DEPTH VARIANCE ===
+(low std_as_pct_of_range means soil/weather barely move the
+ needle for that crop -- depth is mostly determined by crop identity)
+
+        crop  depth_std  crop_allowed_range_cm  std_as_pct_of_range
+    Chickpea      0.358                    2.0                 17.9
+        Rice      0.316                    1.5                 21.1
+Pearl Millet      0.462                    2.0                 23.1
+       Maize      0.484                    2.0                 24.2
+  Pigeon Pea      0.311                    1.0                 31.1
+       Wheat      0.339                    1.0                 33.9
+     Soybean      0.350                    1.0                 35.0
+     Mustard      0.368                    1.0                 36.8
