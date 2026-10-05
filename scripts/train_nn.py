@@ -21,7 +21,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 SOIL_FEATURES = [
     "sand_pct", "clay_pct", "silt_pct", "soil_pH", "nitrogen_ppm",
-    "organic_carbon_pct", "bulk_density_gcm3", "soil_moisture_pct",
+    "organic_carbon_gkg", "bulk_density_gcm3", "soil_moisture_pct",
     "phosphorus_ppm", "potassium_ppm", "soil_texture_class_encoded",
 ]
 WEATHER_FEATURES = [

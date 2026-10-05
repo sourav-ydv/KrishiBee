@@ -1,52 +1,52 @@
 
 === RandomForest ===
-5-fold CV MAE on train: 0.131cm (+/- 0.006)
-Validation: {'mae': 0.13394776608126302, 'rmse': np.float64(0.1698150310179719), 'r2': 0.9882456822121626}
-Test: {'mae': 0.12703474802465012, 'rmse': np.float64(0.16756507041437577), 'r2': 0.9891172135158375}
+5-fold CV MAE on train: 0.131cm (+/- 0.007)
+Validation: {'mae': 0.1336800302769917, 'rmse': np.float64(0.16942307741270757), 'r2': 0.9882998803627102}
+Test: {'mae': 0.12752035455870522, 'rmse': np.float64(0.16766907605665424), 'r2': 0.9891036996914498}
 
 Top 8 feature importances:
-crop_name_encoded             0.494231
-seed_size_mm                  0.419987
-rainfall_7day_mm              0.029019
-soil_moisture_pct             0.025738
-seed_weight_1000g             0.008527
-clay_pct                      0.004406
-sand_pct                      0.003754
-soil_texture_class_encoded    0.002903
+crop_name_encoded             0.494580
+seed_size_mm                  0.420240
+rainfall_7day_mm              0.028769
+soil_moisture_pct             0.025681
+seed_weight_1000g             0.008137
+clay_pct                      0.004462
+sand_pct                      0.003692
+soil_texture_class_encoded    0.002904
 
 Per-crop breakdown:
         crop  mae_cm  r2_within_crop
-     Mustard   0.161           0.682
-    Chickpea   0.175           0.745
-        Rice   0.132           0.750
-       Wheat   0.119           0.799
-  Pigeon Pea   0.100           0.816
-     Soybean   0.076           0.838
-Pearl Millet   0.143           0.873
-       Maize   0.108           0.923
+     Mustard   0.166           0.669
+    Chickpea   0.176           0.741
+        Rice   0.133           0.751
+       Wheat   0.120           0.798
+  Pigeon Pea   0.099           0.819
+     Soybean   0.075           0.843
+Pearl Millet   0.146           0.875
+       Maize   0.105           0.927
 
 === XGBoost ===
-5-fold CV MAE on train: 0.134cm (+/- 0.007)
-Validation: {'mae': 0.13220452286731238, 'rmse': np.float64(0.16622440599297703), 'r2': 0.9887375014045557}
-Test: {'mae': 0.1208086464870935, 'rmse': np.float64(0.1610448731046581), 'r2': 0.9899476655645868}
+5-fold CV MAE on train: 0.134cm (+/- 0.004)
+Validation: {'mae': 0.13321588861531225, 'rmse': np.float64(0.16833283039708877), 'r2': 0.9884499777149364}
+Test: {'mae': 0.1246509222600652, 'rmse': np.float64(0.1618485207904001), 'r2': 0.9898470887260726}
 
 Top 8 feature importances:
-crop_name_encoded             0.701228
-seed_size_mm                  0.144971
-sowing_month                  0.051087
-rainfall_7day_mm              0.035848
-soil_moisture_pct             0.021405
-soil_texture_class_encoded    0.016469
-seed_weight_1000g             0.009654
-clay_pct                      0.005014
+crop_name_encoded             0.704752
+seed_size_mm                  0.147561
+rainfall_7day_mm              0.040483
+sowing_month                  0.039037
+soil_moisture_pct             0.024384
+soil_texture_class_encoded    0.016987
+seed_weight_1000g             0.007773
+clay_pct                      0.005088
 
 Per-crop breakdown:
         crop  mae_cm  r2_within_crop
-     Mustard   0.194           0.551
-    Chickpea   0.180           0.727
-       Wheat   0.115           0.802
-        Rice   0.119           0.808
-     Soybean   0.071           0.867
-  Pigeon Pea   0.086           0.880
-Pearl Millet   0.121           0.918
-       Maize   0.079           0.958
+     Mustard   0.198           0.569
+    Chickpea   0.168           0.757
+        Rice   0.129           0.786
+       Wheat   0.114           0.813
+     Soybean   0.079           0.859
+  Pigeon Pea   0.092           0.861
+Pearl Millet   0.120           0.918
+       Maize   0.096           0.935

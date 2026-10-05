@@ -10,7 +10,7 @@ OUTPUT_DIR = "data/final"
 
 NUMERIC_FEATURES = [
     "sand_pct", "clay_pct", "silt_pct", "soil_pH", "nitrogen_ppm",
-    "organic_carbon_pct", "bulk_density_gcm3", "soil_moisture_pct",
+    "organic_carbon_gkg", "bulk_density_gcm3", "soil_moisture_pct",
     "phosphorus_ppm", "potassium_ppm", "temperature_C", "humidity_pct",
     "rainfall_7day_mm", "solar_radiation_MJ", "wind_speed_ms",
     "seed_size_mm", "seed_weight_1000g", "sowing_month", "latitude", "longitude",

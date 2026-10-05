@@ -30,12 +30,6 @@ def classify_texture(sand_pct: float, clay_pct: float) -> str:
 
 def estimate_soil_moisture_pct(clay_pct: float, sand_pct: float,
                                 organic_carbon: float, rainfall_7day_mm: float) -> float:
-    """
-    Heuristic: clay + organic matter hold water (raise moisture),
-    sand drains fast (lowers it), recent rainfall adds to it.
-    Coefficients are illustrative, not from a specific published study —
-    document as an estimation method, not a measured value.
-    """
     base = 8 + clay_pct * 0.35 + organic_carbon * 0.8 - sand_pct * 0.05
     rain_contribution = min(rainfall_7day_mm * 0.3, 15)
     moisture = base + rain_contribution + random.gauss(0, 1.5)
@@ -52,7 +46,7 @@ STATE_NPK_REFERENCE_PPM = {
 
 def estimate_phosphorus_ppm(organic_carbon: float, clay_pct: float, state: str) -> float:
     p_min, p_max = STATE_NPK_REFERENCE_PPM[state]["phosphorus_ppm_range"]
-    oc_score = min(max((organic_carbon - 0.2) / (1.2 - 0.2), 0), 1)
+    oc_score = min(max((organic_carbon - 2) / (12 - 2), 0), 1)
     clay_score = min(max(clay_pct / 60, 0), 1)
     fertility_score = 0.7 * oc_score + 0.3 * clay_score
     base = p_min + fertility_score * (p_max - p_min)
@@ -122,7 +116,7 @@ def main():
                 "clay_pct": r["clay"],
                 "silt_pct": r["silt"],
                 "soil_pH": r["phh2o"],
-                "organic_carbon_pct": r["soc"],
+                "organic_carbon_gkg": r["soc"],
                 "bulk_density_gcm3": r["bdod"],
                 "nitrogen_ppm": nitrogen_ppm,
                 "soil_texture_class": texture_class,

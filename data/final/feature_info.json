@@ -5,7 +5,7 @@
     "silt_pct",
     "soil_pH",
     "nitrogen_ppm",
-    "organic_carbon_pct",
+    "organic_carbon_gkg",
     "bulk_density_gcm3",
     "soil_moisture_pct",
     "phosphorus_ppm",
