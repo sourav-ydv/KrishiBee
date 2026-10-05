@@ -1,0 +1,52 @@
+
+=== RandomForest ===
+5-fold CV MAE on train: 0.131cm (+/- 0.006)
+Validation: {'mae': 0.13394776608126302, 'rmse': np.float64(0.1698150310179719), 'r2': 0.9882456822121626}
+Test: {'mae': 0.12703474802465012, 'rmse': np.float64(0.16756507041437577), 'r2': 0.9891172135158375}
+
+Top 8 feature importances:
+crop_name_encoded             0.494231
+seed_size_mm                  0.419987
+rainfall_7day_mm              0.029019
+soil_moisture_pct             0.025738
+seed_weight_1000g             0.008527
+clay_pct                      0.004406
+sand_pct                      0.003754
+soil_texture_class_encoded    0.002903
+
+Per-crop breakdown:
+        crop  mae_cm  r2_within_crop
+     Mustard   0.161           0.682
+    Chickpea   0.175           0.745
+        Rice   0.132           0.750
+       Wheat   0.119           0.799
+  Pigeon Pea   0.100           0.816
+     Soybean   0.076           0.838
+Pearl Millet   0.143           0.873
+       Maize   0.108           0.923
+
+=== XGBoost ===
+5-fold CV MAE on train: 0.134cm (+/- 0.007)
+Validation: {'mae': 0.13220452286731238, 'rmse': np.float64(0.16622440599297703), 'r2': 0.9887375014045557}
+Test: {'mae': 0.1208086464870935, 'rmse': np.float64(0.1610448731046581), 'r2': 0.9899476655645868}
+
+Top 8 feature importances:
+crop_name_encoded             0.701228
+seed_size_mm                  0.144971
+sowing_month                  0.051087
+rainfall_7day_mm              0.035848
+soil_moisture_pct             0.021405
+soil_texture_class_encoded    0.016469
+seed_weight_1000g             0.009654
+clay_pct                      0.005014
+
+Per-crop breakdown:
+        crop  mae_cm  r2_within_crop
+     Mustard   0.194           0.551
+    Chickpea   0.180           0.727
+       Wheat   0.115           0.802
+        Rice   0.119           0.808
+     Soybean   0.071           0.867
+  Pigeon Pea   0.086           0.880
+Pearl Millet   0.121           0.918
+       Maize   0.079           0.958
