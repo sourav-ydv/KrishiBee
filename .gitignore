@@ -25,3 +25,6 @@ Thumbs.db
 
 .vscode/
 *.ipynb_checkpoints
+
+models/*.pkl
+models/*.pt
