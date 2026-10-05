@@ -1,13 +1,3 @@
-"""
-prepare_final_dataset.py
-
-Encodes categorical features, scales numeric features, and creates a
-stratified train/val/test split from the validated dataset. Also saves
-feature_info.json and scaler_params.json -- these are REQUIRED at
-inference time to process new farmer inputs the same way training
-data was processed.
-"""
-
 import pandas as pd
 import numpy as np
 import json

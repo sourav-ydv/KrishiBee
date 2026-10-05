@@ -1,15 +1,3 @@
-"""
-collect_weather_data.py
-
-Pulls long-term climatological weather averages from the NASA POWER
-API for the same coordinates collected in collect_soil_data.py.
-For each coordinate, generates TWO rows: one for the Rabi sowing
-window (~November) and one for the Kharif sowing window (~June).
-
-NASA POWER climatology docs:
-https://power.larc.nasa.gov/docs/services/api/temporal/climatology/
-"""
-
 import requests
 import pandas as pd
 import time
@@ -34,7 +22,6 @@ CHECKPOINT_PATH = "data/raw/weather_data_checkpoint.json"
 
 
 def fetch_climatology_point(lat: float, lon: float, retries: int = 3) -> dict:
-    """Fetch monthly climatology for one coordinate. Returns raw JSON properties, or None."""
     params = {
         "parameters": ",".join(PARAMETERS),
         "community": "AG",
@@ -59,12 +46,6 @@ def fetch_climatology_point(lat: float, lon: float, retries: int = 3) -> dict:
 
 
 def estimate_rain_proxy(monthly_precip_mm_day: float, all_months_precip: list) -> tuple:
-    """
-    Derive a proxy rain_expected flag + estimated 7-day rainfall from
-    the monthly climatological daily average. A month is flagged
-    'rain expected' if its avg daily precip is above the location's
-    own median month (i.e. relatively wet for that specific place).
-    """
     rainfall_7day_mm = round(monthly_precip_mm_day * 7, 2)
     median_precip = sorted(all_months_precip)[len(all_months_precip) // 2]
     rain_expected = monthly_precip_mm_day > median_precip
@@ -72,7 +53,6 @@ def estimate_rain_proxy(monthly_precip_mm_day: float, all_months_precip: list) -
 
 
 def parse_season_rows(data: dict, lat: float, lon: float, state: str) -> list:
-    """Extract Rabi and Kharif rows from one point's climatology response."""
     try:
         params_data = data["properties"]["parameter"]
     except (KeyError, TypeError):

@@ -1,12 +1,3 @@
-"""
-validate_dataset.py
-
-Validates the synthesized dataset for structural integrity AND checks
-whether the depth label actually varies meaningfully within each crop
-(not just between crops) -- this second check matters because if it
-doesn't, soil/weather features aren't adding real signal to the target.
-"""
-
 import pandas as pd
 import numpy as np
 import os
@@ -18,7 +9,6 @@ PLOTS_DIR = "data/processed/plots"
 
 
 def run_structural_checks(df: pd.DataFrame) -> list:
-    """Basic sanity checks. Returns list of (check_name, pass/fail, detail) tuples."""
     checks = []
 
     texture_sum = df["sand_pct"] + df["clay_pct"] + df["silt_pct"]
@@ -48,12 +38,6 @@ def run_structural_checks(df: pd.DataFrame) -> list:
 
 
 def check_within_crop_variance(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    THE IMPORTANT CHECK: for each crop, how much does depth actually
-    vary across different soil/weather conditions? If std is tiny
-    relative to the crop's allowed range, soil/weather aren't
-    contributing much signal for that crop.
-    """
     rows = []
     for crop in df["crop_name"].unique():
         subset = df[df["crop_name"] == crop]

@@ -1,13 +1,3 @@
-"""
-crop_database.py
-
-Agronomic ground-truth data for sowing depth calculation.
-Sources: ICAR crop production manuals, FAO crop guidelines, KVK
-extension booklets. Depth ranges are the published safe range for
-each crop under normal conditions; adjustment rules shift within 
-that range based on soil and weather.
-"""
-
 CROP_DATA = {
     "Wheat": {
         "season": "Rabi",
@@ -76,7 +66,6 @@ CROP_DATA = {
 }
 
 def texture_adjustment(soil_texture_class: str) -> float:
-    """Sandy = go deeper (chases moisture). Clay = go shallower (avoid crusting)."""
     rules = {
         "Sandy": +0.5,
         "Sandy Loam": +0.3,
@@ -88,11 +77,6 @@ def texture_adjustment(soil_texture_class: str) -> float:
 
 
 def moisture_adjustment(soil_moisture_pct: float) -> float:
-    """
-    Continuous version: dry topsoil -> deeper, wet topsoil -> shallower.
-    Anchor points: 5% moisture -> +0.6cm, 20% -> 0cm, 35% -> -0.4cm,
-    linearly interpolated between, flat beyond the ends.
-    """
     m = soil_moisture_pct
     if m <= 5:
         return 0.6
@@ -105,10 +89,6 @@ def moisture_adjustment(soil_moisture_pct: float) -> float:
 
 
 def temperature_adjustment(temperature_c: float, season: str) -> float:
-    """
-    Continuous version. Rabi: cold mornings -> shallower (warmth-seeking).
-    Any season: extreme heat -> deeper (cooler soil).
-    """
     delta = 0.0
     if season == "Rabi" and temperature_c < 18:
         delta += max(-0.4, (temperature_c - 18) * (-0.4) / (5 - 18))
@@ -118,10 +98,6 @@ def temperature_adjustment(temperature_c: float, season: str) -> float:
 
 
 def rain_adjustment(rain_expected: bool, rainfall_7day_mm: float) -> float:
-    """
-    Continuous version: more expected rain -> shallower, up to a cap
-    (avoid over-shallowing before very heavy rain, waterlogging risk).
-    """
     if not rain_expected:
         return 0.0
     delta = -0.2 - min(0.35, (rainfall_7day_mm - 5) * 0.35 / 25)
@@ -135,10 +111,6 @@ def calculate_sowing_depth(
     rainfall_7day_mm: float,
     temperature_c: float,
 ) -> dict:
-    """
-    Returns the recommended depth plus a breakdown of why, so the
-    output is explainable — not a black-box number.
-    """
     if crop_name not in CROP_DATA:
         raise ValueError(f"Unknown crop: {crop_name}. Valid options: {list(CROP_DATA.keys())}")
 

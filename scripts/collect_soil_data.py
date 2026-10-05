@@ -1,13 +1,3 @@
-"""
-collect_soil_data.py
-
-Pulls soil property data from the SoilGrids v2.0 REST API for a grid
-of coordinates across target Indian states. This gives real,
-geographically-varied soil inputs for the dataset.
-
-SoilGrids docs: https://www.isric.org/explore/soilgrids/soilgrids-access
-"""
-
 import requests
 import pandas as pd
 import time
@@ -34,7 +24,6 @@ CHECKPOINT_PATH = "data/raw/soil_data_checkpoint.json"
 
 
 def generate_grid_coordinates(bounds: tuple, n_points: int) -> list:
-    """Roughly evenly-spaced grid of (lat, lon) within bounds."""
     min_lat, max_lat, min_lon, max_lon = bounds
     side = math.ceil(math.sqrt(n_points))
     lats = [min_lat + (max_lat - min_lat) * i / (side - 1) for i in range(side)]
@@ -44,7 +33,6 @@ def generate_grid_coordinates(bounds: tuple, n_points: int) -> list:
 
 
 def fetch_soil_point(lat: float, lon: float, retries: int = 3) -> dict:
-    """Fetch soil properties for one coordinate. Returns a flat dict, or None on failure."""
     params = {"lon": lon, "lat": lat, "property": PROPERTIES, "depth": DEPTH, "value": "mean"}
     for attempt in range(retries):
         try:
@@ -63,7 +51,6 @@ def fetch_soil_point(lat: float, lon: float, retries: int = 3) -> dict:
 
 
 def parse_soilgrids_response(data: dict, lat: float, lon: float) -> dict:
-    """Extract mean values for each property from the SoilGrids JSON response."""
     row = {"latitude": lat, "longitude": lon}
     try:
         for layer in data["properties"]["layers"]:
