@@ -2,8 +2,11 @@ import sys
 import os
 import json
 import torch
+import pandas as pd
+from math import radians, sin, cos, sqrt, atan2
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+from fastapi.middleware.cors import CORSMiddleware
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "scripts"))
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "models"))
@@ -13,7 +16,7 @@ from synthesize_dataset import (
     classify_texture, estimate_soil_moisture_pct,
     estimate_phosphorus_ppm, estimate_potassium_ppm,
 )
-from collect_soil_data import fetch_soil_point
+from collect_soil_data import fetch_soil_point, STATE_BOUNDS
 from collect_weather_data import fetch_climatology_point, parse_season_rows, SOWING_MONTHS
 from agrodynamicnet import AgroDynamicNet
 
@@ -36,6 +39,13 @@ WEATHER_FEATURES = [
 CROP_NUMERIC_FEATURES = ["seed_size_mm", "seed_weight_1000g", "latitude", "longitude"]
 
 app = FastAPI(title="KrishiBee Sowing Depth API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 with open(FEATURE_INFO_PATH) as f:
     feature_info = json.load(f)
@@ -189,6 +199,31 @@ def build_response(crop_name, state, latitude, longitude, season, sowing_month,
         note=note,
     )
 
+SOIL_CACHE_PATH = "data/raw/soil_data_raw.csv"
+_soil_cache = pd.read_csv(SOIL_CACHE_PATH) if os.path.exists(SOIL_CACHE_PATH) else None
+
+
+def haversine_km(lat1, lon1, lat2, lon2):
+    R = 6371
+    dlat = radians(lat2 - lat1)
+    dlon = radians(lon2 - lon1)
+    a = sin(dlat / 2) ** 2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2) ** 2
+    return R * 2 * atan2(sqrt(a), sqrt(1 - a))
+
+
+def nearest_cached_soil_point(lat, lon):
+    if _soil_cache is None or _soil_cache.empty:
+        return None
+    distances = _soil_cache.apply(
+        lambda r: haversine_km(lat, lon, r["latitude"], r["longitude"]), axis=1
+    )
+    nearest_idx = distances.idxmin()
+    row = _soil_cache.loc[nearest_idx]
+    return {
+        "sand": row["sand"], "clay": row["clay"], "phh2o": row["phh2o"],
+        "soc": row["soc"], "bdod": row["bdod"], "nitrogen": row["nitrogen"],
+    }, round(distances[nearest_idx], 1)
+
 
 @app.get("/health")
 def health():
@@ -215,9 +250,31 @@ def predict_by_location(req: LocationDepthRequest):
     if req.season not in SOWING_MONTHS:
         raise HTTPException(400, f"Unknown season '{req.season}'. Valid: {list(SOWING_MONTHS.keys())}")
 
+    if req.state not in STATE_BOUNDS:
+        raise HTTPException(400, f"Unknown state '{req.state}'.")
+    min_lat, max_lat, min_lon, max_lon = STATE_BOUNDS[req.state]
+    if not (min_lat <= req.latitude <= max_lat and min_lon <= req.longitude <= max_lon):
+        raise HTTPException(
+            400,
+            f"That location doesn't fall within {req.state}. Click a point inside {req.state}, "
+            f"or change the State dropdown to match where you clicked.",
+        )
+
     soil_data = fetch_soil_point(req.latitude, req.longitude)
-    if soil_data is None:
-        raise HTTPException(502, "Could not fetch soil data for this location. Try again shortly.")
+    required_soil_fields = ["sand", "clay", "phh2o", "soc", "bdod", "nitrogen"]
+    missing = [f for f in required_soil_fields if not soil_data or soil_data.get(f) is None]
+
+    used_fallback = False
+    fallback_distance_km = None
+    if missing:
+        fallback = nearest_cached_soil_point(req.latitude, req.longitude)
+        if fallback is None:
+            raise HTTPException(
+                502,
+                "Live soil data is unavailable and no cached data could be found. Try the manual /predict endpoint instead.",
+            )
+        soil_data, fallback_distance_km = fallback
+        used_fallback = True
 
     climatology = fetch_climatology_point(req.latitude, req.longitude)
     if climatology is None:
@@ -228,10 +285,16 @@ def predict_by_location(req: LocationDepthRequest):
     if weather_row is None:
         raise HTTPException(502, "Weather data parsing failed for the requested season.")
 
-    return build_response(
+    result = build_response(
         req.crop_name, req.state, req.latitude, req.longitude, req.season, weather_row["sowing_month"],
         soil_data["sand"], soil_data["clay"], soil_data["phh2o"], soil_data["soc"],
         soil_data["bdod"], round(soil_data["nitrogen"] * 1000, 2),
         weather_row["temperature_C"], weather_row["humidity_pct"], weather_row["rainfall_7day_mm"],
         weather_row["rain_expected"], weather_row["solar_radiation_MJ"], weather_row["wind_speed_ms"],
     )
+    if used_fallback:
+        result.note = (
+            f"Live soil data unavailable (SoilGrids API is currently paused). "
+            f"Used cached data from {fallback_distance_km} km away instead. {result.note}"
+        )
+    return result

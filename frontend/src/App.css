@@ -1,0 +1,246 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #f6f6e8;
+  color: #2f3b2f;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+header h1 {
+  color: #3e6f52;
+  margin-bottom: 4px;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 24px;
+}
+
+.map-panel {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.prediction-form {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.prediction-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  gap: 4px;
+}
+
+.prediction-form select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.coords {
+  font-size: 13px;
+  color: #666;
+}
+
+.prediction-form button {
+  background: #3e6f52;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.prediction-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.results-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-left: 4px solid #3e6f52;
+}
+
+.results-card.warning {
+  border-left-color: #c0392b;
+}
+
+.depth-row {
+  display: flex;
+  gap: 24px;
+  margin: 12px 0;
+}
+
+.depth-row .label {
+  display: block;
+  font-size: 12px;
+  color: #777;
+}
+
+.depth-row .value {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: #3e6f52;
+}
+
+.range {
+  font-size: 14px;
+  color: #555;
+}
+
+.note {
+  font-size: 13px;
+  font-style: italic;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #777;
+  margin-top: 8px;
+}
+
+.error {
+  color: #c0392b;
+  font-size: 14px;
+}
+
+@media (max-width: 800px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.coords-missing {
+  color: #c0392b;
+}
+
+.error-box {
+  background: #fdecea;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.error-box .error {
+  margin: 0;
+}
+
+.retry-btn {
+  align-self: flex-start;
+  background: #c0392b;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-line {
+  height: 14px;
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.skeleton-title {
+  width: 40%;
+  height: 20px;
+}
+
+.skeleton-wide {
+  width: 70%;
+}
+
+.skeleton-row {
+  display: flex;
+  gap: 16px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 12px;
+  }
+  header h1 {
+    font-size: 28px;
+  }
+  .depth-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .prediction-form select,
+  .prediction-form button {
+    font-size: 16px;
+  }
+}
