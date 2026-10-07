@@ -37,17 +37,18 @@ Both return the neural network's prediction alongside the rule engine's predicti
 
 ## Project structure
 
+```
 KrishiBee/
-├── scripts/ # data collection, synthesis, validation, training
-├── models/ # model architecture + trained weights
-├── api/ # FastAPI backend
-├── frontend/ # React app
+├── scripts/          # data collection, synthesis, validation, training
+├── models/           # model architecture + trained weights
+├── api/               # FastAPI backend
+├── frontend/          # React app
 ├── data/
-│ ├── raw/ # SoilGrids + NASA POWER output
-│ ├── processed/ # synthesized + validated datasets, reports
-│ └── final/ # train/val/test splits, scaler + feature config
+│   ├── raw/           # SoilGrids + NASA POWER output
+│   ├── processed/     # synthesized + validated datasets, reports
+│   └── final/          # train/val/test splits, scaler + feature config
 └── notebooks/
-
+```
 
 ## Running locally
 
