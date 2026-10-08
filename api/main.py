@@ -40,9 +40,11 @@ CROP_NUMERIC_FEATURES = ["seed_size_mm", "seed_weight_1000g", "latitude", "longi
 
 app = FastAPI(title="KrishiBee Sowing Depth API")
 
+allowed_origins = os.environ.get("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=allowed_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
