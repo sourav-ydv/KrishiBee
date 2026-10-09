@@ -32,11 +32,11 @@ def generate_grid_coordinates(bounds: tuple, n_points: int) -> list:
     return points[:n_points]
 
 
-def fetch_soil_point(lat: float, lon: float, retries: int = 3) -> dict:
+def fetch_soil_point(lat: float, lon: float, retries: int = 3, timeout: int = 20) -> dict:
     params = {"lon": lon, "lat": lat, "property": PROPERTIES, "depth": DEPTH, "value": "mean"}
     for attempt in range(retries):
         try:
-            resp = requests.get(SOILGRIDS_URL, params=params, timeout=20)
+            resp = requests.get(SOILGRIDS_URL, params=params, timeout=timeout)
             if resp.status_code == 200:
                 return parse_soilgrids_response(resp.json(), lat, lon)
             elif resp.status_code == 429:

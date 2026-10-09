@@ -19,6 +19,7 @@ data/final/*.json
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/final/.gitkeep
+!data/raw/soil_data_raw.csv
 
 .DS_Store
 Thumbs.db

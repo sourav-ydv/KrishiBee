@@ -262,7 +262,7 @@ def predict_by_location(req: LocationDepthRequest):
             f"or change the State dropdown to match where you clicked.",
         )
 
-    soil_data = fetch_soil_point(req.latitude, req.longitude)
+    soil_data = fetch_soil_point(req.latitude, req.longitude, retries=1, timeout=6)
     required_soil_fields = ["sand", "clay", "phh2o", "soc", "bdod", "nitrogen"]
     missing = [f for f in required_soil_fields if not soil_data or soil_data.get(f) is None]
 
