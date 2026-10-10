@@ -2,6 +2,7 @@ import sys
 import os
 import json
 import torch
+import random
 import pandas as pd
 from math import radians, sin, cos, sqrt, atan2
 from fastapi import FastAPI, HTTPException
@@ -127,6 +128,7 @@ def build_response(crop_name, state, latitude, longitude, season, sowing_month,
     if silt_pct < 0:
         raise HTTPException(400, "sand_pct + clay_pct exceeds 100%.")
 
+    random.seed(42)
     texture_class = classify_texture(sand_pct, clay_pct)
     moisture_pct = estimate_soil_moisture_pct(clay_pct, sand_pct, organic_carbon_gkg, rainfall_7day_mm)
     phosphorus = estimate_phosphorus_ppm(organic_carbon_gkg, clay_pct, state)
