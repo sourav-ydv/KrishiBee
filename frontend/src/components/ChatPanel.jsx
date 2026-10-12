@@ -13,7 +13,7 @@ function describeChatError(err) {
     return "Can't reach the server. Please try again.";
   }
   if (err.response.status === 429) {
-    return "The assistant is busy right now. Please wait a minute and try again.";
+    return err.response.data?.detail || "The assistant is busy right now. Please wait a minute and try again.";
   }
   if (err.response.status === 503) {
     return "The assistant isn't available right now.";

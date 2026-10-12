@@ -14,6 +14,24 @@ STOPWORDS = {
     "wheat", "rice", "maize", "chickpea", "mustard", "soybean", "millet", "pearl", "pigeon", "pea",
 }
 
+HINDI_TERMS = {
+    "sichai": "irrigation", "sinchai": "irrigation", "sinchaai": "irrigation", "sichayi": "irrigation",
+    "सिंचाई": "irrigation", "pani": "water", "paani": "water", "पानी": "water",
+    "kab": "when timing", "kb": "when timing", "कब": "when timing", "samay": "timing", "समय": "timing",
+    "din": "days", "दिन": "days",
+    "pehli": "first", "pahli": "first", "पहली": "first", "pehla": "first", "पहला": "first",
+    "kitna": "how much amount", "kitni": "how much amount", "कितना": "how much amount", "कितनी": "how much amount",
+    "matra": "amount", "मात्रा": "amount",
+    "bowai": "sowing", "buwai": "sowing", "bovai": "sowing", "बुवाई": "sowing", "बुआई": "sowing",
+    "khad": "fertilizer", "खाद": "fertilizer", "urvarak": "fertilizer", "उर्वरक": "fertilizer",
+}
+
+
+def expand_query(query):
+    raw = re.findall(r"[a-z0-9]+|[\u0900-\u097f]+", query.lower())
+    extra = [HINDI_TERMS[t] for t in raw if t in HINDI_TERMS]
+    return " ".join([query] + extra)
+
 
 def tokenize(text):
     return [t for t in TOKEN_RE.findall(text.lower()) if t not in STOPWORDS]
@@ -49,9 +67,9 @@ class KnowledgeBase:
         ]
         if not candidates:
             return []
-        tokens = tokenize(query)
+        tokens = tokenize(expand_query(query))
         if not tokens:
-            return [self.entries[i] for i in candidates[:top_k]]
+            return []
         scored = sorted(((self.score(tokens, i), i) for i in candidates), reverse=True)
         return [self.entries[i] for s, i in scored if s > 0][:top_k]
 

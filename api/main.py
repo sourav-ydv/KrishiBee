@@ -8,6 +8,7 @@ from math import radians, sin, cos, sqrt, atan2
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
+from api.chat import router as chat_router
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "scripts"))
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "models"))
@@ -49,6 +50,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(chat_router)
 
 with open(FEATURE_INFO_PATH) as f:
     feature_info = json.load(f)

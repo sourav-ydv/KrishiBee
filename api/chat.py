@@ -1,7 +1,9 @@
 import os
 import requests
 from typing import List, Optional
-from fastapi import APIRouter, HTTPException
+import time
+from collections import defaultdict, deque
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 from api.retrieval import kb
 
@@ -12,12 +14,12 @@ GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
 
 SYSTEM_PROMPT = (
     "You are KrishiBee Assistant, a farming advisor for small and marginal farmers in India. "
-    "Reply in the language of the farmer's latest message. If the message is in English, reply in English. Use short, plain sentences. "
+    "Use short, plain sentences and simple bullet lists. Never use tables. "
     "Use the field details provided when they are relevant. "
     "Give practical, stage-by-stage guidance on sowing, irrigation timing, fertilizer scheduling and crop care. "
     "Never state exact pesticide or fertilizer doses from memory. Explain the general approach and tell the "
     "farmer to confirm quantities with their Soil Health Card or the local Krishi Vigyan Kendra (KVK). "
-        "Do not guess the timing of crop stages or irrigations. State a number, such as days, depth or quantity, only if it appears in the reference notes provided. If you are not confident about when something should be done for this crop, say so and point the farmer to the KVK. Stay on farming topics."
+    "Do not guess the timing of crop stages or irrigations. State a number, such as days, depth or quantity, only if it appears in the reference notes provided. If you are not confident about when something should be done for this crop, say so and point the farmer to the KVK. Stay on farming topics."
 )
 
 
@@ -87,6 +89,50 @@ def format_notes(notes: list) -> Optional[str]:
         "If they do not cover the question, say you are not sure instead of guessing:\n" + "\n".join(lines)
     )
 
+NO_NOTES_NOTE = (
+    "No reference notes were found for this question. Do not give crop-stage timings, quantities, "
+    "schedules or doses. Say you do not have a sourced answer for this, share only general advice "
+    "without numbers, and point the farmer to the local KVK."
+)
+
+IP_LIMIT = 10
+IP_WINDOW_SECONDS = 600
+DAILY_LIMIT = 80
+
+_ip_hits = defaultdict(deque)
+_daily = {"day": None, "count": 0}
+
+
+def language_instruction(message: str) -> str:
+    if any(ord(c) > 127 and c.isalpha() for c in message):
+        return "Reply in the same language and script as the farmer's latest message."
+    return "Reply in English, even if the question uses Hindi words written in English letters."
+
+
+def client_ip(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+def check_rate_limit(request: Request):
+    now = time.time()
+    today = time.strftime("%Y-%m-%d", time.gmtime(now))
+    if _daily["day"] != today:
+        _daily["day"] = today
+        _daily["count"] = 0
+    if _daily["count"] >= DAILY_LIMIT:
+        raise HTTPException(429, "The assistant has reached its daily limit. Please try again tomorrow.")
+
+    hits = _ip_hits[client_ip(request)]
+    while hits and now - hits[0] > IP_WINDOW_SECONDS:
+        hits.popleft()
+    if len(hits) >= IP_LIMIT:
+        raise HTTPException(429, "You are asking too quickly. Please wait a few minutes and try again.")
+    hits.append(now)
+    _daily["count"] += 1
+
 def call_groq(messages: list) -> str:
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
@@ -128,7 +174,9 @@ def call_groq(messages: list) -> str:
 
 
 @router.post("/chat", response_model=ChatResponse)
-def chat(req: ChatRequest):
+def chat(req: ChatRequest, request: Request):
+    check_rate_limit(request)
+
     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
     context_note = describe_context(req.context)
     if context_note:
@@ -137,10 +185,10 @@ def chat(req: ChatRequest):
     crop = req.context.crop if req.context else None
     notes = kb.search(req.message, crop=crop, top_k=3)
     notes_text = format_notes(notes)
-    if notes_text:
-        messages.append({"role": "system", "content": notes_text})
+    messages.append({"role": "system", "content": notes_text or NO_NOTES_NOTE})
 
     messages.extend({"role": t.role, "content": t.content} for t in req.history[-6:])
+    messages.append({"role": "system", "content": language_instruction(req.message)})
     messages.append({"role": "user", "content": req.message})
 
     reply = call_groq(messages)
