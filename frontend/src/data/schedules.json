@@ -1,0 +1,70 @@
+{
+  "Wheat": {
+    "tasks": [
+      {
+        "id": "wheat-irrigation-cri",
+        "type": "Irrigation",
+        "stage": "Crown root initiation",
+        "title": "First irrigation after sowing",
+        "startDay": 20,
+        "endDay": 25,
+        "note": "In Punjab Agricultural University trials, 75 mm for the first irrigation gave clearly better yield than 65 mm, and 85 mm added little more. Confirm the quantity for your field with the local KVK.",
+        "sources": [
+          {
+            "title": "Indian Journal of Agricultural Sciences 90(3), 2020 (PAU, Ludhiana)",
+            "url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
+          },
+          {
+            "title": "Optimizing irrigation schedule for wheat (PAU thesis, KrishiKosh)",
+            "url": "https://krishikosh.egranth.ac.in/handle/1/5810205422"
+          }
+        ]
+      },
+      {
+        "id": "wheat-irrigation-tillering",
+        "type": "Irrigation",
+        "stage": "Tillering",
+        "title": "Second irrigation",
+        "startDay": 40,
+        "endDay": 45,
+        "note": "Part of the four post-sowing irrigations recommended by PAU.",
+        "sources": [
+          {
+            "title": "Indian Journal of Agricultural Sciences 90(3), 2020 (PAU, Ludhiana)",
+            "url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
+          }
+        ]
+      },
+      {
+        "id": "wheat-irrigation-jointing",
+        "type": "Irrigation",
+        "stage": "Jointing / booting",
+        "title": "Third irrigation",
+        "startDay": 60,
+        "endDay": 70,
+        "note": "Part of the four post-sowing irrigations recommended by PAU.",
+        "sources": [
+          {
+            "title": "Indian Journal of Agricultural Sciences 90(3), 2020 (PAU, Ludhiana)",
+            "url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
+          }
+        ]
+      },
+      {
+        "id": "wheat-irrigation-milking",
+        "type": "Irrigation",
+        "stage": "Milking",
+        "title": "Fourth irrigation",
+        "startDay": 100,
+        "endDay": 105,
+        "note": "Part of the four post-sowing irrigations recommended by PAU.",
+        "sources": [
+          {
+            "title": "Indian Journal of Agricultural Sciences 90(3), 2020 (PAU, Ludhiana)",
+            "url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
+          }
+        ]
+      }
+    ]
+  }
+}

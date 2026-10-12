@@ -3,6 +3,7 @@ import LocationMap from "./components/LocationMap";
 import PredictionForm from "./components/PredictionForm";
 import ResultsCard, { ResultsSkeleton } from "./components/ResultsCard";
 import ChatPanel from "./components/ChatPanel";
+import CropTracker from "./components/CropTracker";
 import { predictByLocation } from "./api";
 import "leaflet/dist/leaflet.css";
 import "./App.css";
@@ -26,6 +27,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [lastPayload, setLastPayload] = useState(null);
+  const [view, setView] = useState("advisor");
 
   const handleSelect = (lat, lng) => setPosition([lat, lng]);
 
@@ -66,9 +68,19 @@ export default function App() {
       <header>
         <h1>KrishiBee</h1>
         <p>AI-powered sowing depth advisory</p>
+        <nav className="tabs">
+          <button className={view === "advisor" ? "active" : ""} onClick={() => setView("advisor")}>
+            Depth advisor
+          </button>
+          <button className={view === "tracker" ? "active" : ""} onClick={() => setView("tracker")}>
+            My crop
+          </button>
+        </nav>
       </header>
 
-      <div className="main-grid">
+      {view === "tracker" && <CropTracker />}
+
+      <div className="main-grid" hidden={view !== "advisor"}>
         <div className="map-panel">
           <LocationMap position={position} onSelect={handleSelect} />
         </div>
