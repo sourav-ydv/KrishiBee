@@ -1,0 +1,34 @@
+[
+  {
+    "id": "wheat-first-irrigation-timing",
+    "crop": "Wheat",
+    "topic": "first irrigation timing after sowing crown root initiation",
+    "text": "The first post-sowing irrigation in wheat is timed at crown root initiation, about 20 to 25 days after sowing. Punjab Agricultural University lists it as the first of its recommended post-sowing irrigations.",
+    "source_title": "Indian Journal of Agricultural Sciences 90(3), 2020: sowing dates, planting methods and irrigation treatments in wheat (PAU, Ludhiana)",
+    "source_url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
+  },
+  {
+    "id": "wheat-irrigation-schedule",
+    "crop": "Wheat",
+    "topic": "irrigation schedule stages tillering jointing booting milking",
+    "text": "Punjab Agricultural University's recommended four post-sowing irrigations for wheat are at crown root initiation (20 to 25 days after sowing), tillering (40 to 45 days), jointing or booting (60 to 70 days) and milking (100 to 105 days). A three-irrigation schedule tested in the same study used crown root initiation, flag leaf emergence (70 to 80 days) and soft dough (115 to 120 days).",
+    "source_title": "Indian Journal of Agricultural Sciences 90(3), 2020: sowing dates, planting methods and irrigation treatments in wheat (PAU, Ludhiana)",
+    "source_url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
+  },
+  {
+    "id": "wheat-cri-importance",
+    "crop": "Wheat",
+    "topic": "crown root initiation importance first irrigation weeks",
+    "text": "Crown root initiation is treated as the most important stage for irrigating wheat because of its role in root development and nutrient availability. A department of agriculture guide from Sindh, Pakistan gives the first wheat irrigation as 3 to 4 weeks after sowing, which is consistent with the 20 to 25 day figure from Indian Punjab studies.",
+    "source_title": "Agriculture Department, Government of Sindh: irrigation scheduling guide (Pakistan)",
+    "source_url": "https://agri.sindh.gov.pk/irrigation"
+  },
+  {
+    "id": "wheat-first-irrigation-depth",
+    "crop": "Wheat",
+    "topic": "first irrigation depth amount of water mm",
+    "text": "In Punjab Agricultural University field and simulation studies on irrigation scheduling, wheat grain yield rose significantly when the first irrigation was increased from 65 mm to 75 mm of water. Going further to 85 mm gave only a small numerical gain. These were research results for irrigated wheat, so actual quantities should be confirmed with the local KVK.",
+    "source_title": "Optimizing irrigation schedule for wheat through field and simulation studies (PAU thesis, KrishiKosh)",
+    "source_url": "https://krishikosh.egranth.ac.in/handle/1/5810205422"
+  }
+]
