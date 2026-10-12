@@ -2,6 +2,7 @@ import { useState } from "react";
 import LocationMap from "./components/LocationMap";
 import PredictionForm from "./components/PredictionForm";
 import ResultsCard, { ResultsSkeleton } from "./components/ResultsCard";
+import ChatPanel from "./components/ChatPanel";
 import { predictByLocation } from "./api";
 import "leaflet/dist/leaflet.css";
 import "./App.css";
@@ -47,6 +48,19 @@ export default function App() {
     if (lastPayload) runPrediction(lastPayload);
   };
 
+  const chatContext =
+    result && lastPayload
+      ? {
+          crop: result.crop,
+          state: lastPayload.state,
+          season: lastPayload.season,
+          recommended_depth_cm: result.nn_recommended_depth_cm,
+          safe_range_cm: result.agronomic_safe_range_cm,
+          soil_texture: result.derived_soil_texture_class,
+          soil_moisture_pct: result.estimated_soil_moisture_pct,
+        }
+      : null;
+
   return (
     <div className="app">
       <header>
@@ -71,6 +85,7 @@ export default function App() {
 
           {loading && <ResultsSkeleton />}
           {!loading && <ResultsCard result={result} />}
+          <ChatPanel context={chatContext} />
         </div>
       </div>
     </div>

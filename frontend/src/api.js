@@ -6,3 +6,6 @@ export const getCrops = () => axios.get(`${API_BASE}/crops`).then((r) => r.data.
 
 export const predictByLocation = (payload) =>
   axios.post(`${API_BASE}/predict_by_location`, payload).then((r) => r.data);
+
+export const sendChat = (payload) =>
+  axios.post(`${API_BASE}/chat`, payload).then((r) => r.data);
