@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import schedules from "../data/schedules.json";
+import PhotoLog from "./PhotoLog";
+import { clearPhotos } from "../photoStore";
 
 const STORAGE_KEY = "krishibee_plot_v1";
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -73,8 +75,10 @@ export default function CropTracker() {
     setPlot((prev) => ({ ...prev, done: { ...prev.done, [id]: !prev.done[id] } }));
   };
 
-  const reset = () => {
-    if (window.confirm("Remove this crop plan from this device?")) setPlot(null);
+  const reset = async () => {
+    if (!window.confirm("Remove this crop plan and its photos from this device?")) return;
+    await clearPhotos();
+    setPlot(null);
   };
 
   if (!plot) {
@@ -153,6 +157,8 @@ export default function CropTracker() {
           );
         })}
       </ul>
+
+      <PhotoLog dayCount={dayCount} />
 
       <p className="tracker-note">
         Dates come from published schedules. Actual timing depends on variety, weather and soil, so confirm with your local KVK.
