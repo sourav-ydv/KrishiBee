@@ -24,6 +24,9 @@ HINDI_TERMS = {
     "matra": "amount", "मात्रा": "amount",
     "bowai": "sowing", "buwai": "sowing", "bovai": "sowing", "बुवाई": "sowing", "बुआई": "sowing",
     "khad": "fertilizer", "खाद": "fertilizer", "urvarak": "fertilizer", "उर्वरक": "fertilizer",
+    "urea": "urea fertilizer nitrogen", "yuriya": "urea fertilizer nitrogen", "यूरिया": "urea fertilizer nitrogen",
+    "nirai": "weeding weed", "nindai": "weeding weed", "निराई": "weeding weed",
+    "kharpatwar": "weed", "खरपतवार": "weed",
 }
 
 

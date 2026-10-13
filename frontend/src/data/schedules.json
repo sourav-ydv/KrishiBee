@@ -64,7 +64,46 @@
             "url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
           }
         ]
+      },
+      {
+        "id": "wheat-nitrogen-first-irrigation",
+        "type": "Fertilizer",
+        "stage": "Crown root initiation",
+        "title": "Nitrogen top-dressing before the first irrigation",
+        "startDay": 20,
+        "endDay": 25,
+        "note": "Apply the top-dressing share of nitrogen just before the irrigation, not after it. In a Punjab trial, half the nitrogen at sowing and half at the first irrigation gave yield on par with a three-way split and better than the other timings tested. Total dose and fertilizer form should follow your Soil Health Card or the local KVK.",
+        "sources": [
+          {
+            "title": "Indian Journal of Agronomy: sowing time and split nitrogen in bread wheat (Amritsar, Punjab)",
+            "url": "https://pub.isa-india.in/index.php/ija/article/download/2886/2586/3078"
+          },
+          {
+            "title": "Journal of Wheat Research: nitrogen top dressing just before irrigation improves wheat growth",
+            "url": "https://epubs.icar.org.in/index.php/JWR/article/download/83006/36838/231889"
+          }
+        ]
+      },
+      {
+        "id": "wheat-weed-control",
+        "type": "Weeding",
+        "stage": "Early growth",
+        "title": "Weed check and control window",
+        "startDay": 20,
+        "endDay": 35,
+        "note": "The critical period for weed control is put at about 15 to 30 days after sowing. Where no herbicide is used, hand weeding at about 20 and 35 days is advised. In Punjab trials, post-emergence herbicides were applied around 30 days after sowing. Product choice and dose must come from your KVK, and the label must be followed.",
+        "sources": [
+          {
+            "title": "Tamil Nadu Agricultural University agritech portal: weed management in wheat",
+            "url": "https://agritech.tnau.ac.in/agriculture/agri_weedmgt_wheat.html"
+          },
+          {
+            "title": "Spanish Journal of Agricultural Research: growth stages, weed control and herbicide tolerance in wheat (PAU, Ludhiana)",
+            "url": "https://sjar.revistas.csic.es/index.php/sjar/article/view/9728/3327"
+          }
+        ]
       }
     ]
   }
 }
+      
