@@ -85,7 +85,10 @@ def load_entries():
         for name in sorted(os.listdir(KB_DIR)):
             if name.endswith(".json"):
                 with open(os.path.join(KB_DIR, name), encoding="utf-8") as f:
-                    entries.extend(json.load(f))
+                    entries.extend(
+                        e for e in json.load(f)
+                        if {"crop", "topic", "text", "source_title", "source_url"} <= e.keys()
+                    )
     return entries
 
 
