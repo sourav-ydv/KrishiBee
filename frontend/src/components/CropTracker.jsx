@@ -91,7 +91,7 @@ function resolveTask(task, sowing, tasksById) {
 }
 
 function taskStatus(task, resolved, today, done) {
-  if (task.reference) return { key: "reference", label: "At sowing" };
+  if (task.reference) return { key: "reference", label: "Reference" };
   if (done) return { key: "done", label: "Done" };
   if (resolved.lastDay && today > resolved.lastDay) return { key: "passed", label: "Window passed" };
   if (today >= resolved.start) return { key: "due", label: task.ongoing ? "Keep checking" : "Due now" };

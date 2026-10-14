@@ -1,0 +1,167 @@
+[
+  {
+    "id": "yellow-rust",
+    "name": "Yellow (stripe) rust",
+    "category": "Disease",
+    "look_for": "Yellow powdery pustules lined up in stripes along the leaves.",
+    "conditions": "Cool nights (7 to 13 °C) with high humidity. Frequent rain with wind in February and March makes it worse. It appears first in sub-mountainous areas.",
+    "manage": "Start checking from the second week of December, especially after rain or irrigation. Treat the first patches early and only around the infected spot. Grow resistant varieties, and avoid October sowing in disease-prone sub-mountainous areas.",
+    "ask_kvk": "PAU lists several fungicide options for yellow rust. Confirm the product and dose with your KVK.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (pp. 19-20)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "brown-rust",
+    "name": "Brown (leaf) rust",
+    "category": "Disease",
+    "look_for": "Round, orange powdery pustules scattered or in clusters on the leaves, less often on leaf sheaths and stalks.",
+    "conditions": "",
+    "manage": "Grow rust-resistant varieties, and act as soon as it is noticed.",
+    "ask_kvk": "PAU lists a fungicide for brown rust. Confirm the product and dose with your KVK.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (p. 20)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "powdery-mildew",
+    "name": "Powdery mildew",
+    "category": "Disease",
+    "look_for": "White floury spots on leaves and other above-ground parts, later turning grey or reddish brown. Plants become stunted with fewer, smaller leaves.",
+    "conditions": "",
+    "manage": "Infected plants lose leaf area and become stunted, so acting early matters.",
+    "ask_kvk": "PAU lists fungicides for powdery mildew. Confirm the product and dose with your KVK.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (p. 20)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "loose-smut",
+    "name": "Loose smut",
+    "category": "Disease",
+    "look_for": "Ears turned into a black, loose, powdery mass, leaving only the central stalk of the ear.",
+    "conditions": "",
+    "manage": "PAU's measures are all applied to the seed or variety before sowing: grow resistant varieties (WHD 943, PDW 291), soak seed in plain water for 4 hours on a calm sunny day in May or June and dry it fully in the sun, or use recommended fungicide seed treatment.",
+    "ask_kvk": "",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (p. 20)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "flag-smut",
+    "name": "Flag smut",
+    "category": "Disease",
+    "look_for": "Long, narrow grey-black streaks running along the leaf veins that split open to show sooty black spores.",
+    "conditions": "",
+    "manage": "Sow shallow, remove affected plants and burn them, treat seed with recommended fungicides, and grow resistant varieties (WHD 943, PDW 291).",
+    "ask_kvk": "",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (p. 20)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "karnal-bunt",
+    "name": "Karnal bunt",
+    "category": "Disease",
+    "look_for": "Only a few grains in an ear are affected. Pressed grains release a black powder with a foul smell.",
+    "conditions": "",
+    "manage": "Grow resistant varieties (WHD 943, PDW 291). A fungicide spray at ear emergence is recommended only for wheat grown for seed production.",
+    "ask_kvk": "",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (p. 20)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "head-scab",
+    "name": "Head blight (scab)",
+    "category": "Disease",
+    "look_for": "Single spikelets or parts of the ear bleach or turn brown early. Pinkish mould may show in humid weather. Grains are shrivelled and chalky.",
+    "conditions": "More common in durum varieties and in very humid areas, especially near rivers.",
+    "manage": "Clean seed lots thoroughly to remove shrivelled grains. Avoid growing durum varieties in highly humid areas near rivers.",
+    "ask_kvk": "",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (p. 21)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "leaf-blight",
+    "name": "Leaf blight, glume blight and black tip",
+    "category": "Disease",
+    "look_for": "Elongated brown spots and blotches on leaves and glumes. Ears are poorly filled, with shrivelled, discoloured grains that have black tips.",
+    "conditions": "",
+    "manage": "Use disease-free seed.",
+    "ask_kvk": "",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (p. 21)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "aphids",
+    "name": "Aphids",
+    "category": "Pest",
+    "look_for": "Discoloured leaves with small insects clustered on leaves or ear heads, often starting along the field borders.",
+    "conditions": "",
+    "manage": "PAU treats aphids only when they reach about 5 per ear head (counted on 10 random ear heads in each of 4 parts of an acre) and only at the ear stage. Spray only the infested strip, since aphids start at the borders. A homemade neem extract is PAU's non-chemical option.",
+    "ask_kvk": "If a chemical spray is needed, confirm the product and dose with your KVK.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat insect pests (p. 18)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "termites",
+    "name": "Termites",
+    "category": "Pest",
+    "look_for": "Plants drying up completely and pulling out easily, soon after sowing or near maturity. Late damage gives white (empty) ears.",
+    "conditions": "Worse in sandy soil.",
+    "manage": "Treat the seed before sowing as per the package. Irrigating an affected field gives some control.",
+    "ask_kvk": "Severe infestations need a soil-applied insecticide. Ask your KVK.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat insect pests (pp. 17-18)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "zinc-deficiency",
+    "name": "Zinc deficiency",
+    "category": "Nutrient",
+    "look_for": "Stunted, bushy plants with leaves that turn pale in the middle and then break and hang.",
+    "conditions": "",
+    "manage": "Apply 25 kg zinc sulphate (21%) per acre, which lasts 2 to 3 years, or spray 0.5% zinc sulphate (1 kg zinc sulphate with 0.5 kg unslaked lime in 200 litres of water per acre), two or three times at 15-day intervals. Skip it if zinc sulphate went on the previous kharif crop.",
+    "ask_kvk": "",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat fertilizer application (p. 12)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "manganese-deficiency",
+    "name": "Manganese deficiency",
+    "category": "Nutrient",
+    "look_for": "Pale greyish-yellow to pinkish-brown specks between the veins on the middle leaves, joining into streaks while the veins stay green.",
+    "conditions": "Light soils under intensive rice-wheat cropping. Durum varieties in sandy soils are prone to it.",
+    "manage": "Spray 0.5% manganese sulphate (1 kg in 200 litres of water per acre) 2 to 4 days before the first irrigation and three more times at weekly intervals on sunny days. Soil application is not profitable.",
+    "ask_kvk": "",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat fertilizer application (pp. 11-12)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "sulphur-deficiency",
+    "name": "Sulphur deficiency",
+    "category": "Nutrient",
+    "look_for": "Younger, upper leaves fading to light yellow except the tips, while the lower leaves stay green.",
+    "conditions": "Sandy soils, worse when winter rains continue long in early growth.",
+    "manage": "Where phosphorus went on as DAP instead of single superphosphate, 100 kg gypsum or 18 kg bentonite-sulphur per acre corrects it, and gypsum can also be applied to a standing crop. This differs from nitrogen deficiency, where the lower leaves yellow first.",
+    "ask_kvk": "",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat fertilizer application (p. 12)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "nitrogen-deficiency",
+    "name": "Nitrogen deficiency",
+    "category": "Nutrient",
+    "look_for": "Yellowing that starts on the older, lower leaves.",
+    "conditions": "",
+    "manage": "If the full dose of urea is already on and the crop still looks nitrogen-starved, PAU suggests spraying a 3% urea solution (9 kg urea in 300 litres of water per acre) cross-wise over the crop.",
+    "ask_kvk": "",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat fertilizer application (p. 11)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "seedling-yellowing",
+    "name": "Yellowing of young crop (general)",
+    "category": "General",
+    "look_for": "Young plants turning yellow from the leaf tips and edges, with stunting and decline.",
+    "conditions": "PAU lists nutrient deficiency, bad weather or frost, poor drainage, leaf-spot fungi (Alternaria, Drechslera) and cereal cyst nematode as possible causes.",
+    "manage": "Give proper irrigation to counter frost and avoid excessive irrigation. Which leaves yellow first helps tell the nutrients apart: older leaves point to nitrogen, young leaves to sulphur, and bushy stunting with pale-middle leaves to zinc.",
+    "ask_kvk": "If it does not match a nutrient pattern, ask your KVK to check the field.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (pp. 18-19)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  }
+]
