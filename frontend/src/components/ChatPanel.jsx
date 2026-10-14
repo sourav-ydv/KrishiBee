@@ -81,7 +81,7 @@ export default function ChatPanel({ context }) {
             {m.sources?.length > 0 && (
               <ul className="chat-sources">
                 {m.sources.map((s) => (
-                  <li key={s.url}>
+                  <li key={s.title}>
                     <a href={s.url} target="_blank" rel="noreferrer">{s.title}</a>
                   </li>
                 ))}

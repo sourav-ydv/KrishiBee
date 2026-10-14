@@ -1,109 +1,180 @@
 {
   "Wheat": {
+    "sowingWindow": {
+      "from": "10-22",
+      "to": "11-30",
+      "message": "This sowing date is outside PAU's timely-sowing window for wheat (4th week of October to 4th week of November). Each week of delay after the optimum time costs about 150 kg of yield per acre, and wheat sown after mid-December needs late-sown varieties and about 25% less nitrogen. Check this plan with your KVK."
+    },
     "tasks": [
       {
-        "id": "wheat-irrigation-cri",
-        "type": "Irrigation",
-        "stage": "Crown root initiation",
-        "title": "First irrigation after sowing",
-        "startDay": 20,
-        "endDay": 25,
-        "note": "In Punjab Agricultural University trials, 75 mm for the first irrigation gave clearly better yield than 65 mm, and 85 mm added little more. Confirm the quantity for your field with the local KVK.",
+        "id": "wheat-sowing",
+        "type": "At sowing",
+        "stage": "Sowing",
+        "title": "Sowing depth, seed and basal fertilizer",
+        "reference": true,
+        "startDay": 0,
+        "endDay": 0,
+        "note": "Sow with a seed-cum-fertilizer drill at 4 to 6 cm depth in rows 15 to 20 cm apart, after a heavy pre-sowing irrigation of about 10 cm (not needed after rice). Seed rate is 40 kg per acre for most varieties and 45 kg for PBW 869 and Unnat PBW 550. Drill all the phosphorus at sowing: 55 kg DAP per acre on medium-fertility soil when there is no soil test. No urea is needed at sowing if DAP is used. Add muriate of potash only where a soil test shows low potassium.",
         "sources": [
           {
-            "title": "Indian Journal of Agricultural Sciences 90(3), 2020 (PAU, Ludhiana)",
-            "url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
-          },
-          {
-            "title": "Optimizing irrigation schedule for wheat (PAU thesis, KrishiKosh)",
-            "url": "https://krishikosh.egranth.ac.in/handle/1/5810205422"
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat sowing (pp. 5-6) and fertilizer (p. 10)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
           }
         ]
       },
       {
-        "id": "wheat-irrigation-tillering",
+        "id": "wheat-irrigation-1",
         "type": "Irrigation",
-        "stage": "Tillering",
-        "title": "Second irrigation",
-        "startDay": 40,
-        "endDay": 45,
-        "note": "Part of the four post-sowing irrigations recommended by PAU.",
+        "stage": "First irrigation",
+        "title": "First irrigation (relatively light)",
+        "variants": [
+          { "sowUpTo": "10-31", "startDay": 21, "endDay": 21 },
+          { "sowUpTo": "01-15", "startDay": 28, "endDay": 28 }
+        ],
+        "graceDays": 3,
+        "note": "PAU advises the first irrigation about 3 weeks after sowing for October-sown wheat and 4 weeks after sowing for later sowings, and it should be relatively light. Bring it forward on light soils and delay it by a week on heavy paddy soils. Timings can shift by 2 to 3 days either side.",
         "sources": [
           {
-            "title": "Indian Journal of Agricultural Sciences 90(3), 2020 (PAU, Ludhiana)",
-            "url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat irrigation (p. 16)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
           }
         ]
       },
       {
-        "id": "wheat-irrigation-jointing",
-        "type": "Irrigation",
-        "stage": "Jointing / booting",
-        "title": "Third irrigation",
-        "startDay": 60,
-        "endDay": 70,
-        "note": "Part of the four post-sowing irrigations recommended by PAU.",
-        "sources": [
-          {
-            "title": "Indian Journal of Agricultural Sciences 90(3), 2020 (PAU, Ludhiana)",
-            "url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
-          }
-        ]
-      },
-      {
-        "id": "wheat-irrigation-milking",
-        "type": "Irrigation",
-        "stage": "Milking",
-        "title": "Fourth irrigation",
-        "startDay": 100,
-        "endDay": 105,
-        "note": "Part of the four post-sowing irrigations recommended by PAU.",
-        "sources": [
-          {
-            "title": "Indian Journal of Agricultural Sciences 90(3), 2020 (PAU, Ludhiana)",
-            "url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
-          }
-        ]
-      },
-      {
-        "id": "wheat-nitrogen-first-irrigation",
+        "id": "wheat-urea-1",
         "type": "Fertilizer",
-        "stage": "Crown root initiation",
-        "title": "Nitrogen top-dressing before the first irrigation",
-        "startDay": 20,
-        "endDay": 25,
-        "note": "Apply the top-dressing share of nitrogen just before the irrigation, not after it. In a Punjab trial, half the nitrogen at sowing and half at the first irrigation gave yield on par with a three-way split and better than the other timings tested. Total dose and fertilizer form should follow your Soil Health Card or the local KVK.",
+        "stage": "First irrigation",
+        "title": "Urea with the first irrigation",
+        "sameWindowAs": "wheat-irrigation-1",
+        "graceDays": 3,
+        "note": "Broadcast about 45 kg urea per acre before the first irrigation (35 kg if the crop was sown after mid-December). This is PAU's figure for medium-fertility soil, so follow a soil test if you have one. Over both top-dressings that is about 90 kg urea per acre, on top of 55 kg DAP at sowing.",
         "sources": [
           {
-            "title": "Indian Journal of Agronomy: sowing time and split nitrogen in bread wheat (Amritsar, Punjab)",
-            "url": "https://pub.isa-india.in/index.php/ija/article/download/2886/2586/3078"
-          },
-          {
-            "title": "Journal of Wheat Research: nitrogen top dressing just before irrigation improves wheat growth",
-            "url": "https://epubs.icar.org.in/index.php/JWR/article/download/83006/36838/231889"
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat fertilizer application (pp. 9-10)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
           }
         ]
       },
       {
-        "id": "wheat-weed-control",
+        "id": "wheat-weeds",
         "type": "Weeding",
         "stage": "Early growth",
-        "title": "Weed check and control window",
+        "title": "Weed control window",
         "startDay": 20,
         "endDay": 35,
-        "note": "The critical period for weed control is put at about 15 to 30 days after sowing. Where no herbicide is used, hand weeding at about 20 and 35 days is advised. In Punjab trials, post-emergence herbicides were applied around 30 days after sowing. Product choice and dose must come from your KVK, and the label must be followed.",
+        "note": "PAU's options: two hand hoeings (one before and one after the first irrigation), or herbicides. Pre-emergence sprays go on within 2 days of sowing. Post-emergence sprays for grass weeds such as gulli danda go on about 20 days after sowing, 2 to 3 days before the first irrigation, or at 30 to 35 days. Sprays for broadleaf weeds fall between 25 and 45 days (45 to 55 days for December sowings). The right product depends on the weed, soil texture and the next crop, so use the weed control section of the package or ask your KVK, and follow the label. Keep the irrigation after spraying light.",
         "sources": [
           {
-            "title": "Tamil Nadu Agricultural University agritech portal: weed management in wheat",
-            "url": "https://agritech.tnau.ac.in/agriculture/agri_weedmgt_wheat.html"
-          },
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat weed control (pp. 12-16)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "wheat-irrigation-2",
+        "type": "Irrigation",
+        "stage": "Second irrigation",
+        "title": "Second irrigation",
+        "variants": [
+          { "sowUpTo": "10-31", "startDay": 56, "endDay": 63 },
+          { "sowUpTo": "11-21", "startDay": 63, "endDay": 70 },
+          { "sowUpTo": "12-20", "startDay": 63, "endDay": 70 },
+          { "sowUpTo": "01-15", "startDay": 56, "endDay": 56 }
+        ],
+        "graceDays": 3,
+        "note": "PAU's timetable puts this 5 to 6 weeks after the first irrigation for wheat sown up to 20 December, and 4 weeks after for sowings from 21 December. The second to fourth irrigations are about 7.5 cm each. Each cm of rain adds about 5 days to the next interval until the end of January, and 2 days after that. Avoid irrigating on windy days to reduce lodging.",
+        "sources": [
           {
-            "title": "Spanish Journal of Agricultural Research: growth stages, weed control and herbicide tolerance in wheat (PAU, Ludhiana)",
-            "url": "https://sjar.revistas.csic.es/index.php/sjar/article/view/9728/3327"
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat irrigation (p. 16)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "wheat-urea-2",
+        "type": "Fertilizer",
+        "stage": "Second irrigation",
+        "title": "Urea with the second irrigation",
+        "sameWindowAs": "wheat-irrigation-2",
+        "graceDays": 3,
+        "note": "Broadcast another 45 kg urea per acre before the second irrigation (35 kg for sowing after mid-December). If rain delays the second irrigation, apply the urea at about 55 days after sowing anyway. If water is standing in the field, do not broadcast; spray a 7.5% urea solution (15 kg urea in 200 litres of water per acre) at 42 and 54 days after sowing instead.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat fertilizer application (p. 10)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "wheat-rust-scouting",
+        "type": "Scouting",
+        "stage": "Winter",
+        "title": "Check for yellow rust",
+        "fromDate": "12-08",
+        "ongoing": true,
+        "note": "Walk the field from the second week of December onward, especially after irrigation or rain, looking for yellow powdery stripes on the leaves. PAU advises treating the first patches early and spraying only around the infected area. Cool nights (7 to 13 °C) with high humidity favour the disease, and frequent rain with wind in February and March makes it worse. If you see it, ask your KVK which fungicide suits your field.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (pp. 19-20)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "wheat-irrigation-3",
+        "type": "Irrigation",
+        "stage": "Third irrigation",
+        "title": "Third irrigation",
+        "variants": [
+          { "sowUpTo": "10-31", "startDay": 91, "endDay": 105 },
+          { "sowUpTo": "11-21", "startDay": 98, "endDay": 112 },
+          { "sowUpTo": "12-20", "startDay": 84, "endDay": 98 },
+          { "sowUpTo": "01-15", "startDay": 77, "endDay": 77 }
+        ],
+        "graceDays": 3,
+        "note": "PAU puts this 5 to 6 weeks after the second irrigation for sowings up to 21 November, 3 to 4 weeks for 22 November to 20 December, and 3 weeks for 21 December to 15 January.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat irrigation (p. 16)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "wheat-irrigation-4",
+        "type": "Irrigation",
+        "stage": "Fourth irrigation",
+        "title": "Fourth irrigation",
+        "variants": [
+          { "sowUpTo": "10-31", "startDay": 119, "endDay": 133 },
+          { "sowUpTo": "11-21", "startDay": 126, "endDay": 140 },
+          { "sowUpTo": "12-20", "startDay": 98, "endDay": 112 },
+          { "sowUpTo": "01-15", "startDay": 91, "endDay": 91 }
+        ],
+        "graceDays": 3,
+        "note": "PAU puts this 4 weeks after the third irrigation for sowings up to 21 November and 2 weeks after for later sowings. Depending on rain, timely-sown wheat is irrigated up to the end of March to protect grain filling from a sudden rise in temperature. Wheat sown after 5 December keeps being irrigated up to 10 April.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat irrigation (p. 16)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "wheat-harvest",
+        "type": "Harvest",
+        "stage": "Maturity",
+        "title": "Harvest when fully ripe",
+        "startDay": 145,
+        "endDay": 158,
+        "note": "Timely-sown varieties in the package mature in roughly 145 to 158 days, so check your variety. Harvest and thresh as soon as the crop is fully ripe, because late harvesting causes heavy shattering losses. Dry the grain to 10% moisture or less before storing it.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat varieties (pp. 1-4) and harvesting (p. 17)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
           }
         ]
       }
     ]
   }
 }
-      

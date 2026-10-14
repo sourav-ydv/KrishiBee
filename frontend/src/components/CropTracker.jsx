@@ -45,14 +45,73 @@ function formatDate(date) {
   return date.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
 }
 
-function taskStatus(task, sowing, today, done) {
+function seasonKey(month, day) {
+  return (month < 6 ? month + 12 : month) * 100 + day;
+}
+
+function keyFromMmDd(value) {
+  const [m, d] = value.split("-").map(Number);
+  return seasonKey(m, d);
+}
+
+function keyFromDate(date) {
+  return seasonKey(date.getMonth() + 1, date.getDate());
+}
+
+function windowDays(task, sowing, tasksById, depth = 0) {
+  if (task.sameWindowAs && depth < 3) {
+    return windowDays(tasksById[task.sameWindowAs], sowing, tasksById, depth + 1);
+  }
+  if (task.variants) {
+    const key = keyFromDate(sowing);
+    const match = task.variants.find((v) => key <= keyFromMmDd(v.sowUpTo));
+    const chosen = match || task.variants[task.variants.length - 1];
+    return [chosen.startDay, chosen.endDay];
+  }
+  return [task.startDay, task.endDay];
+}
+
+function calendarStart(sowing, value) {
+  const [m, d] = value.split("-").map(Number);
+  const first = new Date(sowing.getFullYear(), m - 1, d);
+  return first < sowing ? new Date(sowing.getFullYear() + 1, m - 1, d) : first;
+}
+
+function resolveTask(task, sowing, tasksById) {
+  if (task.fromDate) {
+    return { start: calendarStart(sowing, task.fromDate), shownEnd: null, lastDay: null, days: null };
+  }
+  const [startDay, endDay] = windowDays(task, sowing, tasksById);
+  return {
+    start: addDays(sowing, startDay),
+    shownEnd: addDays(sowing, endDay),
+    lastDay: addDays(sowing, endDay + (task.graceDays || 0)),
+    days: [startDay, endDay],
+  };
+}
+
+function taskStatus(task, resolved, today, done) {
+  if (task.reference) return { key: "reference", label: "At sowing" };
   if (done) return { key: "done", label: "Done" };
-  const start = addDays(sowing, task.startDay);
-  const end = addDays(sowing, task.endDay);
-  if (today > end) return { key: "passed", label: "Window passed" };
-  if (today >= start) return { key: "due", label: "Due now" };
-  const daysLeft = Math.round((start - today) / DAY_MS);
+  if (resolved.lastDay && today > resolved.lastDay) return { key: "passed", label: "Window passed" };
+  if (today >= resolved.start) return { key: "due", label: task.ongoing ? "Keep checking" : "Due now" };
+  const daysLeft = Math.round((resolved.start - today) / DAY_MS);
   return { key: "upcoming", label: `In ${daysLeft} day${daysLeft === 1 ? "" : "s"}` };
+}
+
+function describeWindow(resolved) {
+  if (!resolved.days) return `from ${formatDate(resolved.start)} onward`;
+  const [a, b] = resolved.days;
+  if (a === b) return `${formatDate(resolved.start)} (day ${a})`;
+  return `${formatDate(resolved.start)} to ${formatDate(resolved.shownEnd)} (days ${a} to ${b})`;
+}
+
+function sowingWarning(template, sowing) {
+  const w = template.sowingWindow;
+  if (!w) return null;
+  const key = keyFromDate(sowing);
+  if (key >= keyFromMmDd(w.from) && key <= keyFromMmDd(w.to)) return null;
+  return w.message;
 }
 
 export default function CropTracker() {
@@ -81,7 +140,7 @@ export default function CropTracker() {
     setPlot(null);
   };
 
-  if (!plot) {
+  if (!plot || !schedules[plot.crop]) {
     return (
       <form className="tracker-setup" onSubmit={handleStart}>
         <h2>Track your crop</h2>
@@ -103,10 +162,15 @@ export default function CropTracker() {
     );
   }
 
+  const template = schedules[plot.crop];
   const sowing = parseLocalDate(plot.sowingDate);
   const today = startOfToday();
   const dayCount = Math.round((today - sowing) / DAY_MS);
-  const tasks = [...schedules[plot.crop].tasks].sort((a, b) => a.startDay - b.startDay);
+  const tasksById = Object.fromEntries(template.tasks.map((t) => [t.id, t]));
+  const rows = template.tasks
+    .map((task) => ({ task, resolved: resolveTask(task, sowing, tasksById) }))
+    .sort((a, b) => a.resolved.start - b.resolved.start);
+  const warning = sowingWarning(template, sowing);
 
   return (
     <div className="tracker">
@@ -122,11 +186,12 @@ export default function CropTracker() {
         <button className="link-btn" onClick={reset}>Remove plan</button>
       </div>
 
+      {warning && <p className="tracker-warning">{warning}</p>}
+
       <ul className="task-list">
-        {tasks.map((task) => {
-          const status = taskStatus(task, sowing, today, plot.done[task.id]);
-          const start = addDays(sowing, task.startDay);
-          const end = addDays(sowing, task.endDay);
+        {rows.map(({ task, resolved }) => {
+          const status = taskStatus(task, resolved, today, plot.done[task.id]);
+          const trackable = !task.reference && !task.ongoing;
           return (
             <li key={task.id} className={`task ${status.key}`}>
               <div className="task-top">
@@ -134,22 +199,22 @@ export default function CropTracker() {
                 <span className={`chip ${status.key}`}>{status.label}</span>
               </div>
               <h3>{task.title}</h3>
-              <p className="task-when">
-                {task.stage}: {formatDate(start)} to {formatDate(end)} (days {task.startDay} to {task.endDay})
-              </p>
+              <p className="task-when">{task.stage}: {describeWindow(resolved)}</p>
               <p className="task-note">{task.note}</p>
-              <label className="task-check">
-                <input
-                  type="checkbox"
-                  checked={!!plot.done[task.id]}
-                  onChange={() => toggleDone(task.id)}
-                />
-                Mark as done
-              </label>
+              {trackable && (
+                <label className="task-check">
+                  <input
+                    type="checkbox"
+                    checked={!!plot.done[task.id]}
+                    onChange={() => toggleDone(task.id)}
+                  />
+                  Mark as done
+                </label>
+              )}
               <ul className="task-sources">
                 {task.sources.map((s) => (
-                  <li key={s.url}>
-                    <a href={s.url} target="_blank" rel="noreferrer">{s.title}</a>
+                  <li key={s.title}>
+                    {s.url ? <a href={s.url} target="_blank" rel="noreferrer">{s.title}</a> : s.title}
                   </li>
                 ))}
               </ul>

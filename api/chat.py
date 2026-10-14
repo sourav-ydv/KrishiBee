@@ -196,7 +196,7 @@ def chat(req: ChatRequest, request: Request):
     seen = set()
     sources = []
     for n in notes:
-        if n["source_url"] not in seen:
-            seen.add(n["source_url"])
+        if n["source_title"] not in seen:
+            seen.add(n["source_title"])
             sources.append(SourceRef(title=n["source_title"], url=n["source_url"]))
     return ChatResponse(reply=reply, sources=sources)

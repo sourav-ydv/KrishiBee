@@ -27,6 +27,8 @@ HINDI_TERMS = {
     "urea": "urea fertilizer nitrogen", "yuriya": "urea fertilizer nitrogen", "यूरिया": "urea fertilizer nitrogen",
     "nirai": "weeding weed", "nindai": "weeding weed", "निराई": "weeding weed",
     "kharpatwar": "weed", "खरपतवार": "weed",
+    "gehrai": "depth sowing", "gahrai": "depth sowing", "गहराई": "depth sowing",
+    "katai": "harvest", "कटाई": "harvest",
 }
 
 

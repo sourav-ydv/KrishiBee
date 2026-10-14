@@ -28,6 +28,7 @@ export default function PhotoLog({ dayCount }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
+  const cameraRef = useRef(null);
   const urlsRef = useRef([]);
 
   const refresh = useCallback(async () => {
@@ -90,9 +91,13 @@ export default function PhotoLog({ dayCount }) {
           placeholder="Optional note, e.g. yellow tips on lower leaves"
           maxLength={120}
         />
-        <button type="button" onClick={() => inputRef.current?.click()} disabled={busy}>
-          {busy ? "Saving..." : "Add photo"}
+        <button type="button" onClick={() => cameraRef.current?.click()} disabled={busy}>
+          {busy ? "Saving..." : "Take photo"}
         </button>
+        <button type="button" className="secondary" onClick={() => inputRef.current?.click()} disabled={busy}>
+          From gallery
+        </button>
+        <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={handleFiles} />
         <input ref={inputRef} type="file" accept="image/*" multiple hidden onChange={handleFiles} />
       </div>
 

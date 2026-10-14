@@ -1,66 +1,74 @@
 [
   {
-    "id": "wheat-first-irrigation-timing",
+    "id": "wheat-first-irrigation",
     "crop": "Wheat",
-    "topic": "first irrigation timing after sowing crown root initiation",
-    "text": "The first post-sowing irrigation in wheat is timed at crown root initiation, about 20 to 25 days after sowing. Punjab Agricultural University lists it as the first of its recommended post-sowing irrigations.",
-    "source_title": "Indian Journal of Agricultural Sciences 90(3), 2020: sowing dates, planting methods and irrigation treatments in wheat (PAU, Ludhiana)",
-    "source_url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
+    "topic": "first irrigation timing weeks after sowing light irrigation pre-sowing irrigation rauni",
+    "text": "PAU advises a relatively light first irrigation about 3 weeks after sowing for October-sown wheat and about 4 weeks after sowing for later-sown wheat. It suggests bringing the first irrigation forward on light soils and delaying it by a week on heavy paddy soils. A heavy pre-sowing irrigation of about 10 cm is recommended before sowing, except when wheat follows rice.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat irrigation (p. 16)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
   },
   {
-    "id": "wheat-irrigation-schedule",
+    "id": "wheat-irrigation-timetable",
     "crop": "Wheat",
-    "topic": "irrigation schedule stages tillering jointing booting milking",
-    "text": "Punjab Agricultural University's recommended four post-sowing irrigations for wheat are at crown root initiation (20 to 25 days after sowing), tillering (40 to 45 days), jointing or booting (60 to 70 days) and milking (100 to 105 days). A three-irrigation schedule tested in the same study used crown root initiation, flag leaf emergence (70 to 80 days) and soft dough (115 to 120 days).",
-    "source_title": "Indian Journal of Agricultural Sciences 90(3), 2020: sowing dates, planting methods and irrigation treatments in wheat (PAU, Ludhiana)",
-    "source_url": "https://epubs.icar.org.in/index.php/IJAgS/article/download/101461/39839/340822"
+    "topic": "irrigation schedule second third fourth irrigation interval weeks rain end of March",
+    "text": "For wheat sown on sandy loam or heavier soils, PAU gives intervals in weeks after the previous irrigation. Sown up to 21 November: second irrigation 5 to 6 weeks, third 5 to 6 weeks, fourth 4 weeks. Sown 22 November to 20 December: 5 to 6, 3 to 4 and 2 weeks. Sown 21 December to 15 January: 4, 3 and 2 weeks. These irrigations are about 7.5 cm each and the intervals can shift by 2 to 3 days either side. Each cm of rain lengthens the next interval by about 5 days until the end of January and by 2 days after that. Timely-sown wheat is irrigated up to the end of March depending on rain, and wheat sown after 5 December up to 10 April. Irrigation should be avoided on windy days to reduce lodging.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat irrigation (p. 16)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
   },
   {
-    "id": "wheat-cri-importance",
+    "id": "wheat-urea-timing",
     "crop": "Wheat",
-    "topic": "crown root initiation importance first irrigation weeks",
-    "text": "Crown root initiation is treated as the most important stage for irrigating wheat because of its role in root development and nutrient availability. A department of agriculture guide from Sindh, Pakistan gives the first wheat irrigation as 3 to 4 weeks after sowing, which is consistent with the 20 to 25 day figure from Indian Punjab studies.",
-    "source_title": "Agriculture Department, Government of Sindh: irrigation scheduling guide (Pakistan)",
-    "source_url": "https://agri.sindh.gov.pk/irrigation"
+    "topic": "urea nitrogen fertilizer top dressing first second irrigation split dose phosphorus DAP at sowing",
+    "text": "PAU recommends drilling all the phosphorus at sowing (55 kg DAP per acre on medium-fertility soil) and no urea at sowing when DAP is used. Urea is broadcast in two doses of 45 kg per acre before the first and second irrigations for timely-sown wheat, and 35 kg each for wheat sown after mid-December. If rain delays the second irrigation, the urea is applied about 55 days after sowing. If water is standing near the second irrigation, urea is not broadcast; two sprays of 7.5% urea solution (15 kg urea in 200 litres of water per acre) are given at 42 and 54 days after sowing.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat fertilizer application (pp. 9-10)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
   },
   {
-    "id": "wheat-first-irrigation-depth",
+    "id": "wheat-fertilizer-baseline",
     "crop": "Wheat",
-    "topic": "first irrigation depth amount of water mm",
-    "text": "In Punjab Agricultural University field and simulation studies on irrigation scheduling, wheat grain yield rose significantly when the first irrigation was increased from 65 mm to 75 mm of water. Going further to 85 mm gave only a small numerical gain. These were research results for irrigated wheat, so actual quantities should be confirmed with the local KVK.",
-    "source_title": "Optimizing irrigation schedule for wheat through field and simulation studies (PAU thesis, KrishiKosh)",
-    "source_url": "https://krishikosh.egranth.ac.in/handle/1/5810205422"
-  },
-    {
-    "id": "wheat-nitrogen-split",
-    "crop": "Wheat",
-    "topic": "nitrogen urea fertilizer split application timing sowing first irrigation",
-    "text": "In a sowing-time trial in Punjab, applying half of the nitrogen at sowing and half at the first irrigation gave wheat yield on par with a three-way split (half at sowing, a quarter at the first irrigation and a quarter at the second) and significantly better than the other timings tested. The total dose should follow the Soil Health Card or the local KVK.",
-    "source_title": "Indian Journal of Agronomy: sowing time and split nitrogen in bread wheat (Amritsar, Punjab)",
-    "source_url": "https://pub.isa-india.in/index.php/ija/article/download/2886/2586/3078"
+    "topic": "fertilizer dose per acre without soil test medium fertility nitrogen phosphorus potash kallar",
+    "text": "Fertilizer should follow a soil test. Without one, PAU gives for medium-fertility soil 50 kg nitrogen and 25 kg phosphorus (P2O5) per acre, which works out to about 90 kg urea plus 55 kg DAP. Potash (20 kg muriate of potash per acre) is applied only to soils testing low in potassium. Crops on kallar soil get 25% more nitrogen, and crops sown after mid-December get 25% less.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat fertilizer application (pp. 9-10)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
   },
   {
-    "id": "wheat-urea-before-irrigation",
+    "id": "wheat-sowing-time",
     "crop": "Wheat",
-    "topic": "urea nitrogen top dressing before or after irrigation timing",
-    "text": "A Journal of Wheat Research study for the wheat belt of Haryana and Punjab found that top dressing urea just before irrigation improved wheat growth compared with top dressing it after irrigation.",
-    "source_title": "Journal of Wheat Research: nitrogen top dressing just before irrigation improves wheat growth",
-    "source_url": "https://epubs.icar.org.in/index.php/JWR/article/download/83006/36838/231889"
+    "topic": "sowing time date November optimum late sowing yield loss variety",
+    "text": "The optimum sowing time for wheat in Punjab is the first fortnight of November. Long-duration varieties can be sown from the fourth week of October, and timely-sown varieties are sown from the fourth week of October to the fourth week of November. A delay of one week from the optimum time cuts yield by about 150 kg per acre. Late-sown crops use late-sown varieties such as PBW 771 and PBW 752.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat time of sowing (p. 5)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
   },
   {
-    "id": "wheat-weed-critical-period",
+    "id": "wheat-sowing-depth-seed",
     "crop": "Wheat",
-    "topic": "weed control weeding critical period hand weeding days after sowing",
-    "text": "A Tamil Nadu Agricultural University guide puts the critical period of weed control in wheat at 15 to 30 days after sowing. Where no herbicide is used it advises two hand weedings, at about 20 and 35 days after sowing. This guide is from another state, so local advice should be confirmed with the KVK.",
-    "source_title": "Tamil Nadu Agricultural University agritech portal: weed management in wheat",
-    "source_url": "https://agritech.tnau.ac.in/agriculture/agri_weedmgt_wheat.html"
+    "topic": "sowing depth cm seed rate row spacing drill happy seeder",
+    "text": "With a seed-cum-fertilizer drill PAU recommends sowing wheat at 4 to 6 cm depth with rows 15 to 20 cm apart (15 cm if late sown). In bi-directional sowing the seed goes in slightly shallower, at 4 cm in rows 20 cm apart. With a Happy Seeder the sowing depth is 1.5 to 2 inches. Seed rate is 40 kg per acre for most varieties and 45 kg for PBW 869 and Unnat PBW 550, with 5 kg more per acre when sowing with a Happy Seeder.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat sowing method and seed rate (pp. 5-8)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
   },
   {
-    "id": "wheat-herbicide-timing-punjab",
+    "id": "wheat-weed-control",
     "crop": "Wheat",
-    "topic": "weed herbicide timing post-emergence days after sowing Phalaris minor",
-    "text": "In north-western India, the main wheat weed Phalaris minor is controlled either with pre-emergence herbicides within 2 days of sowing or with post-emergence herbicides at about 30 days after sowing, and post-emergence use is by far the more common among farmers. Growth stage at spraying affects both weed control and crop tolerance. Product and dose must come from the KVK, and the label must be followed.",
-    "source_title": "Spanish Journal of Agricultural Research: growth stages, weed control and herbicide tolerance in wheat (PAU, Ludhiana)",
-    "source_url": "https://sjar.revistas.csic.es/index.php/sjar/article/view/9728/3327"
+    "topic": "weed control weeding herbicide hand hoeing gulli danda Phalaris minor timing broadleaf",
+    "text": "PAU's first option is two hand hoeings, one before and one after the first irrigation. For herbicides, pre-emergence sprays go on within 2 days of sowing. Post-emergence sprays for grass weeds such as gulli danda go on either when the crop is about 20 days old and the weeds have 2 to 3 leaves (2 to 3 days before the first irrigation) or 30 to 35 days after sowing. Broadleaf weed sprays fall between 25 and 45 days after sowing (45 to 55 days for December sowings). The right product depends on the weed, soil texture and the next crop, so it should be chosen from the package or with the KVK. Irrigation after spraying should be light, and the herbicide group should be changed every year.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat weed control (pp. 12-16)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "wheat-yellow-rust",
+    "crop": "Wheat",
+    "topic": "yellow rust stripe rust disease symptoms yellow powdery stripes monitoring December",
+    "text": "Yellow rust shows as yellow powdery pustules forming stripes on the leaves. PAU advises monitoring wheat from the second week of December onward, especially after irrigation or rain, treating the first patches early and spraying only around the infected area. Nights of 7 to 13 degrees C with 85 to 100% humidity and days of 15 to 24 degrees C favour it, and frequent rain with wind in February and March makes it worse. Resistant varieties are advised, and October sowing is discouraged in disease-prone sub-mountainous areas. Fungicide options are listed in the package and should be confirmed with the KVK.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat diseases (pp. 19-20)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "wheat-harvest-storage",
+    "crop": "Wheat",
+    "topic": "harvest maturity days ripe shattering threshing storage moisture grain",
+    "text": "PAU advises harvesting and threshing wheat as soon as it is fully ripe, because late harvest causes heavy grain loss from shattering. Timely-sown varieties in its list mature in roughly 145 to 158 days. Grain with more than 10% moisture should be dried before storage to avoid mould and heat damage.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: wheat harvesting and storage (p. 17)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
   }
 ]
