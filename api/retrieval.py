@@ -76,7 +76,10 @@ class KnowledgeBase:
         if not tokens:
             return []
         scored = sorted(((self.score(tokens, i), i) for i in candidates), reverse=True)
-        return [self.entries[i] for s, i in scored if s > 0][:top_k]
+        if not scored or scored[0][0] <= 0:
+            return []
+        cutoff = scored[0][0] * 0.5
+        return [self.entries[i] for s, i in scored if s >= cutoff][:top_k]
 
 
 def load_entries():

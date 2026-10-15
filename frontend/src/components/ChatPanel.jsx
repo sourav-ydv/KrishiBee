@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-import { sendChat } from "../api";
+import { sendChat, getChatCoverage } from "../api";
 
 const STARTERS = [
   "When should I give the first irrigation?",
@@ -27,6 +27,13 @@ export default function ChatPanel({ context }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const endRef = useRef(null);
+  const [covered, setCovered] = useState(null);
+
+  useEffect(() => {
+    getChatCoverage().then(setCovered).catch(() => {});
+  }, []);
+
+  const unsourced = covered !== null && context?.crop && !covered.includes(context.crop);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -64,8 +71,15 @@ export default function ChatPanel({ context }) {
     <div className="chat-panel">
       <h3>Ask KrishiBee</h3>
 
+      {unsourced && (
+        <p className="chat-coverage">
+          Sourced answers are available for {covered.join(", ")} only so far, so the assistant will not give advice
+          for {context.crop}. Please ask your local KVK.
+        </p>
+      )}
+
       <div className="chat-log">
-        {messages.length === 0 && (
+        {messages.length === 0 && !unsourced && (
           <div className="chat-starters">
             {STARTERS.map((s) => (
               <button key={s} type="button" onClick={() => send(s)} disabled={loading}>

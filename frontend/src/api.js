@@ -9,3 +9,6 @@ export const predictByLocation = (payload) =>
 
 export const sendChat = (payload) =>
   axios.post(`${API_BASE}/chat`, payload).then((r) => r.data);
+
+export const getChatCoverage = () =>
+  axios.get(`${API_BASE}/chat/coverage`).then((r) => r.data.crops);

@@ -85,14 +85,14 @@ def format_notes(notes: list) -> Optional[str]:
         return None
     lines = [f"[{i + 1}] {n['text']} (Source: {n['source_title']})" for i, n in enumerate(notes)]
     return (
-        "Reference notes from published sources. Base crop-stage timings and quantities on these notes. "
-        "If they do not cover the question, say you are not sure instead of guessing:\n" + "\n".join(lines)
+        "Reference notes from published sources. Base crop-stage timings and quantities only on these notes. "
+        "If a detail the farmer needs is not in the notes, say it is not covered instead of filling it in:\n" + "\n".join(lines)
     )
 
 NO_NOTES_NOTE = (
-    "No reference notes were found for this question. Do not give crop-stage timings, quantities, "
-    "schedules or doses. Say you do not have a sourced answer for this, share only general advice "
-    "without numbers, and point the farmer to the local KVK."
+    "No reference notes were found for this question. Do not give any crop-specific advice, timings, "
+    "quantities, schedules or doses. In one or two sentences, say you do not have a sourced answer for "
+    "this yet and suggest the local KVK or the state agricultural university's package of practices."
 )
 
 IP_LIMIT = 10
@@ -200,3 +200,7 @@ def chat(req: ChatRequest, request: Request):
             seen.add(n["source_title"])
             sources.append(SourceRef(title=n["source_title"], url=n["source_url"]))
     return ChatResponse(reply=reply, sources=sources)
+
+@router.get("/chat/coverage")
+def chat_coverage():
+    return {"crops": sorted({e["crop"] for e in kb.entries if e["crop"] != "General"})}

@@ -679,3 +679,12 @@ header h1 {
   color: #3e6f52;
   border: 1px solid #3e6f52;
 }
+
+.chat-coverage {
+  background: #fff6e0;
+  border: 1px solid #f0d28a;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  margin: 0;
+}
