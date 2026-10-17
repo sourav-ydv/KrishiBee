@@ -223,7 +223,7 @@ export default function CropTracker() {
         })}
       </ul>
 
-      <PhotoLog dayCount={dayCount} />
+      <PhotoLog dayCount={dayCount} crop={plot.crop} />
 
       <p className="tracker-note">
         Dates come from published schedules. Actual timing depends on variety, weather and soil, so confirm with your local KVK.

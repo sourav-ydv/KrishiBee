@@ -9,6 +9,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from api.chat import router as chat_router
+from api.diagnose import router as diagnose_router
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "scripts"))
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "models"))
@@ -52,6 +53,7 @@ app.add_middleware(
 )
 
 app.include_router(chat_router)
+app.include_router(diagnose_router)
 
 with open(FEATURE_INFO_PATH) as f:
     feature_info = json.load(f)

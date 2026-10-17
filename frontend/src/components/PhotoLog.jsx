@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { listPhotos, savePhoto, deletePhoto } from "../photoStore";
+import { diagnosePhoto } from "../api";
+import DiagnosisResult from "./DiagnosisResult";
 
 async function compressImage(file, maxSide = 1280, quality = 0.72) {
   const bitmap = await createImageBitmap(file);
@@ -22,13 +24,33 @@ function formatDay(iso) {
   return new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
 }
 
-export default function PhotoLog({ dayCount }) {
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(String(reader.result).split(",")[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+function describeCheckError(err) {
+  if (!err.response) {
+    return "Could not reach the server. It may be waking up, so please try again in a minute.";
+  }
+  const detail = err.response.data?.detail;
+  return typeof detail === "string" ? detail : "The photo check failed. Please try again.";
+}
+
+export default function PhotoLog({ dayCount, crop }) {
   const [photos, setPhotos] = useState([]);
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
   const cameraRef = useRef(null);
+  const [checkingId, setCheckingId] = useState(null);
+  const [diagnosis, setDiagnosis] = useState(null);
+  const [checkError, setCheckError] = useState(null);
   const urlsRef = useRef([]);
 
   const refresh = useCallback(async () => {
@@ -66,6 +88,27 @@ export default function PhotoLog({ dayCount }) {
       setError("Could not save the photo. Try a smaller image or free up space on your device.");
     } finally {
       setBusy(false);
+    }
+  };
+
+  const handleCheck = async (photo) => {
+    setCheckingId(photo.id);
+    setCheckError(null);
+    setDiagnosis(null);
+    try {
+      const small = await compressImage(photo.blob, 1024, 0.7);
+      const image_base64 = await blobToBase64(small);
+      const data = await diagnosePhoto({
+        crop,
+        image_base64,
+        note: photo.note || null,
+        day_after_sowing: photo.day >= 0 ? photo.day : null,
+      });
+      setDiagnosis({ photoId: photo.id, url: photo.url, data });
+    } catch (err) {
+      setCheckError(describeCheckError(err));
+    } finally {
+      setCheckingId(null);
     }
   };
 
@@ -116,13 +159,25 @@ export default function PhotoLog({ dayCount }) {
                 <strong>Day {p.day}</strong> · {formatDay(p.takenAt)}
                 {p.note && <span>{p.note}</span>}
               </div>
-              <button type="button" className="link-btn" onClick={() => handleDelete(p.id)}>
-                Delete
-              </button>
+              <div className="photo-actions">
+                <button
+                  type="button"
+                  className="check-btn"
+                  onClick={() => handleCheck(p)}
+                  disabled={checkingId !== null}
+                >
+                  {checkingId === p.id ? "Checking..." : "Check this photo"}
+                </button>
+                <button type="button" className="link-btn" onClick={() => handleDelete(p.id)}>
+                  Delete
+                </button>
+              </div>
             </li>
           ))}
         </ul>
       )}
+      {checkError && <p className="photo-error">{checkError}</p>}
+      {diagnosis && <DiagnosisResult result={diagnosis} onClose={() => setDiagnosis(null)} />}
     </section>
   );
 }

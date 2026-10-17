@@ -12,3 +12,6 @@ export const sendChat = (payload) =>
 
 export const getChatCoverage = () =>
   axios.get(`${API_BASE}/chat/coverage`).then((r) => r.data.crops);
+
+export const diagnosePhoto = (payload) =>
+  axios.post(`${API_BASE}/diagnose`, payload, { timeout: 90000 }).then((r) => r.data);
