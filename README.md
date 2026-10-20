@@ -1,52 +1,95 @@
 # KrishiBee
 
-An ML-powered sowing depth advisory system for Indian farmers. Given a crop, a location, and a sowing season, it recommends a sowing depth based on soil properties, weather conditions, and crop characteristics — and shows its work, rather than just outputting a number.
+A farm advisory web app for Indian farmers. It recommends a sowing depth from the soil, weather and crop at a location, answers farming questions from a small set of sourced notes, tracks a wheat crop through the season, and lets a farmer check a photo of a field problem against a published list of wheat diseases, pests and nutrient deficiencies. It shows its work throughout instead of handing back a bare number.
+
+## Live demo
+
+- App: https://krishi-bee.vercel.app
+- API docs: https://krishibee-api.onrender.com/docs
+
+The backend runs on Render's free tier, so the first request after a quiet period can take up to a minute while the service wakes up.
+
+## What it does
+
+- **Depth advisor.** Pick a crop, state, season and a point on the map. The app fetches soil and weather for that point and returns a sowing depth from a neural network, next to the rule-based depth and the agronomic safe range. Covers 8 crops in 5 states.
+- **Ask KrishiBee.** A chatbot that knows which crop and field the farmer just looked up. It answers from short notes taken from a published package of practices and lists the sources under each answer. When it has no sourced answer, it says so. It understands Hindi, Hinglish and English.
+- **My crop.** The farmer enters a sowing date and gets a calendar of irrigation, fertilizer, weeding, disease-scouting and harvest windows, with a done checkbox per task. Field photos are kept in a dated timeline on the phone.
+- **Photo check.** Any photo in the timeline can be checked against a list of wheat problems. The app shows the closest matches with what to compare, what the package advises and where it says so.
+
+The depth advisor covers eight crops. The chatbot, tracker and photo check currently cover wheat only, because every entry in them has to be traced to a source, and that takes real work per crop.
 
 ## The problem
 
-Sowing depth matters more than it gets credit for. Plant a seed too shallow and it dries out or gets eaten; too deep and it never breaks the surface. Most advisory material gives a single fixed number per crop ("sow wheat 4-5cm deep") and ignores that the right depth shifts with soil texture, moisture, and weather. Small and marginal farmers in India mostly work from this kind of generic advice, or none at all.
-
-KrishiBee tries to close that gap: it combines real soil and weather data for a location with agronomic rules and a trained model to give a depth recommendation that actually accounts for local conditions.
+Sowing depth matters more than it gets credit for. Plant a seed too shallow and it dries out or gets eaten; too deep and it never breaks the surface. Most advisory material gives a single fixed number per crop ("sow wheat 4-5cm deep") and ignores that the right depth shifts with soil texture, moisture, and weather. Small and marginal farmers in India mostly work from this kind of generic advice, or none at all. The same gap shows up later in the season, when general advice about irrigation or disease does not match the stage of the crop in front of the farmer.
 
 ## How it works
 
+### Sowing depth
+
 **Data pipeline.** Soil properties (texture, pH, organic carbon, bulk density, nitrogen) for 145 coordinates across Punjab, Haryana, Uttar Pradesh, Madhya Pradesh, and Rajasthan were pulled from SoilGrids. Weather climatology (temperature, humidity, rainfall, solar radiation) for the same points was pulled from NASA POWER, for both Rabi and Kharif sowing windows. Phosphorus and potassium aren't in SoilGrids, so they're estimated from texture and organic carbon, calibrated against published district-level soil fertility studies for each state rather than left as an unconstrained guess.
 
-**Agronomic rules.** `crop_database.py` encodes base sowing depth ranges for 8 crops (Wheat, Rice, Maize, Chickpea, Mustard, Soybean, Pearl Millet, Pigeon Pea), sourced from ICAR/FAO guidance, along with continuous adjustment functions for soil texture, moisture, rainfall, and temperature. This is both the training-label generator for the synthetic dataset and a standalone fallback the app cross-checks every prediction against.
+**Agronomic rules.** `crop_database.py` encodes base sowing depth ranges for 8 crops (Wheat, Rice, Maize, Chickpea, Mustard, Soybean, Pearl Millet, Pigeon Pea) from ICAR and FAO guidance, along with continuous adjustment functions for soil texture, moisture, rainfall, and temperature. This is both the training-label generator for the synthetic dataset and a standalone check the app compares every prediction against. For wheat, the 4 to 5 cm base range sits inside the 4 to 6 cm that Punjab Agricultural University recommends for drill sowing. The ranges for the other seven crops come from general guidance and have not yet been cross-checked against a state package of practices.
 
 **Synthesized training data.** Combining the soil and weather data through the rule engine produces 1,160 labeled rows (145 locations × up to 8 season-matched crops), with small added noise so labels aren't perfectly deterministic.
 
-**Models.** Random Forest and XGBoost baselines were trained first, both landing around MAE 0.12-0.13cm / R² 0.99 on held-out test data. A custom multi-branch neural network (separate soil, weather, and crop+location branches merged before the output layer) was trained alongside them, with a 4-way ablation study (soil-only, weather-only, crop-only, combined) to check whether soil and weather features actually carry predictive signal beyond crop identity alone. They do: the combined model cuts error by about 36% relative to crop-only. The tree-based baselines edge out the neural net slightly, consistent with typical small-tabular-data behavior — the app deploys the custom network anyway, since that was the deliberate choice for this project, with the comparison documented rather than hidden.
+**Models.** Random Forest and XGBoost baselines were trained first, both landing around MAE 0.12-0.13cm / R² 0.99 on held-out test data. A custom multi-branch neural network (separate soil, weather, and crop+location branches merged before the output layer) was trained alongside them, with a 4-way ablation study (soil-only, weather-only, crop-only, combined) to check whether soil and weather features carry predictive signal beyond crop identity alone. They do: the combined model cuts error by about 36% relative to crop-only. The tree-based baselines edge out the neural net slightly, which is typical for small tabular data. The app serves the custom network anyway, and the comparison is documented rather than hidden.
 
-**Honesty about the data.** Every label in the training set is derived from the rule engine, not from observed real-world outcomes. That means the model's accuracy reflects how well it learned the rules, not how well those rules match reality in the field. Real field validation (actual farms, actual germination outcomes) was out of reach for this build due to access constraints — noted here as a limitation, not hidden.
+**Honesty about the data.** Every label in the training set comes from the rule engine, not from observed outcomes in a field. The model's accuracy therefore reflects how well it learned the rules, not how well those rules match reality. Real field validation (actual farms, actual germination outcomes) was out of reach for this build because of access constraints, and is listed below as a limitation.
 
-**API.** FastAPI backend with two prediction modes:
-- `/predict` — manual input of all soil/weather values
-- `/predict_by_location` — farmer supplies only crop, state, and GPS coordinates; soil and weather are fetched automatically
+**API.** The FastAPI backend has two prediction modes. `/predict` takes all soil and weather values by hand. `/predict_by_location` takes only a crop, state, season and GPS point, and fetches soil and weather itself. Both return the neural network's prediction next to the rule engine's prediction and the safe range, so a farmer or a developer can see when they disagree. `/predict_by_location` falls back to the nearest previously collected soil point when the live SoilGrids API is unavailable. ISRIC paused that service during development, so this was a real outage, not a hypothetical one, and the response says when cached data was used.
 
-Both return the neural network's prediction alongside the rule engine's prediction and the agronomic safe range, so a farmer (or a developer debugging) can see when the two disagree. `/predict_by_location` falls back to the nearest previously-collected soil point when the live SoilGrids API is unavailable — ISRIC paused the SoilGrids REST API service during this project's development, so this isn't a hypothetical edge case, it's handling a real outage gracefully.
+### Chatbot
 
-**Frontend.** React app with a Leaflet map for picking a location, a form for crop/state/season, and a results card showing both predictions, the safe range, and the derived soil texture and moisture.
+The chatbot sends the latest prediction (crop, state, season, depth, soil texture, estimated moisture) to a hosted language model on Groq, along with up to three matching notes from a small knowledge base. Each note in `data/knowledge/` is a short paraphrase of a passage in the Punjab Agricultural University (PAU) *Package of Practices for Crops of Punjab, Rabi 2025-26*, with its page reference. Notes are retrieved with BM25 plus a small Hindi and Hinglish term map, which keeps the backend light enough for a free instance. The API returns the sources with each answer. If no note matches, the model is told to say it has no sourced answer and to point the farmer to the local Krishi Vigyan Kendra (KVK). The interface also warns up front when the current crop has no notes yet.
+
+This design came out of failures. The first version had no knowledge base and told a wheat farmer to irrigate 7 to 10 days after sowing, while Punjab guidance puts the first irrigation at about three to four weeks. A second version, built from individual research papers, still disagreed with PAU's own timetable, so the wheat content was rebuilt from the package itself.
+
+### Crop tracker and photo log
+
+The wheat schedule in `frontend/src/data/schedules.json` follows PAU's tables. Irrigation windows depend on the sowing date, because the package gives different intervals for October, early and late November, and December sowings. The plan also covers urea timing, a weed-control window, yellow rust scouting from December and a harvest window, and it warns when the sowing date falls outside the timely window. Fertilizer figures are PAU's baseline for medium-fertility soil and the app tells the farmer to follow a soil test where there is one. Herbicide and fungicide product choices and doses are deliberately left out, because they depend on the weed, soil and next crop; those tasks point to the package and the KVK.
+
+The plan is stored in the browser and photos in IndexedDB, compressed to a maximum of 1280 px. Nothing about the tracker is stored on a server, which keeps it simple and private, but it also means a plan lives on one device and clearing browser data erases it.
+
+### Photo check
+
+Each photo can be checked against a list of 14 wheat problems (8 diseases, 2 pests and 4 nutrient deficiencies) written from the package, in `data/problems/`. A vision model on Groq looks at the photo and may only return ids from that list. The server discards any other id, and everything shown about a match (what to compare against, what PAU advises, the source page) comes from the sourced list, not from the model. If the photo is not wheat, is unreadable, or matches nothing, the app says so. Results are ranked and carry no confidence percentage, since the model cannot produce calibrated ones.
+
+**Pilot evaluation.** To get a measured number, 40 photos were sampled at random (fixed seed, 10 each of yellow rust, brown rust, powdery mildew and healthy leaves) from the public John Innes Centre wheat disease dataset and sent through the endpoint once, without tuning on them.
+
+| | Result |
+|---|---|
+| Diseased photos, correct first answer | 20 of 30 (67%, 95% interval 49-81%) |
+| Diseased photos, correct disease in top three | 21 of 30 (70%, 95% interval 52-83%) |
+| Diseased photos with no match returned | 5 of 30 |
+| Healthy photos with no false alarm | 9 of 10 |
+
+By class, the first answer was right for brown rust 7 of 10, powdery mildew 6 of 10 and yellow rust 7 of 10. With ten photos per class those intervals overlap heavily, so the numbers do not show that one disease is easier than another.
+
+This is a small pilot, not a validation. The photos come mostly from the UK and Ireland, none are from Punjab, and a purpose-trained classifier would very likely score higher on this dataset; the dataset's own authors report 97% for a trained network. The design's advantages are that a new problem is added by editing a sourced list, and that the system stays quiet when unsure. To repeat the evaluation, download the dataset from Zenodo, then run `scripts/sample_eval.py` and `scripts/eval_diagnose.py`.
 
 ## Tech stack
 
 - **Data collection:** Python, SoilGrids REST API, NASA POWER API
 - **ML:** scikit-learn (Random Forest), XGBoost, PyTorch (custom neural network)
-- **Backend:** FastAPI, uvicorn
-- **Frontend:** React (Vite), Leaflet, Axios
+- **Backend:** FastAPI, uvicorn, hosted on Render
+- **Chatbot and photo check:** Groq-hosted language and vision models, BM25 retrieval over a sourced knowledge base
+- **Frontend:** React (Vite), Leaflet, Axios, hosted on Vercel
 
 ## Project structure
 
 ```
 KrishiBee/
-├── scripts/          # data collection, synthesis, validation, training
+├── scripts/          # data collection, synthesis, validation, training, photo-check evaluation
 ├── models/           # model architecture + trained weights
-├── api/               # FastAPI backend
-├── frontend/          # React app
+├── api/              # FastAPI backend: prediction, chat, retrieval, photo check
+├── frontend/         # React app: depth advisor, chat, crop tracker, photo log
+│   └── src/data/     # wheat schedule
 ├── data/
-│   ├── raw/           # SoilGrids + NASA POWER output
-│   ├── processed/     # synthesized + validated datasets, reports
-│   └── final/          # train/val/test splits, scaler + feature config
+│   ├── raw/          # SoilGrids + NASA POWER output
+│   ├── processed/    # synthesized + validated datasets, reports
+│   ├── final/        # train/val/test splits, scaler + feature config
+│   ├── knowledge/    # sourced notes for the chatbot
+│   └── problems/     # sourced wheat problem list for the photo check
 └── notebooks/
 ```
 
@@ -56,9 +99,10 @@ KrishiBee/
 ```bash
 python -m venv venv
 venv\Scripts\activate          # Windows
-pip install -r requirements.txt
+pip install -r requirements-deploy.txt
 uvicorn api.main:app --reload --port 8000
 ```
+The API needs only `requirements-deploy.txt`. The data and training scripts need the fuller environment (pandas, scikit-learn, XGBoost, PyTorch, matplotlib and seaborn).
 
 **Frontend:**
 ```bash
@@ -66,6 +110,18 @@ cd frontend
 npm install
 npm run dev
 ```
+
+**Environment variables.** Set these in the shell before starting the backend (in PowerShell: `$env:GROQ_API_KEY="..."`).
+
+| Variable | Purpose |
+|---|---|
+| `GROQ_API_KEY` | Needed for `/chat` and `/diagnose`. Never commit it. |
+| `GROQ_MODEL` | Optional chat model, default `openai/gpt-oss-120b` |
+| `GROQ_VISION_MODEL` | Optional vision model, default `qwen/qwen3.8-27b` |
+| `ALLOWED_ORIGINS` | Comma-separated origins allowed by CORS, default `http://localhost:5173` |
+| `DIAGNOSE_DISABLE_LIMITS` | Set to `1` only for local evaluation runs |
+
+The frontend reads `VITE_API_BASE` for the backend URL and defaults to `http://localhost:8000`.
 
 ## Results summary
 
@@ -76,20 +132,36 @@ npm run dev
 | AgroDynamicNet (combined) | 0.153 | 0.985 |
 | AgroDynamicNet (crop-only ablation) | 0.208 | 0.972 |
 
-Per-crop performance varies — strongest for Maize and Pearl Millet (R² 0.9+ within-crop), weaker for Mustard, which has the narrowest allowed depth range and so the least room for soil/weather features to move the prediction.
+These scores measure agreement with the rule engine that produced the labels, not with field outcomes. Per-crop performance varies: strongest for Maize and Pearl Millet (R² above 0.9 within the crop), weaker for Mustard, which has the narrowest allowed depth range and so the least room for soil and weather features to move the prediction.
 
 ## Known limitations
 
 - Training labels come from the rule engine, not observed field outcomes
-- Phosphorus, potassium, and soil moisture are estimated, not measured
-- No real-world field validation yet (documented as future work, not silently skipped)
-- SoilGrids live lookups can fall back to a cached nearby point when the external API is down
+- Phosphorus, potassium and soil moisture are estimated, not measured
+- No real-world field validation of the depth model yet
+- Only the depth advisor covers all 8 crops; the chatbot, tracker and photo check cover wheat only
+- The wheat schedule follows PAU's recommendations for irrigated, timely-sown wheat in Punjab and does not yet ask about soil texture or variety
+- The photo check was evaluated on only 40 public photos from outside India and has not been tested on Punjab fields
+- Language-model answers can add details that are not in the notes. The interface shows sources and a KVK reminder with each answer, but this is a risk to keep in mind
+- Chat and photo-check rate limits are kept in memory and reset when the free backend restarts, so Groq's own limits are the real backstop
+- Tracker plans and photos live only in the browser on one device
+- SoilGrids lookups can fall back to a cached nearby point when the external API is down
 
 ## Future work
 
-- Real field data collection for model validation against actual outcomes
-- RAG-based chatbot for broader farming advisory (irrigation timing, fertilizer scheduling)
-- Expand beyond the current 8 crops and 5 states
+- Accounts and cloud sync so a plan and its photos follow the farmer across devices
+- Sourced schedules, notes and problem lists for the other seven crops
+- A trained image classifier compared head to head with the vision-model approach on a held-out set
+- Field validation of the depth model against real sowing outcomes
+- Rain-aware reminders from a live forecast, plus local-language interface and voice input
+
+## Data and sources
+
+- Soil properties: SoilGrids (ISRIC World Soil Information)
+- Weather climatology: NASA POWER
+- Wheat schedule, knowledge notes and problem list: PAU, *Package of Practices for Crops of Punjab, Rabi 2025-26*. The package is PAU's copyright. This repository contains only short paraphrased notes with page references, not the document itself, and the notes should be checked against the current edition.
+- Photo-check evaluation: John Innes Centre, *Wheat disease images (small dataset)*, Zenodo record 7573133, associated with Long et al., *Plant Pathology*, 2023 (doi:10.1111/ppa.13684). The photos are used only for evaluation and are not included here.
+- Map tiles: OpenStreetMap contributors
 
 ## Author
 
