@@ -156,7 +156,7 @@ export default function PhotoLog({ dayCount, crop }) {
                 <img src={p.url} alt={`Field photo from day ${p.day}`} />
               </a>
               <div className="photo-meta">
-                <strong>Day {p.day}</strong> · {formatDay(p.takenAt)}
+                <strong>{p.day < 0 ? "Before sowing" : `Day ${p.day}`}</strong> · {formatDay(p.takenAt)}
                 {p.note && <span>{p.note}</span>}
               </div>
               <div className="photo-actions">

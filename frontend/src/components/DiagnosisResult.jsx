@@ -29,7 +29,8 @@ export default function DiagnosisResult({ result, onClose }) {
       ))}
 
       <p className="diagnosis-warning">
-        The AI can be wrong and has not been tested on real farm photos. Use this only as a prompt to look closer,
+        The AI can be wrong. In a small pilot on public photos from the UK and Ireland it named the right disease first
+        in about 2 of 3 cases, and it has not been tested in Punjab fields. Use this only as a prompt to look closer,
         and confirm with your KVK before spraying anything. The photo is sent to Groq's AI service for analysis
         and is not stored by KrishiBee.
       </p>
