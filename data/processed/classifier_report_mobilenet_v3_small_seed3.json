@@ -1,0 +1,56 @@
+{
+  "arch": "mobilenet_v3_small",
+  "seed": 3,
+  "split_seed": 42,
+  "classes": [
+    "brown-rust",
+    "healthy",
+    "powdery-mildew",
+    "septoria",
+    "yellow-rust"
+  ],
+  "split_sizes": {
+    "train": 671,
+    "val": 144,
+    "test": 144
+  },
+  "test_accuracy": 0.75,
+  "test_macro_f1": 0.7329,
+  "ece_raw": 0.0642,
+  "ece_calibrated": 0.0596,
+  "temperature": 0.9084,
+  "coverage_table": [
+    {
+      "threshold": 0.0,
+      "coverage": 1.0,
+      "accuracy": 0.75
+    },
+    {
+      "threshold": 0.5,
+      "coverage": 0.861,
+      "accuracy": 0.798
+    },
+    {
+      "threshold": 0.7,
+      "coverage": 0.667,
+      "accuracy": 0.854
+    },
+    {
+      "threshold": 0.8,
+      "coverage": 0.583,
+      "accuracy": 0.893
+    },
+    {
+      "threshold": 0.9,
+      "coverage": 0.382,
+      "accuracy": 0.927
+    }
+  ],
+  "pilot": {
+    "diseased_top1": 26,
+    "diseased_top3": 30,
+    "diseased_n": 30,
+    "healthy_correct": 9,
+    "healthy_n": 10
+  }
+}

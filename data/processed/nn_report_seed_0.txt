@@ -1,0 +1,25 @@
+Seed: 0
+Device used: cuda
+
+=== combined ===
+Val MAE during training: 0.1532cm
+Test: MAE=0.1618cm RMSE=0.2091cm R2=0.9940
+
+=== soil_only ===
+Val MAE during training: 1.4463cm
+Test: MAE=1.5257cm RMSE=2.4624cm R2=0.1677
+
+=== weather_only ===
+Val MAE during training: 1.4111cm
+Test: MAE=1.4105cm RMSE=2.0773cm R2=0.4076
+
+=== crop_only ===
+Val MAE during training: 0.2290cm
+Test: MAE=0.2477cm RMSE=0.3186cm R2=0.9861
+
+=== ABLATION SUMMARY (test set) ===
+Variant         MAE (cm)     RMSE (cm)    R2      
+combined        0.1618       0.2091       0.9940  
+soil_only       1.5257       2.4624       0.1677  
+weather_only    1.4105       2.0773       0.4076  
+crop_only       0.2477       0.3186       0.9861  
