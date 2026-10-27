@@ -22,7 +22,7 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
 from torchvision import models, transforms
 
-SEED = 42
+SPLIT_SEED = 42
 PILOT_DIR = "eval_photos"
 MODELS_DIR = "models"
 REPORT_DIR = "data/processed"
@@ -205,6 +205,66 @@ def fmt(k, n):
     return f"{k}/{n} (95% CI {100 * low:.0f}-{100 * high:.0f}%)"
 
 
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+
+def mean_std(values):
+    arr = np.asarray(values, dtype=float)
+    std = float(arr.std(ddof=1)) if len(arr) > 1 else 0.0
+    return float(arr.mean()), std
+
+
+def write_multiseed_summary(arch):
+    rows = []
+    prefix = f"classifier_report_{arch}_seed"
+    for name in os.listdir(REPORT_DIR):
+        if name.startswith(prefix) and name.endswith(".json"):
+            with open(os.path.join(REPORT_DIR, name), encoding="utf-8") as f:
+                rows.append(json.load(f))
+    rows = [row for row in rows if "seed" in row and "test_accuracy" in row]
+    rows.sort(key=lambda row: row["seed"])
+    if not rows:
+        return
+    acc_mean, acc_std = mean_std([row["test_accuracy"] for row in rows])
+    f1_mean, f1_std = mean_std([row["test_macro_f1"] for row in rows])
+    lines = [
+        f"Architecture: {arch}",
+        f"Seeds: {', '.join(str(row['seed']) for row in rows)}",
+        "Split random_state: 42",
+        "",
+        f"Held-out accuracy: mean {acc_mean:.4f}  std {acc_std:.4f}",
+        f"Held-out macro-F1: mean {f1_mean:.4f}  std {f1_std:.4f}",
+    ]
+    with_pilot = [row for row in rows if row.get("pilot")]
+    if with_pilot:
+        diseased_mean, diseased_std = mean_std([row["pilot"]["diseased_top1"] for row in with_pilot])
+        healthy_mean, healthy_std = mean_std([row["pilot"]["healthy_correct"] for row in with_pilot])
+        diseased_n = with_pilot[0]["pilot"]["diseased_n"]
+        healthy_n = with_pilot[0]["pilot"]["healthy_n"]
+        lines.append(f"Pilot diseased top-1: mean {diseased_mean:.2f}/{diseased_n}  std {diseased_std:.2f}")
+        lines.append(f"Pilot healthy correct: mean {healthy_mean:.2f}/{healthy_n}  std {healthy_std:.2f}")
+    lines.append("")
+    lines.append(f"{'seed':<8}{'accuracy':<12}{'macro-F1':<12}{'pilot diseased':<18}{'pilot healthy'}")
+    for row in rows:
+        pilot = row.get("pilot") or {}
+        lines.append(
+            f"{row['seed']:<8}{row['test_accuracy']:<12.4f}{row['test_macro_f1']:<12.4f}"
+            f"{str(pilot.get('diseased_top1', '')):<18}{pilot.get('healthy_correct', '')}"
+        )
+    lines.append("")
+    lines.append("Existing classifier_report files without a seed number were left unchanged.")
+    path = os.path.join(REPORT_DIR, f"classifier_multiseed_{arch}.txt")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+    print(f"Multi-seed summary -> {path}")
+
+
 def save_confusion(cm, classes, path, title):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     fig, ax = plt.subplots(figsize=(6, 5))
@@ -231,13 +291,12 @@ def main():
     parser.add_argument("--epochs", type=int, default=20)
     parser.add_argument("--patience", type=int, default=6)
     parser.add_argument("--batch", type=int, default=32)
+    parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
-    random.seed(SEED)
-    np.random.seed(SEED)
-    torch.manual_seed(SEED)
+    set_seed(args.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Device: {device}  Architecture: {args.arch}")
+    print(f"Device: {device}  Architecture: {args.arch}  Seed: {args.seed}")
 
     items = collect_dataset(args.data)
     pilot = collect_pilot()
@@ -257,9 +316,9 @@ def main():
     print("Classes:", classes)
 
     labels = [l for _, l in remaining]
-    train_items, temp_items = train_test_split(remaining, test_size=0.30, stratify=labels, random_state=SEED)
+    train_items, temp_items = train_test_split(remaining, test_size=0.30, stratify=labels, random_state=SPLIT_SEED)
     temp_labels = [l for _, l in temp_items]
-    val_items, test_items = train_test_split(temp_items, test_size=0.50, stratify=temp_labels, random_state=SEED)
+    val_items, test_items = train_test_split(temp_items, test_size=0.50, stratify=temp_labels, random_state=SPLIT_SEED)
     print(f"Split: train {len(train_items)}, val {len(val_items)}, test {len(test_items)}")
 
     os.makedirs(REPORT_DIR, exist_ok=True)
@@ -278,7 +337,9 @@ def main():
     pilot_ds = LeafDataset(pilot, classes, EVAL_TF) if pilot else None
     print(f"Loaded in {time.time() - started:.0f}s")
 
-    train_loader = DataLoader(train_ds, batch_size=args.batch, shuffle=True, drop_last=True)
+    generator = torch.Generator()
+    generator.manual_seed(args.seed)
+    train_loader = DataLoader(train_ds, batch_size=args.batch, shuffle=True, drop_last=True, generator=generator)
     val_loader = DataLoader(val_ds, batch_size=args.batch)
     test_loader = DataLoader(test_ds, batch_size=args.batch)
 
@@ -335,10 +396,16 @@ def main():
         print(f"  confidence >= {row['threshold']}: coverage {row['coverage']}, accuracy {row['accuracy']}")
 
     cm = confusion_matrix(test_y, test_pred, labels=list(range(len(classes))))
-    save_confusion(cm, classes, os.path.join(PLOTS_DIR, f"classifier_confusion_{args.arch}.png"), f"{args.arch}: held-out test set")
+    save_confusion(
+        cm, classes,
+        os.path.join(PLOTS_DIR, f"classifier_confusion_{args.arch}_seed{args.seed}.png"),
+        f"{args.arch} seed {args.seed}: held-out test set",
+    )
 
     report = {
         "arch": args.arch,
+        "seed": args.seed,
+        "split_seed": SPLIT_SEED,
         "classes": classes,
         "split_sizes": {"train": len(train_items), "val": len(val_items), "test": len(test_items)},
         "test_accuracy": round(float(test_acc), 4),
@@ -366,7 +433,7 @@ def main():
                 "confidence": round(float(conf), 3),
                 "top3": "|".join(classes[i] for i in top3),
             })
-        out_csv = os.path.join(REPORT_DIR, f"classifier_pilot_{args.arch}.csv")
+        out_csv = os.path.join(REPORT_DIR, f"classifier_pilot_{args.arch}_seed{args.seed}.csv")
         with open(out_csv, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=["label", "file", "predicted", "confidence", "top3"])
             writer.writeheader()
@@ -389,13 +456,17 @@ def main():
         }
 
     os.makedirs(MODELS_DIR, exist_ok=True)
+    weight_path = os.path.join(MODELS_DIR, f"wheat_classifier_{args.arch}_seed{args.seed}.pt")
+    report_path = os.path.join(REPORT_DIR, f"classifier_report_{args.arch}_seed{args.seed}.json")
     torch.save(
-        {"state_dict": best_state, "classes": classes, "arch": args.arch, "temperature": temperature},
-        os.path.join(MODELS_DIR, f"wheat_classifier_{args.arch}.pt"),
+        {"state_dict": best_state, "classes": classes, "arch": args.arch, "seed": args.seed, "temperature": temperature},
+        weight_path,
     )
-    with open(os.path.join(REPORT_DIR, f"classifier_report_{args.arch}.json"), "w", encoding="utf-8") as f:
+    with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
-    print(f"\nSaved model to {MODELS_DIR}/wheat_classifier_{args.arch}.pt and report to {REPORT_DIR}/classifier_report_{args.arch}.json")
+    print(f"\nSaved model to {weight_path}")
+    print(f"Saved report to {report_path}")
+    write_multiseed_summary(args.arch)
 
 
 if __name__ == "__main__":

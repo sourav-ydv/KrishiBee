@@ -1,0 +1,17 @@
+Architecture: resnet18
+Seeds: 0, 1, 2, 3, 4
+Split random_state: 42
+
+Held-out accuracy: mean 0.8944  std 0.0216
+Held-out macro-F1: mean 0.8802  std 0.0229
+Pilot diseased top-1: mean 25.20/30  std 1.30
+Pilot healthy correct: mean 9.00/10  std 0.00
+
+seed    accuracy    macro-F1    pilot diseased    pilot healthy
+0       0.8889      0.8785      27                9
+1       0.9097      0.8883      24                9
+2       0.8750      0.8568      24                9
+3       0.9236      0.9146      25                9
+4       0.8750      0.8629      26                9
+
+Existing classifier_report files without a seed number were left unchanged.

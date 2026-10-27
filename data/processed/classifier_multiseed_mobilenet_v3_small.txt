@@ -1,0 +1,17 @@
+Architecture: mobilenet_v3_small
+Seeds: 0, 1, 2, 3, 4
+Split random_state: 42
+
+Held-out accuracy: mean 0.7528  std 0.0188
+Held-out macro-F1: mean 0.7349  std 0.0146
+Pilot diseased top-1: mean 24.40/30  std 1.82
+Pilot healthy correct: mean 8.80/10  std 0.45
+
+seed    accuracy    macro-F1    pilot diseased    pilot healthy
+0       0.7847      0.7601      22                9
+1       0.7361      0.7236      23                9
+2       0.7431      0.7266      25                8
+3       0.7500      0.7329      26                9
+4       0.7500      0.7313      26                9
+
+Existing classifier_report files without a seed number were left unchanged.

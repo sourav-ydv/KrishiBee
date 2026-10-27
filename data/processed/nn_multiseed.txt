@@ -1,0 +1,18 @@
+Seeds: 0, 1, 2, 3, 4
+
+Variant         MAE mean    MAE std     R2 mean     R2 std      
+combined        0.1659      0.0178      0.9938      0.0012      
+soil_only       1.5310      0.0256      0.1713      0.0282      
+weather_only    1.4184      0.0250      0.3969      0.0233      
+crop_only       0.2560      0.0091      0.9856      0.0008      
+
+Error reduction of combined versus crop-only, (crop_only MAE - combined MAE) / crop_only MAE
+seed 0: 34.7%
+seed 1: 38.0%
+seed 2: 43.8%
+seed 3: 33.9%
+seed 4: 25.3%
+mean: 35.2%  std: 6.7%
+
+Deployed weights left unchanged: models/agrodynamicnet_combined.pt
+Single-run report left unchanged: data/processed/nn_report.txt
