@@ -72,7 +72,7 @@ This is a small pilot, not a validation. The photos come mostly from the UK and 
 | | Held-out accuracy | Macro-F1 | Pilot, diseased first answer | Pilot, healthy |
 |---|---|---|---|---|
 | ResNet18 | 89.4% ± 2.2% | 0.880 ± 0.023 | 25.2 ± 1.3 of 30 | 9 of 10 on every seed |
-| MobileNetV3-Small | 75.3% ± 1.9% | 0.735 ± 0.014 | 24.4 ± 1.8 of 30 | 8.8 ± 0.4 of 10 |
+| MobileNetV3-Small | 75.3% ± 1.9% | 0.735 ± 0.015 | 24.4 ± 1.8 of 30 | 8.8 ± 0.4 of 10 |
 
 On this pilot the vision model’s 20 of 30 sits below both means. That comparison favours the classifiers: they trained on the same dataset the pilot photos come from, and the vision model did not. With 30 diseased photos the gap is suggestive. Abstaining below a calibrated confidence of 0.8 keeps roughly 70% of the ResNet18 test photos and puts their accuracy near 95%. Neither classifier is wired into the app. The seed reports are `data/processed/classifier_multiseed_resnet18.txt` and `data/processed/classifier_multiseed_mobilenet_v3_small.txt`.
 
