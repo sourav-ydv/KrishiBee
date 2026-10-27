@@ -1,0 +1,56 @@
+{
+  "arch": "resnet18",
+  "seed": 0,
+  "split_seed": 42,
+  "classes": [
+    "brown-rust",
+    "healthy",
+    "powdery-mildew",
+    "septoria",
+    "yellow-rust"
+  ],
+  "split_sizes": {
+    "train": 671,
+    "val": 144,
+    "test": 144
+  },
+  "test_accuracy": 0.8889,
+  "test_macro_f1": 0.8785,
+  "ece_raw": 0.0831,
+  "ece_calibrated": 0.0712,
+  "temperature": 0.8484,
+  "coverage_table": [
+    {
+      "threshold": 0.0,
+      "coverage": 1.0,
+      "accuracy": 0.889
+    },
+    {
+      "threshold": 0.5,
+      "coverage": 0.951,
+      "accuracy": 0.912
+    },
+    {
+      "threshold": 0.7,
+      "coverage": 0.819,
+      "accuracy": 0.949
+    },
+    {
+      "threshold": 0.8,
+      "coverage": 0.681,
+      "accuracy": 0.959
+    },
+    {
+      "threshold": 0.9,
+      "coverage": 0.542,
+      "accuracy": 0.949
+    }
+  ],
+  "pilot": {
+    "diseased_top1": 27,
+    "diseased_top3": 30,
+    "diseased_n": 30,
+    "healthy_correct": 9,
+    "healthy_n": 10
+  }
+}

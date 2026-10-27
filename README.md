@@ -32,7 +32,7 @@ Sowing depth matters more than it gets credit for. Plant a seed too shallow and 
 
 **Synthesized training data.** Combining the soil and weather data through the rule engine produces 1,160 labeled rows (145 locations × up to 8 season-matched crops), with small added noise so labels aren't perfectly deterministic.
 
-**Models.** Random Forest and XGBoost baselines were trained first, both landing around MAE 0.12-0.13cm / R² 0.99 on held-out test data. A custom multi-branch neural network (separate soil, weather, and crop+location branches merged before the output layer) was trained alongside them, with a 4-way ablation study (soil-only, weather-only, crop-only, combined) to check whether soil and weather features carry predictive signal beyond crop identity alone. They do: On the current single training run the combined network’s test MAE is 0.151 cm against 0.261 cm for a crop-only network, about a 42% error reduction. Earlier runs of the same comparison gave 19%, 26% and 36%, so that percentage is not stable. A multi-seed mean and spread will replace it. Soil alone and weather alone explain little (test R² about 0.19 and 0.38). The tree models are slightly better than the network, which is normal for a small table. The app serves the network, and the comparison is documented.
+**Models.** Random Forest and XGBoost baselines were trained first, both landing around MAE 0.12-0.13cm / R² 0.99 on held-out test data. A custom multi-branch neural network (separate soil, weather, and crop+location branches merged before the output layer) was trained alongside them, with a 4-way ablation study (soil-only, weather-only, crop-only, combined) to check whether soil and weather features carry predictive signal beyond crop identity alone. They do, by a modest amount that moves from seed to seed. Five seeds give a combined-network test MAE of 0.166 ± 0.018 cm (R² 0.994 ± 0.001) against 0.256 ± 0.009 cm for a crop-only network (R² 0.986 ± 0.001). The error reduction is 35.2% on average, with a standard deviation of 6.7 percentage points. The five seeds were 34.7%, 38.0%, 43.8%, 33.9% and 25.3%. Soil alone and weather alone explain little (R² 0.17 ± 0.03 and 0.40 ± 0.02). The network shipped in the app is an earlier single run, test MAE 0.151 cm, which sits inside that seed range. The tree models still edge the network on the one split in the table below. The app serves that shipped network. The five-seed weights were not deployed.
 
 **Honesty about the data.** Every label in the training set comes from the rule engine, not from observed outcomes in a field. The model's accuracy therefore reflects how well it learned the rules, not how well those rules match reality. Real field validation (actual farms, actual germination outcomes) was out of reach for this build because of access constraints, and is listed below as a limitation.
 
@@ -65,7 +65,16 @@ Each photo can be checked against a list of 14 wheat problems (8 diseases, 2 pes
 
 By class, the first answer was right for brown rust 7 of 10, powdery mildew 6 of 10 and yellow rust 7 of 10. With ten photos per class those intervals overlap heavily, so the numbers do not show that one disease is easier than another.
 
-This is a small pilot, not a validation. The photos come mostly from the UK and Ireland, none are from Punjab, and a purpose-trained classifier would very likely score higher on this dataset; the dataset's own authors report 97% for a trained network. The design's advantages are that a new problem is added by editing a sourced list, and that the system stays quiet when unsure. To repeat the evaluation, download the dataset from Zenodo, then run `scripts/sample_eval.py` and `scripts/eval_diagnose.py`.
+This is a small pilot, not a validation. The only photo evidence is the 40-photo pilot and the held-out split, both from the UK and Ireland set, and there is no Indian field test. A potentially suitable Maharashtra field-image dataset, *Wheat_Rust_HLSS*, was identified on IEEE DataPort, but its files require a paid subscription, so it could not be downloaded for evaluation. The design's advantages are that a new problem is added by editing a sourced list, and that the system stays quiet when unsure. To repeat the existing evaluation, download the dataset from Zenodo, then run `scripts/sample_eval.py` and `scripts/eval_diagnose.py`.
+
+**Trained classifiers.** ResNet18 and MobileNetV3-Small were fine-tuned on the other 959 photos from the same dataset. The 40 pilot photos were held out by file hash, and the remaining photos were split once (671 train, 144 validation, 144 test) and reused for every seed. Five seeds:
+
+| | Held-out accuracy | Macro-F1 | Pilot, diseased first answer | Pilot, healthy |
+|---|---|---|---|---|
+| ResNet18 | 89.4% ± 2.2% | 0.880 ± 0.023 | 25.2 ± 1.3 of 30 | 9 of 10 on every seed |
+| MobileNetV3-Small | 75.3% ± 1.9% | 0.735 ± 0.015 | 24.4 ± 1.8 of 30 | 8.8 ± 0.4 of 10 |
+
+On this pilot the vision model’s 20 of 30 sits below both means. That comparison favours the classifiers: they trained on the same dataset the pilot photos come from, and the vision model did not. With 30 diseased photos the gap is suggestive. Abstaining below a calibrated confidence of 0.8 keeps roughly 70% of the ResNet18 test photos and puts their accuracy near 95%. Neither classifier is wired into the app. The seed reports are `data/processed/classifier_multiseed_resnet18.txt` and `data/processed/classifier_multiseed_mobilenet_v3_small.txt`.
 
 ## Tech stack
 
@@ -134,6 +143,15 @@ The frontend reads `VITE_API_BASE` for the backend URL and defaults to `http://l
 | AgroDynamicNet (soil-only) | 1.500 | 0.194 |
 | AgroDynamicNet (weather-only) | 1.416 | 0.376 |
 
+The table is the single run whose weights the app loads. Five more seeds, trained without replacing those weights, are in `data/processed/nn_multiseed.txt`:
+
+| Variant | Test MAE (cm) | Test R² |
+|---|---:|---:|
+| AgroDynamicNet (combined) | 0.166 ± 0.018 | 0.994 ± 0.001 |
+| AgroDynamicNet (crop-only) | 0.256 ± 0.009 | 0.986 ± 0.001 |
+| AgroDynamicNet (soil-only) | 1.531 ± 0.026 | 0.171 ± 0.028 |
+| AgroDynamicNet (weather-only) | 1.418 ± 0.025 | 0.397 ± 0.023 |
+
 These scores measure agreement with the rule engine, not with field outcomes. R² is higher than before the audit mostly because the crops now differ more in depth (chickpea near 11 cm, mustard near 4.5 cm). Crop identity is about 87% of Random Forest importance. Within a crop, Random Forest R² runs from 0.72 for mustard to 0.95 for maize. Before the audit, on the same split, Random Forest was 0.127 / 0.989, XGBoost 0.121 / 0.990, the combined network 0.153 / 0.985 and the crop-only network 0.208 / 0.972. Those older reports are in `data/processed/*_before_audit.txt`.
 
 ## Known limitations
@@ -151,7 +169,6 @@ These scores measure agreement with the rule engine, not with field outcomes. R�
 
 ## Future work
 
-- Mean and spread of the depth-network ablation and the wheat classifiers over several seeds
 - Grad-CAM on the ResNet18 wheat classifier
 - An external test on Indian field photos, or an explicit statement that none was possible
 - Sourced schedules and chatbot notes for chickpea, mustard and rice; photo check stays wheat-only until there is labelled data
