@@ -65,7 +65,7 @@ Each photo can be checked against a list of 14 wheat problems (8 diseases, 2 pes
 
 By class, the first answer was right for brown rust 7 of 10, powdery mildew 6 of 10 and yellow rust 7 of 10. With ten photos per class those intervals overlap heavily, so the numbers do not show that one disease is easier than another.
 
-This is a small pilot, not a validation. The only photo evidence is the 40-photo pilot and the held-out split, both from the UK and Ireland set, and there is no Indian field test. The design's advantages are that a new problem is added by editing a sourced list, and that the system stays quiet when unsure. To repeat the evaluation, download the dataset from Zenodo, then run `scripts/sample_eval.py` and `scripts/eval_diagnose.py`.
+This is a small pilot, not a validation. The only photo evidence is the 40-photo pilot and the held-out split, both from the UK and Ireland set, and there is no Indian field test. A potentially suitable Maharashtra field-image dataset, *Wheat_Rust_HLSS*, was identified on IEEE DataPort, but its files require a paid subscription, so it could not be downloaded for evaluation. The design's advantages are that a new problem is added by editing a sourced list, and that the system stays quiet when unsure. To repeat the existing evaluation, download the dataset from Zenodo, then run `scripts/sample_eval.py` and `scripts/eval_diagnose.py`.
 
 **Trained classifiers.** ResNet18 and MobileNetV3-Small were fine-tuned on the other 959 photos from the same dataset. The 40 pilot photos were held out by file hash, and the remaining photos were split once (671 train, 144 validation, 144 test) and reused for every seed. Five seeds:
 
