@@ -28,11 +28,11 @@ Sowing depth matters more than it gets credit for. Plant a seed too shallow and 
 
 **Data pipeline.** Soil properties (texture, pH, organic carbon, bulk density, nitrogen) for 145 coordinates across Punjab, Haryana, Uttar Pradesh, Madhya Pradesh, and Rajasthan were pulled from SoilGrids. Weather climatology (temperature, humidity, rainfall, solar radiation) for the same points was pulled from NASA POWER, for both Rabi and Kharif sowing windows. Phosphorus and potassium aren't in SoilGrids, so they're estimated from texture and organic carbon, calibrated against published district-level soil fertility studies for each state rather than left as an unconstrained guess.
 
-**Agronomic rules.** `crop_database.py` encodes base sowing depth ranges for 8 crops (Wheat, Rice, Maize, Chickpea, Mustard, Soybean, Pearl Millet, Pigeon Pea) from ICAR and FAO guidance, along with continuous adjustment functions for soil texture, moisture, rainfall, and temperature. This is both the training-label generator for the synthetic dataset and a standalone check the app compares every prediction against. For wheat, the 4 to 5 cm base range sits inside the 4 to 6 cm that Punjab Agricultural University recommends for drill sowing. The ranges for the other seven crops come from general guidance and have not yet been cross-checked against a state package of practices.
+**Agronomic rules.** `crop_database.py` holds a base sowing-depth range for each of the 8 crops, plus continuous adjustments for texture, moisture, rain and temperature. Those rules generate every training label, and the app shows the rule-based depth beside the network. The ranges were checked against the PAU packages for Rabi 2025-26 and Kharif 2026. Five crops moved: chickpea to 10–12.5 cm, mustard to 4–5 cm, maize to 3–5 cm, pearl millet to about 2.5 cm (the ±0.5 cm band is an assumption around PAU’s single value), and rice to 2–4 cm (2–3 cm for direct seeding in dry fields, 3–4 cm in tar-wattar fields, from the basmati section). Wheat is 4–6 cm for drill sowing. Soybean was already inside 2.5–5 cm. Pigeon pea has no depth in the PAU package, so its 4–5 cm range remains general guidance. The packages are written for Punjab; the depth model still covers five states.
 
 **Synthesized training data.** Combining the soil and weather data through the rule engine produces 1,160 labeled rows (145 locations × up to 8 season-matched crops), with small added noise so labels aren't perfectly deterministic.
 
-**Models.** Random Forest and XGBoost baselines were trained first, both landing around MAE 0.12-0.13cm / R² 0.99 on held-out test data. A custom multi-branch neural network (separate soil, weather, and crop+location branches merged before the output layer) was trained alongside them, with a 4-way ablation study (soil-only, weather-only, crop-only, combined) to check whether soil and weather features carry predictive signal beyond crop identity alone. They do: the combined model cuts error by about 36% relative to crop-only. The tree-based baselines edge out the neural net slightly, which is typical for small tabular data. The app serves the custom network anyway, and the comparison is documented rather than hidden.
+**Models.** Random Forest and XGBoost baselines were trained first, both landing around MAE 0.12-0.13cm / R² 0.99 on held-out test data. A custom multi-branch neural network (separate soil, weather, and crop+location branches merged before the output layer) was trained alongside them, with a 4-way ablation study (soil-only, weather-only, crop-only, combined) to check whether soil and weather features carry predictive signal beyond crop identity alone. They do: On the current single training run the combined network’s test MAE is 0.151 cm against 0.261 cm for a crop-only network, about a 42% error reduction. Earlier runs of the same comparison gave 19%, 26% and 36%, so that percentage is not stable. A multi-seed mean and spread will replace it. Soil alone and weather alone explain little (test R² about 0.19 and 0.38). The tree models are slightly better than the network, which is normal for a small table. The app serves the network, and the comparison is documented.
 
 **Honesty about the data.** Every label in the training set comes from the rule engine, not from observed outcomes in a field. The model's accuracy therefore reflects how well it learned the rules, not how well those rules match reality. Real field validation (actual farms, actual germination outcomes) was out of reach for this build because of access constraints, and is listed below as a limitation.
 
@@ -126,13 +126,15 @@ The frontend reads `VITE_API_BASE` for the backend URL and defaults to `http://l
 ## Results summary
 
 | Model | Test MAE (cm) | Test R² |
-|---|---|---|
-| Random Forest | 0.127 | 0.989 |
-| XGBoost | 0.121 | 0.990 |
-| AgroDynamicNet (combined) | 0.153 | 0.985 |
-| AgroDynamicNet (crop-only ablation) | 0.208 | 0.972 |
+|---|---:|---:|
+| Random Forest | 0.131 | 0.996 |
+| XGBoost | 0.133 | 0.996 |
+| AgroDynamicNet (combined) | 0.151 | 0.994 |
+| AgroDynamicNet (crop-only) | 0.261 | 0.985 |
+| AgroDynamicNet (soil-only) | 1.500 | 0.194 |
+| AgroDynamicNet (weather-only) | 1.416 | 0.376 |
 
-These scores measure agreement with the rule engine that produced the labels, not with field outcomes. Per-crop performance varies: strongest for Maize and Pearl Millet (R² above 0.9 within the crop), weaker for Mustard, which has the narrowest allowed depth range and so the least room for soil and weather features to move the prediction.
+These scores measure agreement with the rule engine, not with field outcomes. R² is higher than before the audit mostly because the crops now differ more in depth (chickpea near 11 cm, mustard near 4.5 cm). Crop identity is about 87% of Random Forest importance. Within a crop, Random Forest R² runs from 0.72 for mustard to 0.95 for maize. Before the audit, on the same split, Random Forest was 0.127 / 0.989, XGBoost 0.121 / 0.990, the combined network 0.153 / 0.985 and the crop-only network 0.208 / 0.972. Those older reports are in `data/processed/*_before_audit.txt`.
 
 ## Known limitations
 
@@ -149,9 +151,15 @@ These scores measure agreement with the rule engine that produced the labels, no
 
 ## Future work
 
+- Mean and spread of the depth-network ablation and the wheat classifiers over several seeds
+- Grad-CAM on the ResNet18 wheat classifier
+- An external test on Indian field photos, or an explicit statement that none was possible
+- Sourced schedules and chatbot notes for chickpea, mustard and rice; photo check stays wheat-only until there is labelled data
+- A depth interval from an ensemble and split conformal prediction, with coverage stated against the rule labels
+- Putting the trained classifier inside photo check, after a memory check on the 512 MB server
+- A retrieval comparison of BM25 against embeddings
 - Accounts and cloud sync so a plan and its photos follow the farmer across devices
 - Sourced schedules, notes and problem lists for the other seven crops
-- A trained image classifier compared head to head with the vision-model approach on a held-out set
 - Field validation of the depth model against real sowing outcomes
 - Rain-aware reminders from a live forecast, plus local-language interface and voice input
 
