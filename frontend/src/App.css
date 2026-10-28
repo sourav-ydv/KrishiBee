@@ -777,6 +777,17 @@ header h1 {
   color: #3e6f52;
 }
 
+.classifier-result {
+  border-top: 1px solid #e3e8dc;
+  margin-top: 10px;
+  padding-top: 10px;
+  font-size: 13px;
+}
+
+.classifier-result p {
+  margin: 4px 0;
+}
+
 .diagnosis-warning {
   margin: 12px 0 0;
   font-size: 11px;
