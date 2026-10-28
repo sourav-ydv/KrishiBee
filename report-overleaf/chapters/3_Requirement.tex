@@ -1,0 +1,69 @@
+\label{ch:req}
+
+\section{Feasibility Study}
+
+\subsection{Technical Feasibility}
+SoilGrids and NASA POWER both expose point queries, so a depth request can be answered from a coordinate without a new soil survey \cite{poggio2021soilgrids,nasapower}. The neural network is small: each branch has a hidden width of 32, and the merged trunk has width 64. It runs on CPU. The wheat classifier is a standard ResNet18 and also runs on CPU, which is why it can be loaded on the same free-tier process as the API. BM25 over a few hundred notes is cheap. The pieces that are not free of operational risk are the external services: SoilGrids was paused during development, Groq is rate-limited, and the Render host could not reliably call Open-Meteo. Each of those failures has a behaviour in the product, described in Chapter~\ref{ch:design}.
+
+\subsection{Operational Feasibility}
+A farmer can use the site in a browser without an account. The crop plan and the photographs stay on the device. That is a good fit for a first version and a poor fit for a farmer who changes phones. The calendar is only as good as the sowing date the farmer enters, and the rice screen has to say that the date is the transplanting date. The photo check is available only on a wheat plan, and the other three crops say so rather than accepting a photograph they cannot score against a sourced list.
+
+\subsection{Economic Feasibility}
+The running system uses a free frontend host and a free API host. There is no subscription. The limit is capacity. The API sleeps when idle, chat and photo checks are capped per internet address, and a larger classifier or an embedding index would press the memory limit of the 512\,MB instance. The project is feasible as a demonstrated advisory. It is not costed as a state-wide service.
+
+\subsection{Legal and Ethical Feasibility}
+The PAU packages are the university's copyright. The repository and this report contain short paraphrases and page pointers, not the package text \cite{pau2025rabi,pau2026kharif}. The wheat photographs are used under the terms of the public dataset and are not redistributed in the application repository \cite{long2023data}. The interface does not recommend a pesticide product or a dose. Where a task would require one, the text points to the package and the KVK. Depth predictions are shown with the rule and the safe range so that a single network output is not the only number on the screen. The classifier carries an explicit note that it was trained on John Innes Centre photographs and has not been tested on Punjab fields.
+
+\section{Stakeholders}
+The primary user is a farmer who needs a sowing depth for a field, a dated list of what to do next, and a careful reading of a wheat leaf. The secondary user is a KVK or extension officer who may be shown the same screen. That user needs the source line, because they will be asked to confirm the advice. The developer and the examiner are stakeholders of a different kind: they need the held-out numbers and a clear statement of what the labels are. A use of the system that skips the source line, or that treats the ResNet18 name as a PAU diagnosis, misses the requirement.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    box/.style={draw, rounded corners, align=center, minimum width=3.3cm, minimum height=1cm, font=\small},
+    arr/.style={-{Stealth}, thick}
+]
+    \node[box] (farmer) {Farmer};
+    \node[box, right=1.1cm of farmer] (app) {KrishiBee};
+    \node[box, above right=0.4cm and 1.1cm of app] (kvk) {KVK / package};
+    \node[box, below right=0.4cm and 1.1cm of app] (models) {Depth net\\ and ResNet18};
+    \draw[arr] (farmer) -- node[above, font=\scriptsize] {field, date, photo} (app);
+    \draw[arr] (app) -- node[above, font=\scriptsize, sloped] {sourced answer} (kvk);
+    \draw[arr] (app) -- node[below, font=\scriptsize, sloped] {score beside the rule} (models);
+\end{tikzpicture}
+\caption{The farmer acts on KrishiBee. The package and the KVK remain the authority for practice. The models supply a depth and a wheat-photo score, each shown with its limit.}
+\label{fig:stakeholders}
+\end{figure}
+
+\section{Functional Requirements}
+Table~\ref{tab:fr} lists the behaviours the deployed system is required to provide. Each one is visible on the live site or on a documented API route.
+
+\begin{table}[H]
+\centering
+\caption{Functional requirements.}
+\label{tab:fr}
+\begin{tabular}{lp{0.72\textwidth}}
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+FR1 & Given a crop, state, season and point inside that state, return the network depth, the rule depth and the safe range. \\
+FR2 & If the live soil query fails, say that a cached nearby point was used, and give the distance. \\
+FR3 & Reject a point that does not lie inside the selected state. \\
+FR4 & Answer a question from at most three matching notes, and list the sources. If none match, say so and direct the user to the KVK. \\
+FR5 & Build a crop calendar from a sowing or transplanting date for wheat, chickpea, mustard and rice, including a warning when wheat is outside the timely window. \\
+FR6 & On a wheat plan, match a photograph only to identifiers in the PAU problem list, and show the ResNet18 class beside that list. \\
+FR7 & Withhold the ResNet18 name when the calibrated probability is below 0.8. \\
+FR8 & After a field is chosen, show seven days of rain and temperature and name the next open task on a saved plan. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Non-Functional Requirements}
+\begin{itemize}[leftmargin=1.4em]
+    \item \textbf{Traceability.} A numerical claim about irrigation, fertiliser or depth range is either in a retrieved note, on a calendar task, or in the rule table. The language model is not a source of new numbers.
+    \item \textbf{Privacy.} Plans live in browser storage. Photographs live in IndexedDB, compressed so that the long side is at most 1280 pixels. The photo-check request is not written to a database.
+    \item \textbf{Honesty of metrics.} Depth scores are described as agreement with the rule engine. Classifier scores are described as performance on the John Innes Centre subset.
+    \item \textbf{Graceful failure.} A paused soil service, a sleeping API, a missing Groq key, and an unreachable forecast each produce a sentence the user can act on, rather than a blank screen.
+    \item \textbf{Language.} The chat accepts Hindi, Hinglish and English. The rest of the interface is English.
+    \item \textbf{Limits.} Chat and photo check are rate-limited in memory. Those limits reset when the free process restarts, so the provider's own limit is the real backstop.
+\end{itemize}

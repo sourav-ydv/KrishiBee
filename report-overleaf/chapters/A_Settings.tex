@@ -1,0 +1,70 @@
+\section{Depth Model}
+\begin{table}[H]
+\centering
+\caption{AgroDynamicNet settings. The deployed file is one training run. The five-seed study used the same settings and did not replace that file.}
+\label{tab:nn-settings}
+\begin{tabular}{lp{0.62\textwidth}}
+\toprule
+\textbf{Item} & \textbf{Value} \\
+\midrule
+Soil features & 11, including estimated phosphorus, potassium and moisture \\
+Weather features & 8 seasonal climatology values \\
+Crop embedding & 8 dimensions \\
+State embedding & 4 dimensions \\
+Branch width & 32, then a second layer of 32 \\
+Merged trunk & 64, then 32, then one output \\
+Dropout & 0.15 \\
+Locations & 145 \\
+Labelled rows & 1{,}160 \\
+States & Punjab, Haryana, Uttar Pradesh, Madhya Pradesh, Rajasthan \\
+Crops & Wheat, rice, maize, chickpea, mustard, soybean, pearl millet, pigeon pea \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Wheat Classifier}
+\begin{table}[H]
+\centering
+\caption{Wheat-classifier settings for the checkpoint loaded by the API.}
+\label{tab:clf-settings}
+\begin{tabular}{lp{0.62\textwidth}}
+\toprule
+\textbf{Item} & \textbf{Value} \\
+\midrule
+Public images & 999 \cite{long2023data} \\
+Pilot, excluded by hash & 40 (10 brown rust, 10 yellow rust, 10 powdery mildew, 10 healthy) \\
+Train / validation / test & 671 / 144 / 144, one split for every seed \\
+Classes & Brown rust, healthy, powdery mildew, septoria, yellow rust \\
+Architecture in the app & ResNet18, ImageNet initialisation \\
+Also trained, not served & MobileNetV3-Small \\
+Temperature, seed 0 & 0.8484 \\
+Abstain below & 0.8 after temperature scaling \\
+Seed-0 test accuracy & 0.8889 \\
+Seed-0 macro-F1 & 0.8785 \\
+Seed-0 ECE, raw then scaled & 0.0831, then 0.0712 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Coverage on the Seed-0 Test Split}
+\begin{table}[H]
+\centering
+\caption{ResNet18 seed 0. Coverage is the fraction of the 144 test images with top probability at least the threshold. Accuracy is computed only on that fraction.}
+\label{tab:coverage}
+\begin{tabular}{rrr}
+\toprule
+\textbf{Threshold} & \textbf{Coverage} & \textbf{Accuracy} \\
+\midrule
+0.0 & 1.000 & 0.889 \\
+0.5 & 0.951 & 0.912 \\
+0.7 & 0.819 & 0.949 \\
+0.8 & 0.681 & 0.959 \\
+0.9 & 0.542 & 0.949 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The threshold of 0.9 has a lower accuracy than 0.8 on this particular split (0.949 against 0.959). That is a small-sample reversal, not a reason to claim that a stricter threshold is worse in general. The app uses 0.8 because that was the chosen operating point, not because 0.9 failed.
+
+\section{Interface Constants}
+Chat and photo-check rate limits are held in the API process. The photo check allows a small number of requests per address in a ten-minute window, and a larger daily cap. The exact caps are constants in the server and reset on restart. Forecast rows treat rain as likely at 1\,mm or at 50\% probability. Photographs are resized in the browser so the long side is at most 1280 pixels before they are stored or uploaded for a check.

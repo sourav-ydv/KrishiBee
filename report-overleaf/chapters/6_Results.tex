@@ -1,0 +1,137 @@
+\label{ch:results}
+
+\section{How the Depth Numbers Should Be Read}
+Every depth label is the output of the rule engine, plus a little noise. A low error means the model has learned those rules. It does not mean a field trial measured emergence. The test set is a held-out portion of the same synthetic table. Random Forest importance puts crop identity at about 87\% of the split, which is expected: chickpea sits near 11\,cm and mustard near 4.5\,cm, so knowing the crop already explains most of the variance. Within a crop, Random Forest $R^{2}$ still runs from 0.72 for mustard to 0.95 for maize, so the remaining features are not empty. They are smaller than the crop effect.
+
+\section{Single Split Served by the Application}
+Table~\ref{tab:depth-one} is the run whose neural-network weights the website loads. The tree models were fit on the same split and are not served.
+
+\begin{table}[H]
+\centering
+\caption{Test error on the single split used for the deployed depth network. Lower MAE is closer agreement with the rule labels.}
+\label{tab:depth-one}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Model} & \textbf{Test MAE (cm)} & \textbf{Test $R^{2}$} \\
+\midrule
+Random Forest & 0.131 & 0.996 \\
+XGBoost & 0.133 & 0.996 \\
+AgroDynamicNet, all branches & 0.151 & 0.994 \\
+AgroDynamicNet, crop only & 0.261 & 0.985 \\
+AgroDynamicNet, soil only & 1.500 & 0.194 \\
+AgroDynamicNet, weather only & 1.416 & 0.376 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The trees are ahead of the network by about two tenths of a millimetre on this split. The network is the model that can zero out a branch, which is why it is the one discussed in the ablation and the one loaded by the API. Soil alone and weather alone do not predict depth. Crop identity does. The useful question is the gap between crop-only and the full network.
+
+\section{Five Seeds and the Branch Ablation}
+Five additional seeds were trained without replacing the deployed weights. Table~\ref{tab:depth-seeds} summarises them.
+
+\begin{table}[H]
+\centering
+\caption{Five-seed depth results. The deployed weights are the earlier single run in Table~\ref{tab:depth-one}, whose MAE of 0.151\,cm sits inside the combined-network range below.}
+\label{tab:depth-seeds}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Variant} & \textbf{Test MAE (cm)} & \textbf{Test $R^{2}$} \\
+\midrule
+Combined & $0.166 \pm 0.018$ & $0.994 \pm 0.001$ \\
+Crop only & $0.256 \pm 0.009$ & $0.986 \pm 0.001$ \\
+Soil only & $1.531 \pm 0.026$ & $0.171 \pm 0.028$ \\
+Weather only & $1.418 \pm 0.025$ & $0.397 \pm 0.023$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Relative to the crop-only network, the combined network reduces MAE by 35.2\% on average. The five seed-wise reductions were 34.7\%, 38.0\%, 43.8\%, 33.9\% and 25.3\%, so the mean has a standard deviation of 6.7 percentage points. The reduction is real across seeds and it is not the same size every time. Soil alone ($R^{2}$ about 0.17) and weather alone ($R^{2}$ about 0.40) confirm that the gain is a joint effect, not a hidden copy of the crop name inside the soil file.
+
+Before the PAU range audit, on the same split, Random Forest was at 0.127\,cm / 0.989, XGBoost at 0.121\,cm / 0.990, the combined network at 0.153\,cm / 0.985 and the crop-only network at 0.208\,cm / 0.972. $R^{2}$ rose after the audit mostly because the crops moved further apart in depth. Those earlier reports are kept in the repository and are not the numbers the app should be quoted on.
+
+\section{Vision-Model Pilot}
+Forty photographs were drawn at random with a fixed seed: ten yellow rust, ten brown rust, ten powdery mildew and ten healthy. They were sent through the photo-check endpoint once. Nothing in the prompt was edited afterwards. Table~\ref{tab:pilot} records that pass. The interval is a 95\% interval on a sample of 30 diseased images, and it is wide.
+
+\begin{table}[H]
+\centering
+\caption{Pilot of the PAU-list photo check on 40 John Innes Centre images. This pass does not use the ResNet18 score.}
+\label{tab:pilot}
+\begin{tabular}{lr}
+\toprule
+\textbf{Outcome} & \textbf{Count} \\
+\midrule
+Diseased images, correct first answer & 20 of 30 (67\%, interval 49--81\%) \\
+Diseased images, correct disease in the top three & 21 of 30 (70\%, interval 52--83\%) \\
+Diseased images with no match returned & 5 of 30 \\
+Healthy images with no false alarm & 9 of 10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+By class, the first answer was right for brown rust on 7 of 10, powdery mildew on 6 of 10, and yellow rust on 7 of 10. With ten images per class the intervals overlap, so the pilot does not show that one disease is easier. Five diseased images produced an empty list, which is a failure to help and also a refusal to invent a match.
+
+\section{Fine-Tuned Classifiers}
+ResNet18 and MobileNetV3-Small were fine-tuned on the other 959 images. The pilot files were excluded by hash before the split, so they are not in the 671 / 144 / 144 counts. Every seed reused that split. Table~\ref{tab:clf} is the five-seed summary.
+
+\begin{table}[H]
+\centering
+\caption{Five-seed classifier results. Pilot columns count the 30 diseased and 10 healthy held-out photographs. Macro-F1 is on the 144-image test split.}
+\label{tab:clf}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Model} & \textbf{Accuracy} & \textbf{Macro-F1} & \textbf{Pilot, first} & \textbf{Pilot, healthy} \\
+\midrule
+ResNet18 & $89.4\% \pm 2.2\%$ & $0.880 \pm 0.023$ & $25.2 \pm 1.3$ of 30 & 9 of 10 \\
+MobileNetV3-Small & $75.3\% \pm 1.9\%$ & $0.735 \pm 0.015$ & $24.4 \pm 1.8$ of 30 & $8.8 \pm 0.4$ of 10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On this pilot the vision model's 20 of 30 sits below both means. The comparison favours the classifiers: they trained on the same dataset the pilot photographs come from, and the vision model did not. Thirty diseased photographs are enough to make the gap suggestive and not enough to make it precise. CerealConv's 97.05\% \cite{long2023wheat} is a result on a different protocol and a larger training set. It is not a number KrishiBee missed.
+
+The seed-0 ResNet18 test accuracy is 0.8889 and its macro-F1 is 0.8785, which is inside the five-seed band and slightly below the mean. That is the checkpoint the website loads. Its validation temperature is 0.8484. Expected calibration error moves from 0.0831 to 0.0712 after scaling. At a threshold of 0.8 the same run keeps 68.1\% of the test images and the accuracy on the images it keeps is 0.959. At 0.7 the coverage is 0.819 and the accuracy is 0.949. At 0.9 the coverage falls to 0.542. The operating point 0.8 is the one shown to the farmer: fewer names, and the names that remain are more often correct on this test split. The ``about 70\% coverage and about 95\% accuracy'' summary in earlier notes is this table, read coarsely.
+
+\section{Four Photographs on the Deployed Classifier}
+The 40-image pilot has no septoria folder. Septoria remains one of the five classes in the 144-image test split. As a separate check of the deployed card, one image from each pilot folder was sent through the running photo check. Table~\ref{tab:spot} is that check. It is an illustration of the threshold, not a second test set.
+
+\begin{table}[H]
+\centering
+\caption{One photograph from each pilot class, scored by the deployed ResNet18. A probability below 0.8 is withheld even when the top class is the folder name.}
+\label{tab:spot}
+\begin{tabular}{llcc}
+\toprule
+\textbf{File} & \textbf{Top class} & \textbf{Probability} & \textbf{Shown} \\
+\midrule
+\texttt{brown-rust\_00} & Brown rust & 0.964 & Named \\
+\texttt{yellow-rust\_00} & Yellow rust & 0.851 & Named \\
+\texttt{healthy\_00} & Healthy & 0.996 & Named \\
+\texttt{powdery-mildew\_00} & Powdery mildew & 0.606 & Withheld \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The powdery-mildew case is the important row. The top class matches the folder and the page still refuses to name it. On that same photograph the PAU-list path described white floury spots and matched powdery mildew. The two paths are allowed to disagree in confidence. The farmer sees both.
+
+\screenshot{figures/photo-named.png}{Photo check on a brown-rust pilot image. The ResNet18 name is shown because the probability is above 0.8. Replace the placeholder by exporting this screen from the live site.}{fig:photo-named}
+
+\screenshot{figures/photo-withheld.png}{Photo check on the powdery-mildew pilot image. The top class is correct and the probability is 0.606, so the name is withheld.}{fig:photo-withheld}
+
+\section{Screens of the Deployed Advisor}
+The following figures are part of the result in the sense that the requirements in Table~\ref{tab:fr} are claims about a running site. Export them from \url{https://krishi-bee.vercel.app} after the API has woken, and drop the files into \texttt{figures/} under the names in the captions.
+
+\screenshot{figures/depth.png}{Depth advisor for wheat in Punjab. The card shows the network depth, the rule depth and the 4--6\,cm range together.}{fig:depth}
+
+\screenshot{figures/forecast.png}{Seven-day forecast under the map, including the line that names the next open task.}{fig:forecast}
+
+\screenshot{figures/chat.png}{A sourced answer on first irrigation, with the PAU note listed under the reply.}{fig:chat}
+
+\screenshot{figures/tracker.png}{Wheat calendar after a sowing date, with task windows counted from that date.}{fig:tracker}
+
+\section{Discussion}
+The depth result that should be quoted is not the $R^{2}$ of 0.994. Crop identity makes a high $R^{2}$ easy once chickpea and mustard sit far apart. The result that should be quoted is the 0.09\,cm gap between the crop-only MAE and the combined MAE, repeated over five seeds, together with the statement that the labels are rules. The trees winning by a fraction of a millimetre does not change the product decision. The network is what makes the ablation the same model as the deployment.
+
+The classifier result that should be quoted is the pair of coverage and accuracy at 0.8, plus the pilot comparison, plus the geography. A system that names every image at 89\% accuracy would be a worse fit for this interface than a system that names about two thirds of them and is right about 96\% of the time on the test split. The withheld powdery-mildew photograph is the demonstration of that choice.
+
+The forecast has no accuracy table. It is a pass-through of a public forecast, joined to a task the calendar already knew. Its failure mode on the hosted API, and the move into the browser, belong in the report because they change which component the farmer is actually calling.
+
+What the project does not show is a germination count, a Punjab leaf, or a second season of use. Those are the limits in the next chapter, and they are already the limits of the evidence above.

@@ -1,0 +1,49 @@
+\label{ch:impl}
+
+\section{Development Environment}
+Training was done in Python with PyTorch, scikit-learn and XGBoost. The API dependency file is shorter: FastAPI, Uvicorn, a CPU build of PyTorch and TorchVision, pandas, requests and Pydantic. The client is React, bundled with Vite, with Leaflet for the map and Axios for the API. Photographs are stored with the browser's IndexedDB. Versions are pinned for the torch packages in the deploy file so the hosted build does not drift.
+
+Locally, the API is started with \texttt{uvicorn api.main:app --reload --port 8000} after \texttt{GROQ\_API\_KEY} is set in the shell. The client reads \texttt{VITE\_API\_BASE} and otherwise uses \texttt{http://localhost:8000}. A separate flag, \texttt{DIAGNOSE\_DISABLE\_LIMITS}, turns off the in-memory photo-check cap for a local evaluation only. It is not set on the host.
+
+\section{Data and Training Programs}
+\texttt{scripts/collect\_soil\_data.py} and \texttt{scripts/collect\_weather\_data.py} write the raw point tables. \texttt{scripts/synthesize\_dataset.py} joins them to crops and applies the rule engine. \texttt{scripts/validate\_dataset.py} checks the joined table. \texttt{scripts/prepare\_final\_dataset.py} writes the train, validation and test splits and the scaler. \texttt{scripts/train\_baseline\_models.py} fits Random Forest and XGBoost. \texttt{scripts/train\_nn.py} fits AgroDynamicNet, including the branch ablations. Repeated seeds write a report per seed and do not overwrite the weights the API loads.
+
+\texttt{scripts/train\_wheat\_classifier.py} fine-tunes either ResNet18 or MobileNetV3-Small. The 40 pilot files are excluded by hash. The remaining images are split once, with a fixed split seed, into 671 training, 144 validation and 144 test images, and that split is reused for every model seed. The script records accuracy, macro-F1, a temperature, an expected calibration error before and after scaling, and a coverage table at several probability thresholds. \texttt{scripts/gradcam\_wheat.py} can draw a Grad-CAM map for the ResNet18 checkpoint \cite{selvaraju2017gradcam}. That script is an analysis tool. The website does not call it.
+
+\texttt{scripts/sample\_eval.py} draws the 40-image pilot, ten images each of yellow rust, brown rust, powdery mildew and healthy leaves. Septoria is one of the five training classes and is not in the pilot folders. \texttt{scripts/eval\_diagnose.py} sends the pilot through the photo-check endpoint once, without any change to the prompt in response to the scores.
+
+\section{API Modules}
+\texttt{api/main.py} loads AgroDynamicNet, exposes \texttt{/health}, \texttt{/crops}, \texttt{/predict} and \texttt{/predict\_by\_location}, and includes the other routers. \texttt{/predict} accepts soil and weather fields directly, which is how a developer can bypass the live lookups. \texttt{/predict\_by\_location} is what the page uses.
+
+\texttt{api/retrieval.py} tokenises notes, expands the Hindi and Hinglish map, and ranks with BM25. \texttt{api/chat.py} applies the rate limit, builds the prompt and returns the answer with the notes that were used. \texttt{api/diagnose.py} loads the problem list, calls the vision model, filters identifiers, and, when the crop is wheat, calls \texttt{api/wheat\_classifier.py}. That module decodes the image, applies the ImageNet transform, scales the logits by the stored temperature, and sets \texttt{abstained} when the top probability is below 0.8. \texttt{api/forecast.py} is the server-side forecast used in local tests. The page no longer calls it.
+
+\section{Client Modules}
+The depth screen is a map and a form. Choosing a point stores the latitude and longitude in the browser so that My crop can show the same forecast. The result card prints the network depth, the rule depth, the safe range, the texture, the estimated moisture, and a note when cached soil was used. The chat panel sits under that card and sends the latest result as context. Suggested questions are starting points only.
+
+My crop is a second view, not a second site. Before a plan exists it asks for the crop and the date. After that it lists tasks in date order with a status chip and a checkbox. The forecast card is the first block on that view as well. The photo timeline accepts a camera capture or a file, compresses it, and shows the check button only for wheat. The result component renders the PAU matches and, when present, the ResNet18 block with its probability or its withheld message.
+
+The advisor layout places the map and the forecast in the left column and the form, the depth card and the chat in the right column. On a narrow screen the same blocks stack in that order. This is a presentation change. It does not change a prediction.
+
+\section{What Is Stored Where}
+Table~\ref{tab:storage} is the privacy boundary of the system. It is also the reason a plan does not follow the farmer to a second phone.
+
+\begin{table}[H]
+\centering
+\caption{Where each piece of farmer data lives.}
+\label{tab:storage}
+\begin{tabular}{lp{0.62\textwidth}}
+\toprule
+\textbf{Data} & \textbf{Where it is kept} \\
+\midrule
+Soil cache and model weights & On the API host, built before deployment \\
+Chat and photo-check requests & Sent for an answer, not written to an application database \\
+Crop plan & \texttt{localStorage} on the device \\
+Field photographs & IndexedDB on the device, long side at most 1280\,px \\
+Last map point & \texttt{localStorage}, so the forecast can reload \\
+Groq credential & Host environment variable, not in the repository \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Repository Layout}
+\texttt{scripts/} holds collection, synthesis, training and evaluation. \texttt{models/} holds the AgroDynamicNet definition and the two weight files the API loads. \texttt{api/} holds the HTTP layer. \texttt{frontend/} holds the client, including \texttt{src/data/schedules.json}. \texttt{data/knowledge/} holds the paraphrased notes. \texttt{data/problems/} holds the wheat problem list. \texttt{data/processed/} holds the metric reports for every seed. The wheat photographs themselves are not in the repository.

@@ -1,0 +1,49 @@
+\section{Background and Motivation}
+Sowing depth is a small number with a large effect. A seed placed too shallow dries out or is eaten. A seed placed too deep may never reach the surface. Most advisory material still gives one interval per crop. Wheat is often described as a 4--5\,cm crop, as if soil texture, stored moisture and the chance of rain did not move that interval. The same pattern continues after emergence. A farmer who asks when to irrigate, or what a mark on a leaf might be, is easily given an answer that belongs to a different week of the crop, or to no published timetable at all.
+
+Small and marginal farmers in Punjab, Haryana, Uttar Pradesh, Madhya Pradesh and Rajasthan are the people this project is written for. Many of them do not have a soil-test report in hand at sowing, and the advice they can get quickly is either a fixed number or a general article. A useful tool has to do two things that those articles do not. It has to use the soil and weather at a real point on the map, and it has to show where each later-season statement came from.
+
+Machine learning is justified here only where it changes that situation. A neural network can learn the agronomic adjustments that a rule table already encodes, and it can sit beside the rule so a disagreement is visible. A second network can score a wheat photograph as one of five classes and refuse to name a class when the score is weak. A language model, by contrast, is not treated as a source of agricultural facts. It is allowed to phrase an answer only from notes that were paraphrased from a published package.
+
+\section{Problem Statement}
+The project addresses three related failures.
+
+\begin{enumerate}[leftmargin=1.4em]
+    \item Fixed sowing depths ignore texture, moisture and weather, so two fields of the same crop can be given the same number when the rule for those fields differs.
+    \item Ungrounded language-model answers can state a timetable that contradicts the state package. An early version of this project told a wheat farmer to irrigate 7 to 10 days after sowing. Punjab guidance puts the first irrigation at about three to four weeks \cite{pau2025rabi}.
+    \item A photograph of a wheat leaf can be matched to a disease name with no measure of confidence and no link to what the package says to compare or to do.
+\end{enumerate}
+
+The depth labels available for training are themselves produced by rules. The project therefore cannot claim that the depth model has been shown to improve germination on a farm. The wheat photographs available for training were taken in the United Kingdom and Ireland \cite{long2023wheat,long2023data}. The project cannot claim that the classifier has been tested on Punjab fields.
+
+\section{Proposed Solution}
+KrishiBee is a web application with four farmer-facing parts and two trained models.
+
+The depth advisor takes a crop, a state, a season and a map point. It fetches soil properties and sowing-window climate for that point and returns three numbers together: the neural-network depth, the rule-based depth, and the agronomic safe range. Eight crops are covered: wheat, rice, maize, chickpea, mustard, soybean, pearl millet and pigeon pea. The states are Punjab, Haryana, Uttar Pradesh, Madhya Pradesh and Rajasthan.
+
+Ask KrishiBee answers from a small knowledge base. Wheat, chickpea, and rapeseed and mustard notes are paraphrased from the PAU \emph{Package of Practices for Crops of Punjab, Rabi 2025--26} \cite{pau2025rabi}. Rice notes are paraphrased from the Kharif 2026 package \cite{pau2026kharif}. Retrieval is BM25 with a short Hindi and Hinglish term map \cite{robertson2009bm25}. If no note matches, the system says so and points the farmer to the local Krishi Vigyan Kendra.
+
+My crop turns a sowing date, or a transplanting date for rice, into a calendar of irrigation, fertiliser, weeding, scouting and harvest windows. Herbicide, fungicide and insecticide product names and doses are left out on purpose. Those choices depend on the weed, the soil and the next crop, and the tasks point back to the package and the KVK.
+
+The photo check is wheat only. A hosted vision model may return only identifiers from a list of 14 PAU wheat problems. Beside that list, a fine-tuned ResNet18 \cite{he2016resnet} reports one of five classes: brown rust, yellow rust, powdery mildew, septoria, or healthy. If its calibrated probability is below 0.8, the name is withheld. A seven-day forecast for the selected field is loaded in the browser from Open-Meteo \cite{openmeteo}. It names the next open task on a saved plan and, when that task is irrigation inside the week and rain is likely, tells the farmer to check the field before irrigating. It does not change the depth.
+
+The live application is at \url{https://krishi-bee.vercel.app}. The API documentation is at \url{https://krishibee-api.onrender.com/docs}. The backend is a free-tier service, so the first request after a quiet period can take up to a minute.
+
+\section{Objectives}
+\begin{enumerate}[leftmargin=1.4em]
+    \item Build a sowing-depth model that uses soil, weather and crop identity, and report it next to the rule that generated its labels.
+    \item Measure that model against Random Forest and XGBoost, and by an ablation that removes soil, weather, or both.
+    \item Restrict chatbot and calendar content to paraphrases of the PAU packages, with the source shown on every answer and task.
+    \item Fine-tune and calibrate a wheat-photo classifier, hold out a pilot set, and withhold names below a stated probability.
+    \item Deploy the advisor so that a farmer can complete the path from a map point to a depth, a sourced answer, a calendar and a photo check.
+\end{enumerate}
+
+\section{Scope and Constraints}
+The depth model covers five states and eight crops. Chat, the calendar and the photo check cover fewer crops because every sentence in them had to be traced to a page. Maize, pearl millet, soybean and pigeon pea have depth advice only. The photo check does not run on chickpea, mustard or rice.
+
+Phosphorus, potassium and soil moisture are estimated rather than measured. SoilGrids does not provide phosphorus or potassium, and the estimates are anchored to published district fertility studies rather than left unconstrained. The packages themselves are written for Punjab. Using their depth ranges as the safe band in the other four states is a stated extrapolation.
+
+No pesticide brand or dose is recommended. Photographs and crop plans stay in the browser. The project does not include accounts, mandi prices, or a disease model for a second crop. Grad-CAM maps \cite{selvaraju2017gradcam} can be produced offline for the ResNet18 checkpoint. They are not part of the farmer interface.
+
+\section{Organisation of the Report}
+Chapter~\ref{ch:lit} reviews the data products, the disease-classification literature, and the case for grounded answers. Chapter~\ref{ch:req} records requirements and feasibility. Chapter~\ref{ch:design} describes the architecture. Chapter~\ref{ch:impl} describes the implementation and deployment. Chapter~\ref{ch:results} reports the depth, classifier and pilot numbers. Chapter~\ref{ch:conclusion} states the findings, the contributions and what was deliberately left undone.

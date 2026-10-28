@@ -1,0 +1,199 @@
+\documentclass[a4paper, 11pt, oneside]{report}
+
+% Overleaf: set the main document to report.tex, then compile with pdfLaTeX.
+% Copy "iiit manipur.png" from the format zip into figures/iiitmanipur.png.
+% Optional screenshots, also under figures/:
+%   depth.png  forecast.png  chat.png  tracker.png  photo-named.png  photo-withheld.png
+% Change CSXXXX, the month, and the declaration date if the course notice differs.
+% The internship offer-letter page from the format zip is omitted: this is a project report.
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fouriernc}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, fit}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{longtable}
+\usepackage[nottoc]{tocbibind}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+\newcommand{\includelogo}[2][5cm]{%
+    \IfFileExists{#2}{%
+        \includegraphics[width=#1]{#2}%
+    }{%
+        \fbox{\parbox{#1}{\centering\vspace{8mm}Place the institute logo at\\ \texttt{#2}\vspace{8mm}}}%
+    }%
+}
+
+\newcommand{\screenshot}[3]{%
+    \begin{figure}[H]
+        \centering
+        \IfFileExists{#1}{%
+            \includegraphics[width=0.92\textwidth]{#1}%
+        }{%
+            \fbox{\parbox{0.88\textwidth}{\centering\vspace{14mm}Screenshot to be inserted\\ \texttt{#1}\vspace{14mm}}}%
+        }%
+        \caption{#2}
+        \label{#3}
+    \end{figure}
+}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{\baselineskip}
+    \vspace{0.75\baselineskip}
+    {\LARGE KrishiBee: A Machine-Learning Farm Advisory\\[0.4em] for Sowing Depth and Wheat Disease Screening}
+    \vspace{0.75\baselineskip}
+    \vspace{2\baselineskip}
+    A report submitted for the course named Project-II (CSXXXX)
+    \vspace*{5\baselineskip}
+    Submitted By
+    \vspace{0.5\baselineskip}
+    {\scshape\Large Sourav Yadav\\ Semester~VII\\ 230101043\\ \normalsize sour230101043@iiitmanipur.ac.in}
+    \vspace{0.5\baselineskip}
+    Under the Guidance of
+    \vspace{0.5\baselineskip}
+    {\scshape\Large Dr.\ Rajkumari Bidyalakshmi Devi}
+    \vspace{0.5\baselineskip}
+    \vfill
+    \begin{center}
+        \includelogo{figures/iiitmanipur.png}
+    \end{center}
+    {\scshape\small Department of Computer Science and Engineering\\ Indian Institute of Information Technology Senapati, Manipur\\ November 2026}
+\end{titlepage}
+
+\begin{center}
+    {\LARGE \textbf{Declaration}}
+\end{center}
+
+I hereby declare that the project work entitled ``KrishiBee: A Machine-Learning Farm Advisory for Sowing Depth and Wheat Disease Screening'' has been carried out by me under the supervision of Dr.\ Rajkumari Bidyalakshmi Devi, Assistant Professor, Department of Computer Science and Engineering, IIIT Senapati, Manipur.
+
+In this submission, I have expressed my idea in my own words, and I have adequately cited and referenced any ideas or words that were taken from another source. I also declare that I adhere to all principles of academic honesty and integrity and that I have not misrepresented or falsified any ideas, data, facts, or sources in this submission. I affirm that this project report has not been submitted, either in part or in full, for the award of any other degree or diploma. If any violation of the above is made, I understand that the institute may take disciplinary action.
+
+\vspace{1.2cm}
+\hspace{7cm} Sourav Yadav \\
+\vspace{0.4cm}
+\hspace{7cm} 230101043 \\
+\vspace{0.8cm}
+\hspace{7cm} Date: 05-November-2026
+
+\newpage
+
+\begin{center}
+    \thispagestyle{empty}
+    \begin{table}
+        \centering
+        \includelogo[2.2cm]{figures/iiitmanipur.png}\\[0.4cm]
+        \begin{tabular}{l}
+            Department of Computer Science and Engineering \\
+            Indian Institute of Information Technology Senapati, Manipur \\
+        \end{tabular}
+    \end{table}
+    \par\noindent\rule{\textwidth}{0.4pt}
+
+    Dr.\ Rajkumari Bidyalakshmi Devi
+    \hspace*{\fill} Email: \href{mailto:bidyalakshmi@iiitmanipur.ac.in}{bidyalakshmi@iiitmanipur.ac.in}\\
+    Assistant Professor
+    \hspace*{\fill} Contact No: +91-7005126046\\[1.6cm]
+
+    {\Huge \textbf{\emph{To Whom It May Concern}}}\\[1.4cm]
+
+    \large
+    This is to certify that the project report entitled \textbf{``KrishiBee: A Machine-Learning Farm Advisory for Sowing Depth and Wheat Disease Screening''}, submitted to the Department of Computer Science and Engineering, Indian Institute of Information Technology Senapati, Manipur, in partial fulfilment of the requirements for the award of the degree of Bachelor of Technology in Computer Science and Engineering, is a record of bona fide work carried out by \textbf{Sourav Yadav}, bearing roll number \textbf{230101043}.
+
+    \vspace{1.6cm}
+    \hspace*{2.4in} Signature of Faculty Advisor\\[0.3cm]
+    \hspace*{2.3in} \textbf{(Dr.\ Rajkumari Bidyalakshmi Devi)}\\[0.8cm]
+\end{center}
+
+Signature of the Examiner 1 \dotfill\\[0.8cm]
+Signature of the Examiner 2 \dotfill\\[0.8cm]
+Signature of the Examiner 3 \dotfill\\[0.8cm]
+Signature of the Examiner 4 \dotfill\\[0.8cm]
+
+\newpage
+
+\begin{abstract}
+Farmers are often given one sowing depth for a crop, such as ``sow wheat at 4--5\,cm'', even though the workable depth moves with soil texture, moisture and the weather at sowing. Later in the season the same problem appears again: general advice about irrigation or disease does not match the crop that is actually in the field. KrishiBee is a web advisory built around that gap. It recommends a sowing depth for eight crops across five Indian states, answers questions from short notes traced to the Punjab Agricultural University (PAU) packages of practices, lays out a dated crop calendar for wheat, chickpea, mustard and rice, and checks a wheat photograph against a sourced list of diseases, pests and nutrient deficiencies.
+
+Two trained models carry the machine-learning part of the system. AgroDynamicNet is a multi-branch neural network whose training labels come from an agronomic rule engine, not from observed germination. On the held-out split, the network shipped in the app has a test mean absolute error of 0.151\,cm ($R^{2}=0.994$). Five further seeds give $0.166 \pm 0.018$\,cm. A crop-only network is weaker, at $0.256 \pm 0.009$\,cm, and adding soil and weather reduces that error by about 35\% on average. Random Forest and XGBoost remain slightly stronger on the single reported split. These scores measure agreement with the rules. They are not field-validated germination rates.
+
+The second model is a ResNet18 fine-tuned on 959 wheat photographs from the John Innes Centre set of Long et al., with 40 further photographs held out. Across five seeds the held-out accuracy is $89.4\% \pm 2.2\%$ and the macro-F1 is $0.880 \pm 0.023$. A calibrated probability below 0.8 is withheld rather than named. On one seed, that rule keeps about 68\% of the test photographs and those calls are about 96\% accurate. The live photo check shows this score beside a PAU problem list. A separate vision-model pilot, which did not train on the dataset, named the correct disease first on 20 of 30 diseased pilot photographs. The comparison favours the classifier, and none of the photographs are from Punjab. A seven-day rain forecast for the selected field is fetched in the browser from Open-Meteo and does not change the sowing depth.
+\end{abstract}
+
+\pagebreak
+
+\begin{center}
+    {\LARGE \textbf{Acknowledgement}}
+\end{center}
+\vspace{1.2cm}
+
+I thank my project supervisor, Dr.\ Rajkumari Bidyalakshmi Devi, for her guidance and for insisting that the machine-learning parts of this project stay honest about what they were trained on. Her feedback shaped the decision to show the rule-based depth beside the network, and to withhold a wheat-disease name when the classifier is not confident.
+
+I thank the faculty and staff of the Department of Computer Science and Engineering at the Indian Institute of Information Technology Senapati, Manipur. The department's teaching in machine learning and software engineering is the reason this system could be built and evaluated rather than demonstrated with an unmeasured model.
+
+I thank my peers for trying the live site and for pointing out answers that did not match the Punjab timetable. Those failures are why the chatbot was rebuilt from the PAU packages. I thank my family for their patience through the semester.
+
+\vspace{1.2cm}
+\hspace{7cm} Sourav Yadav\\
+\hspace{7cm} 230101043
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\chapter*{List of Abbreviations}
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+\input{chapters/0_Abbreviations}
+
+\chapter{Introduction}
+\input{chapters/1_Introduction}
+
+\chapter{Literature Survey}
+\input{chapters/2_Literature_Survey}
+
+\chapter{Requirement Engineering}
+\input{chapters/3_Requirement}
+
+\chapter{System Design}
+\input{chapters/4_System_Design}
+
+\chapter{Implementation}
+\input{chapters/5_Implementation}
+
+\chapter{Results}
+\input{chapters/6_Results}
+
+\chapter{Conclusion}
+\input{chapters/7_Conclusion}
+
+\appendix
+\chapter{Training and Evaluation Settings}
+\input{chapters/A_Settings}
+
+\chapter{Metric Definitions}
+\input{chapters/B_Metrics}
+
+\bibliographystyle{plain}
+\bibliography{report}
+
+\end{document}

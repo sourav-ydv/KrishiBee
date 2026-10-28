@@ -1,0 +1,24 @@
+\section{Mean Absolute Error}
+For $n$ held-out rows with rule label $y_i$ and prediction $\hat{y}_i$,
+\begin{equation}
+\mathrm{MAE} = \frac{1}{n} \sum_{i=1}^{n} \lvert y_i - \hat{y}_i \rvert.
+\end{equation}
+The unit is centimetres. Because $y_i$ is a rule output, MAE is agreement with that rule.
+
+\section{Coefficient of Determination}
+\begin{equation}
+R^{2} = 1 - \frac{\sum_{i} (y_i - \hat{y}_i)^{2}}{\sum_{i} (y_i - \bar{y})^{2}}.
+\end{equation}
+A high $R^{2}$ on this table is partly a crop effect. Chickpea and mustard have very different depths, so a model that mostly learns the crop name scores well. Chapter~\ref{ch:results} therefore quotes the crop-only ablation beside $R^{2}$.
+
+\section{Accuracy and Macro-F1}
+Accuracy is the fraction of test images whose predicted class equals the folder name. Macro-F1 is the unweighted mean of the per-class F1 scores, so a class with fewer images is not ignored. Septoria is included in the 144-image test split and is absent from the 40-image pilot, which is why the pilot and the test accuracy answer different questions.
+
+\section{Expected Calibration Error}
+Predictions are binned by reported probability. In each bin the absolute gap between the average reported probability and the accuracy in that bin is computed. ECE is the weighted mean of those gaps \cite{guo2017calibration}. Temperature scaling divides the logits by a single positive number chosen on the validation split before the softmax. It does not change the argmax class. It changes the probability that is compared with 0.8.
+
+\section{Coverage at a Threshold}
+Coverage at threshold $t$ is the fraction of test images whose highest probability is at least $t$. Accuracy at that threshold uses only those images. The two numbers move together: a higher $t$ usually names fewer images and is right more often on the images it still names. Table~\ref{tab:coverage} is the empirical version of that statement for seed 0.
+
+\section{Reading a Small Pilot}
+Twenty correct answers out of thirty diseased images is 67\%. The 95\% interval quoted with it, 49--81\%, is wide because thirty is a small denominator. The same caution applies to 7 of 10 inside one disease. The pilot supports a comparison with the classifier's mean of about 25 of 30 on the same images. It does not support a ranking of diseases.

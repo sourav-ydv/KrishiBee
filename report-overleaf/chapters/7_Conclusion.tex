@@ -1,0 +1,36 @@
+\label{ch:conclusion}
+
+\section{Summary of Findings}
+KrishiBee shows a sowing depth that moves with soil and weather, and it shows the rule that the depth was trained to copy. On rule-generated labels the deployed network has a test MAE of 0.151\,cm. Across five seeds the full network is about 35\% closer to those labels than a crop-only network. Soil alone and weather alone explain little. Random Forest and XGBoost are slightly closer still on the served split. None of these figures is a measured germination rate.
+
+The wheat photograph is handled by two mechanisms that are not allowed to impersonate each other. A vision model may only name problems from a 14-entry PAU list, and on a 40-image pilot it placed the correct disease first for 20 of 30 diseased images. A ResNet18 trained on the other 959 images from the same public set reaches $89.4\% \pm 2.2\%$ accuracy over five seeds. The checkpoint in the app withholds a name below a calibrated probability of 0.8. On its test split that keeps 68.1\% of images at 95.9\% accuracy. One powdery-mildew photograph from the pilot is the worked example: the top class is right, the probability is 0.606, and the page does not name it.
+
+Chat and the calendar stay inside paraphrases of the PAU Rabi 2025--26 and Kharif 2026 packages. The earlier ungrounded chatbot, which recommended a first irrigation at 7 to 10 days, is the reason that restriction exists. The week forecast is a browser call to Open-Meteo joined to the next open task. It does not enter the depth model.
+
+\section{Contributions}
+\begin{enumerate}[leftmargin=1.4em]
+    \item A deployed depth advisor that returns the network, the rule and the safe range for eight crops in five states, with an explicit fallback when SoilGrids does not answer.
+    \item A branch ablation, repeated over five seeds, showing that soil and weather reduce error beyond crop identity by about 35\% on rule labels, and that either one alone does not.
+    \item A chatbot and a four-crop calendar whose numbers are traced to PAU packages, including the refusal to state a number when no note matches.
+    \item A wheat photo check that keeps PAU wording for practice and a calibrated ResNet18 score for the image, with a measured withhold threshold and a held-out pilot.
+    \item A running site on which those pieces can be exercised together, including a seven-day field forecast that does not alter the depth.
+\end{enumerate}
+
+\section{Limits}
+The training labels for depth come from the rule engine. Phosphorus, potassium and moisture are estimated. The packages are written for Punjab and the depth model is applied in four further states. The wheat images are from the United Kingdom and Ireland. A candidate Indian field set, Wheat\_Rust\_HLSS on IEEE DataPort, could not be downloaded because the files require a paid subscription, so no Indian field evaluation was added. Language-model prose can still add a detail that is not in the notes. The sources on the page are the mitigation, not a proof that the prose stayed inside the note. Plans and photographs exist on one device. Rate limits live in the API process and reset when it restarts.
+
+\section{Future Work}
+The following were left undone on purpose once the deployed system and its measurements were in place.
+
+\begin{itemize}[leftmargin=1.4em]
+    \item A depth interval from an ensemble, with coverage stated against the rule labels rather than against a new field trial.
+    \item A comparison of BM25 with an embedding retriever on the same notes.
+    \item Accounts, so a plan and its photographs survive a change of phone.
+    \item Sourced notes and calendars for maize, pearl millet, soybean and pigeon pea.
+    \item A photo-check list for a second crop, after a labelled set for that crop exists.
+    \item Field counts of emergence, in place of rule labels.
+    \item A Hindi interface for the screens that are still English, and voice input.
+    \item A ``due this week'' strip and a sowing card that repeats seed rate and row spacing beside the depth. Both are already present in the notes. They were not given a separate screen.
+\end{itemize}
+
+The project is complete as a measured advisory with a public deployment. Further features would not change the evidence in Chapter~\ref{ch:results}.

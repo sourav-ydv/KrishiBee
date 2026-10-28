@@ -1,0 +1,98 @@
+\label{ch:design}
+
+\section{Overall Architecture}
+KrishiBee is a browser client and a small HTTP API. The client holds the map, the forms, the calendar and the photographs. The API holds the depth model, the wheat classifier, the note index and the calls to the language and vision models. The seven-day forecast is the exception: the browser calls Open-Meteo directly, because the free API host could not complete that call reliably.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    box/.style={draw, rounded corners, align=center, minimum height=0.9cm, font=\small, inner sep=4pt},
+    arr/.style={-{Stealth}, thick}
+]
+    \node[box] (ui) {React client\\ map, calendar, photos};
+    \node[box, below=0.7cm of ui] (api) {FastAPI\\ depth, chat, photo check};
+    \node[box, below left=0.8cm and 0.2cm of api] (soil) {SoilGrids\\ and cache};
+    \node[box, below=0.8cm of api] (power) {NASA POWER\\ climatology};
+    \node[box, below right=0.8cm and 0.2cm of api] (groq) {Groq\\ text and vision};
+    \node[box, right=0.9cm of ui] (meteo) {Open-Meteo\\ 7-day forecast};
+    \draw[arr] (ui) -- (api);
+    \draw[arr] (api) -- (soil);
+    \draw[arr] (api) -- (power);
+    \draw[arr] (api) -- (groq);
+    \draw[arr] (ui) -- (meteo);
+\end{tikzpicture}
+\caption{The client calls the API for depth, chat and photo check. The week forecast is requested by the browser.}
+\label{fig:arch}
+\end{figure}
+
+\section{Depth Data and the Rule Engine}
+One hundred and forty-five coordinates were sampled across the five states. At each coordinate the soil properties listed in Chapter~\ref{ch:lit} were stored, and a Rabi row and a Kharif row of climatology were stored. Not every crop is grown in both seasons, so the synthesised table has 1{,}160 rows rather than $145 \times 8 \times 2$. Each row is passed through \texttt{crop\_database.py}, which holds a base depth interval and additive adjustments for texture, moisture, expected rain and temperature. A small amount of noise is added so that the labels are not a perfect function of the inputs. The safe range shown in the app is the audited base interval, not the noisy label.
+
+The adjustment for texture runs from $+0.5$\,cm on sand to $-0.5$\,cm on clay, with loam at zero. Moisture, rain and temperature contribute further continuous terms. The network is trained to predict the resulting label. At inference the API also evaluates the rule on the same inputs and returns both. If they disagree, the user can see it.
+
+When SoilGrids does not answer, the API computes the great-circle distance to every cached soil point and uses the nearest one. The response states the distance in kilometres. A point outside the bounding box of the selected state is rejected before any lookup. That check is deliberately simple. It stops a Punjab query from being evaluated on a click in another state. It is not a cadastral boundary.
+
+\section{AgroDynamicNet}
+AgroDynamicNet has three branches, each ending in a 32-unit representation. The soil branch reads eleven features: sand, clay, silt, pH, nitrogen, organic carbon, bulk density, estimated moisture, estimated phosphorus, estimated potassium, and an encoded texture class. The weather branch reads temperature, humidity, seven-day rainfall, solar radiation, wind, a rain flag, a season code and the sowing month. The crop branch embeds the crop name in eight dimensions and the state in four, then concatenates seed size, thousand-seed weight, latitude and longitude. Dropout on the branches is 0.15, with batch normalisation. The three vectors are concatenated into a trunk of width 64, then 32, then a single depth output. Figure~\ref{fig:net} shows the merge.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    box/.style={draw, rounded corners, align=center, font=\small, minimum width=3.4cm, minimum height=0.85cm},
+    arr/.style={-{Stealth}, thick}
+]
+    \node[box] (s) {Soil features $\rightarrow$ 32};
+    \node[box, below=0.35cm of s] (w) {Weather features $\rightarrow$ 32};
+    \node[box, below=0.35cm of w] (c) {Crop and state embeddings $\rightarrow$ 32};
+    \node[box, right=1.3cm of w] (m) {Merge $\rightarrow$ 64 $\rightarrow$ 32 $\rightarrow$ cm};
+    \draw[arr] (s.east) -- (m.north west);
+    \draw[arr] (w.east) -- (m.west);
+    \draw[arr] (c.east) -- (m.south west);
+\end{tikzpicture}
+\caption{AgroDynamicNet. Any branch can be replaced by zeros for the ablation. There is no recurrent layer, because the weather input is one climatology vector per season.}
+\label{fig:net}
+\end{figure}
+
+The forward pass takes three flags, \texttt{use\_soil}, \texttt{use\_weather} and \texttt{use\_crop}. Setting a flag to false replaces that branch with zeros. The ablation is therefore the same code path as the deployed model, not a separately designed network. The weights loaded by the API are from one training run. The five-seed study was run without replacing those weights.
+
+\section{Retrieval and the Chatbot}
+Notes live in JSON, one file per crop. A note has an identifier, a crop, a topic string, a short paraphrase, a source title and a source URL where one exists. At startup the API builds a BM25 index and a small map from Hindi and Hinglish words onto the English terms used in the notes. A query is expanded, then searched inside the current crop. The top three notes, if any score highly enough, are placed in the prompt with the latest depth context: crop, state, season, recommended depth, safe range, texture and estimated moisture.
+
+The system instruction tells the model to use a number only when it appears in those notes, to avoid pesticide and fertiliser doses from memory, and to send the farmer to the KVK when the notes are silent. The API returns the sources separately, so the page can render them even if the prose forgets to. Weak matches are dropped rather than passed in as if they were evidence. Crops with no file produce an up-front notice instead of a pretended answer.
+
+\section{Crop Calendar}
+The calendar is a table, not a model. For each of wheat, chickpea, mustard and rice, \texttt{schedules.json} stores tasks with a start and end counted from the entered date, or a calendar date such as the opening of yellow-rust scouting. Wheat irrigation has variants: the interval depends on whether sowing was in October, early November, late November or December. A task can share the window of another task, which is how the urea applications stay tied to the irrigations. Rice uses the entered date as transplanting, and the direct-seeded timings are written in the task note.
+
+A task is due when today falls inside its window, upcoming before that, and passed after the window plus a grace period. The farmer can mark a task done. The plan is stored under one browser key. Removing the plan clears the photographs as well.
+
+\section{Photo Check}
+The wheat problem list contains 14 entries: eight diseases, two pests and four nutrient deficiencies, each with what to look for, what the package says, and the page. The vision model receives the photograph and the list of identifiers. Any identifier it returns that is not on the list is discarded. The sentences shown for a match are copied from the list, not from the model. If the photograph is unreadable, is not wheat, or matches nothing, the page says so. Ranks are shown without a confidence percentage, because that model does not produce a calibrated one.
+
+The ResNet18 path is independent. The image is decoded, resized to $224 \times 224$, and normalised as for ImageNet. Logits are divided by a temperature of $0.8484$ fit on the validation split of seed 0, then turned into a probability. The class is reported only when the top probability is at least 0.8. Otherwise the page says the network is not confident enough to name a class. The note under the score states the training geography and the five class names. MobileNetV3-Small was trained in the same harness and is not loaded by the API.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    box/.style={draw, rounded corners, align=center, font=\small, minimum width=3.6cm, minimum height=0.8cm},
+    arr/.style={-{Stealth}, thick}
+]
+    \node[box] (photo) {Wheat photograph};
+    \node[box, below left=0.7cm and 0.1cm of photo] (groq) {Vision model\\ IDs from 14 PAU problems};
+    \node[box, below right=0.7cm and 0.1cm of photo] (net) {ResNet18\\ 5 classes, withhold below 0.8};
+    \node[box, below=1.5cm of photo] (out) {Both shown\\ neither replaces the other};
+    \draw[arr] (photo) -- (groq);
+    \draw[arr] (photo) -- (net);
+    \draw[arr] (groq) -- (out);
+    \draw[arr] (net) -- (out);
+\end{tikzpicture}
+\caption{The photo check has two outputs. The PAU list is the practice advice. The ResNet18 score is a calibrated class from a different dataset.}
+\label{fig:photopath}
+\end{figure}
+
+\section{Week Forecast}
+The forecast card requests seven daily values from Open-Meteo: weather code, maximum and minimum temperature, precipitation sum, and precipitation probability \cite{openmeteo}. A day is treated as likely rain when the sum is at least 1\,mm or the probability is at least 50\%. The card then reads the crop plan saved on the device, skips tasks that are marked done or whose window has passed, and names the next remaining task. The stronger sentence, which tells the farmer to check the field before irrigating, is used only when that task is an irrigation, it starts within seven days, and rain is likely. The card never says to skip the irrigation.
+
+An API route for the same forecast exists and works from a developer machine. It is not what the live site calls. The hosted process received an error from Open-Meteo and turned that into an HTTP 502. Moving the request into the browser removed that dependency. The depth model is unchanged.
+
+\section{Deployment}
+The client is a Vite build hosted on Vercel. The API is FastAPI on Render, started with one worker. Cross-origin access is limited to an environment list. The Groq key is an environment variable and is not in the repository. Model weights for AgroDynamicNet and for the seed-0 ResNet18 are loaded at process start. The first user request after sleep pays the cold-start cost of that host.

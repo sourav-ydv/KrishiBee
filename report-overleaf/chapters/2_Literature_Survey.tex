@@ -1,0 +1,38 @@
+\label{ch:lit}
+
+\section{Sowing Depth as More than a Single Number}
+Extension material commonly prints one depth interval per crop. That interval is a useful default, and it is also an average over soils. A coarse seed in a drying sandy surface needs to be deeper than the same seed in a moist, fine seedbed. Rain expected in the sowing window pulls in the other direction, because a deep seed under a crust can fail to emerge. The practical problem is not the absence of any number. It is that the number a farmer sees is rarely tied to the field in front of them.
+
+KrishiBee treats published ranges as constraints, not as training labels by themselves. The PAU packages were used to audit the ranges already in the rule table \cite{pau2025rabi,pau2026kharif}. Wheat drill sowing stayed at 4--6\,cm. Chickpea moved to 10--12.5\,cm, mustard to 4--5\,cm, maize to 3--5\,cm, and rice to 2--4\,cm, with the basmati section distinguishing dry seeding from tar-wattar fields. Pearl millet is given as a single PAU value, so the $\pm 0.5$\,cm band around about 2.5\,cm is an assumption. Pigeon pea has no depth in the package that was consulted, so its 4--5\,cm band remains general guidance. This audit is a literature check against one state's package. It is not a multi-state agronomic trial.
+
+\section{Soil and Climate Data Products}
+SoilGrids 2.0 provides global predictions of soil properties on a spatial grid, with an accompanying statement of uncertainty \cite{poggio2021soilgrids}. The properties used here are sand, clay, silt, pH, organic carbon, bulk density and nitrogen, read at 145 coordinates in the five states. Phosphorus and potassium are not in that product. They are estimated from texture and organic carbon and checked against the level of published district fertility figures, so the estimate cannot wander to a value those studies would not support.
+
+Weather for the depth model is a climatology, not a forecast. NASA POWER provides satellite-derived and modelled meteorology for a point \cite{nasapower}. Temperature, humidity, rainfall, solar radiation and wind were summarised for the Rabi and Kharif sowing windows at the same 145 coordinates. A live seven-day forecast is a separate feature and is not an input to AgroDynamicNet. Mixing the two would let a rainy week change a depth that was meant to reflect the usual sowing window.
+
+\section{Tree Models and a Small Neural Network}
+Random Forests average a collection of decision trees and are a standard baseline for tabular agronomic data \cite{breiman2001}. XGBoost adds regularised gradient boosting and is often stronger on the same kind of table \cite{chen2016xgboost}. Both are used here as baselines, not as the model the app serves.
+
+A neural network is justified when the question is whether soil and weather carry signal beyond the name of the crop. That question is answered by training the same architecture with branches switched off. If a crop-only network is already close to the full network, the map and the soil lookup are mostly decoration. The design of AgroDynamicNet follows that test: soil, weather, and crop-plus-location are separate branches and can be zeroed independently. The weather branch is a vector of seasonal means. It is not a sequence, so a recurrent layer would misrepresent the data.
+
+\section{Deep Learning for Wheat Disease Photographs}
+Long, Hartley, Morris and Brown assembled wheat photographs taken in fields and glasshouses, in five categories: healthy leaves, yellow rust, brown rust, powdery mildew and Septoria leaf blotch \cite{long2023wheat}. Their model, CerealConv, reached 97.05\% accuracy under their own training and test protocol, and on one comparison it was slightly ahead of trained pathologists. The public release used in this project is the 999-image subset \cite{long2023data}. The full collection of 19{,}172 images is available only on request and was not used.
+
+That paper is the reason a residual network is a reasonable second model, and it is also the reason the numbers in Chapter~\ref{ch:results} must not be lined up against 97.05\%. CerealConv was evaluated on the authors' split of a much larger set. KrishiBee fine-tunes ImageNet-initialised ResNet18 and MobileNetV3-Small \cite{he2016resnet,howard2019mobilenetv3} on 959 of the public images, with 40 images removed by file hash before the split. The protocols differ, the training sets differ, and a higher headline accuracy on a different test is not evidence that one system is better.
+
+Two further choices follow from the same literature. First, a disease name shown to a farmer in Punjab should not rest only on a model trained in the United Kingdom and Ireland. The interface therefore keeps a PAU problem list, and the network score is labelled as a score rather than as a PAU diagnosis. Second, modern networks are often over-confident \cite{guo2017calibration}. Temperature scaling on a validation set, followed by a hard threshold, is a small and standard way to refuse weak calls.
+
+\section{Grounded Answers rather than a Free Language Model}
+A hosted language model can phrase an answer in Hindi, Hinglish or English, and it can also invent a timetable. The 7-to-10-day irrigation error in the first chatbot was not a retrieval bug. There was no knowledge base. A second version, built from individual papers, still disagreed with the PAU timetable, which is the document an extension officer in Punjab would actually open. The design that remained is retrieval over short paraphrases, with the model instructed to use a number only when that number is in the retrieved notes, and to say when nothing matched.
+
+BM25 is a strong sparse ranker for a few hundred short notes and does not require an embedding service \cite{robertson2009bm25}. That matters on a free compute instance. An embedding index is a reasonable later comparison. It is not required to show that ungrounded generation fails and grounded generation can be forced to cite a page.
+
+\section{Summary of Gaps}
+The gaps this project works inside, rather than claims to close, are the following.
+
+\begin{itemize}[leftmargin=1.4em]
+    \item Published depth ranges are real, but they are not paired here with germination counts from the five states.
+    \item Public wheat-disease photographs support a measured classifier, and they are the wrong geography for a Punjab claim.
+    \item A language model is a fluent interface to a package. It is not a substitute for the package.
+    \item A forecast is useful in the week of an irrigation. It is a different data product from the climatology used to train the depth model.
+\end{itemize}
