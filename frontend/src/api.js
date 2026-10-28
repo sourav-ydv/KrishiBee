@@ -15,3 +15,8 @@ export const getChatCoverage = () =>
 
 export const diagnosePhoto = (payload) =>
   axios.post(`${API_BASE}/diagnose`, payload, { timeout: 90000 }).then((r) => r.data);
+
+export const getForecast = (latitude, longitude) =>
+  axios
+    .get(`${API_BASE}/forecast`, { params: { latitude, longitude }, timeout: 15000 })
+    .then((r) => r.data);
