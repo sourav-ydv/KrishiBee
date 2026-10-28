@@ -1,0 +1,66 @@
+[
+  {
+    "id": "rice-nursery-transplant-time",
+    "crop": "Rice",
+    "topic": "nursery sowing time transplanting date June July seedling age PR 126 seed rate",
+    "text": "For transplanted rice, sow the nursery from 20 May to 20 June. PAU's windows inside that period depend on the variety: several medium-duration varieties from 20 to 25 May, and PR 126 from 25 May to 20 June. Eight kg of heavy seed is enough to transplant one acre. Transplant from 20 June to 10 July so the field is free in time for wheat. Use 30 to 35 day old seedlings for medium-duration varieties and 25 to 30 day old seedlings for PR 126. Do not transplant PR 126 after 15 July.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice nursery and transplanting (pp. 4, 7)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+  },
+  {
+    "id": "rice-transplant-depth",
+    "crop": "Rice",
+    "topic": "transplanting depth cm spacing seedlings per hill puddled",
+    "text": "In a puddled field, transplant two seedlings per hill, upright and about 2 to 3 cm deep. At the normal time use a spacing of 20 by 15 cm. For late transplanting of varieties other than PR 126, tighten that to 15 by 15 cm. Late PR 126 stays at 20 by 15 cm. Shallow upright planting helps the seedlings establish and tiller early.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice method of transplanting (p. 7)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+  },
+  {
+    "id": "rice-direct-seeding-depth",
+    "crop": "Rice",
+    "topic": "direct seeding DSR depth cm tar-wattar dry field sowing time June seed rate",
+    "text": "Unpuddled direct seeding is for medium to heavy soils, not light sandy soils, and the sowing window is 1 to 15 June. Use 8 to 10 kg seed per acre. In tar-wattar fields, place the seed 3 to 4 cm deep in rows 20 cm apart, and give the first irrigation about 21 days after sowing. In dry fields, place the seed 2 to 3 cm deep in rows 20 cm apart and irrigate immediately. Direct-seeded basmati uses the same sowing method, with its own window of 15 to 30 June.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: direct seeded rice (pp. 25, 27-28)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+  },
+  {
+    "id": "rice-fertilizer",
+    "crop": "Rice",
+    "topic": "fertilizer urea nitrogen phosphorus potassium dose per acre soil test split PR 132",
+    "text": "Fertilizer should follow a soil test. Skip phosphorus if the previous wheat crop already received the recommended dose. Without a test, PAU gives varieties other than PR 132 about 42 kg nitrogen, 12 kg phosphorus (P2O5) and 12 kg potash (K2O) per acre, which is about 90 kg neem-coated urea, 27 kg DAP or 75 kg single superphosphate, and 20 kg muriate of potash. Apply phosphorus and potash only when the test shows they are short, and put them in before puddling. PR 132 gets 25% less nitrogen, about 67.5 kg urea, because a higher dose risks lodging. Split the nitrogen into three equal parts: within 7 days of transplanting, at 21 days, and at 35 days for PR 126 or 42 days for the other varieties. Apply the second and third splits when water is not standing, and irrigate on the third day.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice fertilizer (p. 10)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+  },
+  {
+    "id": "rice-basmati-fertilizer-time",
+    "crop": "Rice",
+    "topic": "basmati nursery transplanting urea dose lodging green manure weeks",
+    "text": "For Punjab Basmati 7 and 5, and for Pusa Basmati 1847, 1121 and 1718, sow the nursery in the first fortnight of June and transplant in the first fortnight of July. CSR 30 and Pusa Basmati 1509 move one fortnight later. Basmati seedlings are ready at 25 to 30 days, or the 5 to 6 leaf stage. Do not apply urea if the field was green manured. Otherwise the urea dose per acre is 18 kg for CSR 30, 36 kg for Punjab Basmati 7 and 5 and for Pusa Basmati 1121 and 1718, and 54 kg for Pusa Basmati 1847 and 1509. Split that urea into two equal parts at 3 weeks and 6 weeks after transplanting. A high nitrogen dose makes basmati tall and prone to lodging.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: basmati rice (pp. 21-22)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+  },
+  {
+    "id": "rice-irrigation",
+    "crop": "Rice",
+    "topic": "irrigation standing water weeks ponded drain fortnight before harvest depth cm",
+    "text": "After transplanting, keep water standing for two weeks so the seedlings establish. After that, irrigate two days after the ponded water has soaked in. Do not let the standing water get deeper than 10 cm, and do not let the soil crack. Stop irrigation about a fortnight before maturity so harvest is easy and the next rabi crop can be sown on time. Basmati is managed the same way, and it should not be short of water at flowering. In tar-wattar direct seeding, the first irrigation is about 21 days after sowing and later ones are 5 to 7 days apart. Stop direct-seeded rice irrigation about 10 days before harvest.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice irrigation (pp. 11, 22, 27)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+  },
+  {
+    "id": "rice-weeds-harvest",
+    "crop": "Rice",
+    "topic": "weeding paddy weeder hand weeding harvest maturity yellow straw shattering",
+    "text": "Run a paddy weeder 15 days after transplanting and again a fortnight later. Where the weeder cannot pass, pull the weeds by hand. Herbicide choice and timing belong in the package and with the KVK. Harvest when the ears are nearly ripe and the straw has just turned yellow. Waiting until the crop is dead ripe causes grains to shatter and hurts milling quality. Harvest basmati the same way, and thresh it the same day or the next day.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice weed control and harvesting (pp. 8, 12, 22)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+  },
+  {
+    "id": "rice-dsr-urea",
+    "crop": "Rice",
+    "topic": "direct seeded fertilizer urea weeks green manure basmati DSBR",
+    "text": "For unpuddled direct-seeded rice, apply fertilizer on a soil test. Without one, PAU uses 130 kg urea per acre in three equal splits at 4, 6 and 9 weeks after sowing. After green manuring with sunnhemp, or 6 tonnes of farmyard manure per acre, cut that to 90 kg urea. Direct-seeded basmati is sown from 15 to 30 June and gets 54 kg urea per acre in three equal splits at 3, 6 and 9 weeks, cut to 18 kg after sunnhemp green manure. No urea goes on at sowing if a leaf-colour chart is being used; matching starts later.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: direct seeded rice fertilizer (pp. 26-28)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+  }
+]
