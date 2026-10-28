@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import schedules from "../data/schedules.json";
 import PhotoLog from "./PhotoLog";
 import { clearPhotos } from "../photoStore";
+import ForecastCard from "./ForecastCard";
 
 const STORAGE_KEY = "krishibee_plot_v1";
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -143,6 +144,7 @@ export default function CropTracker() {
   if (!plot || !schedules[plot.crop]) {
     return (
       <form className="tracker-setup" onSubmit={handleStart}>
+        <ForecastCard />
         <h2>Track your crop</h2>
         <p>Pick your crop and the day you sowed. KrishiBee lays out the key operations from published schedules.</p>
         <label>
@@ -174,6 +176,7 @@ export default function CropTracker() {
 
   return (
     <div className="tracker">
+      <ForecastCard />
       <div className="tracker-head">
         <div>
           <h2>{plot.crop}</h2>
