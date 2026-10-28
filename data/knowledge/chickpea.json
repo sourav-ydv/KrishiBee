@@ -1,0 +1,66 @@
+[
+  {
+    "id": "chickpea-sowing-time",
+    "crop": "Chickpea",
+    "topic": "sowing time date October November gram desi kabuli rainfed irrigated early late",
+    "text": "PAU calls this crop gram. For desi gram under rainfed conditions the optimum sowing time is 10 to 25 October. Under irrigated conditions both desi and kabuli gram should be sown from 25 October to 10 November. Sowing earlier than that risks wilt because of high temperature, and the plants make too much leafy growth with poor seed set. A late crop makes weak growth; raising the seed rate only partly makes up for it.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram time of sowing (p. 35)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "chickpea-seed-rate",
+    "crop": "Chickpea",
+    "topic": "seed rate kg per acre PBG kabuli desi late sowing November December",
+    "text": "PAU's seed rate is 30 kg per acre for PBG 10, 24 kg for PBG 5, and 15 to 18 kg for the other desi varieties. Kabuli gram uses 37 kg per acre. If desi gram other than PBG 10 and PBG 5 is sown in the second fortnight of November, raise the rate to 27 kg per acre, and to 36 kg per acre if sowing slips into the first fortnight of December.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram seed rate (p. 36)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "chickpea-sowing-depth",
+    "crop": "Chickpea",
+    "topic": "sowing depth cm row spacing pora drill raised bed after rice",
+    "text": "Sow gram by the pora method in rows 30 cm apart, with the seed 10 to 12.5 cm deep. PAU places it that deep because a shallow sowing is more liable to wilt. A conventional seed-cum-fertilizer drill with broader flutes can be used. After rice, on medium to heavy soils, sow on beds 67.5 cm apart (37.5 cm bed top and a 30 cm furrow), two rows per bed at 20 cm, using the same seed and fertilizer as flat sowing.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram method of sowing (p. 36)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "chickpea-fertilizer",
+    "crop": "Chickpea",
+    "topic": "fertilizer urea phosphorus superphosphate dose per acre soil test spray",
+    "text": "Fertilizer should follow a soil test. Without one, PAU drills all the fertilizer at sowing. For desi gram, irrigated or unirrigated, that is 6 kg nitrogen and 8 kg phosphorus (P2O5) per acre, about 13 kg urea and 50 kg single superphosphate. For irrigated kabuli gram it is 6 kg nitrogen and 16 kg P2O5, about 13 kg urea and 100 kg single superphosphate. For a higher yield, PAU also gives a 2% urea spray (3 kg urea in 150 litres of water per acre) at 90 and 110 days after sowing.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram fertilizer (p. 36)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "chickpea-inoculation",
+    "crop": "Chickpea",
+    "topic": "seed inoculation biofertilizer Rhizobium Mesorhizobium before sowing",
+    "text": "Moisten the seed for one acre with a little water and mix one packet each of Mesorhizobium (LGR-33) and Rhizobacterium (RB-1). Dry the seed in the shade and sow it within one hour. These cultures are sold at the PAU seed shop and at Krishi Vigyan Kendras.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram seed inoculation (p. 36)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "chickpea-irrigation",
+    "crop": "Chickpea",
+    "topic": "irrigation rauni pre-sowing December January wilt after rice heavy soil",
+    "text": "Where irrigation is available, give a heavy pre-sowing irrigation (rauni) so the roots go deep. One more irrigation may be given between mid-December and the end of January, depending on the sowing date and the rain. Do not give that irrigation earlier than 4 weeks after sowing, and delay it if early rain has fallen. Too much irrigation pushes leafy growth and cuts grain yield. Do not irrigate gram sown after rice on heavy soils; that irrigation can badly damage the crop. On raised beds after rice, irrigate only under water stress, especially at pod initiation.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram irrigation (p. 37)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "chickpea-weeds-harvest",
+    "crop": "Chickpea",
+    "topic": "weeding hand hoeing harvest maturity sickle pods dry",
+    "text": "One or two hand hoeings, preferably with a wheel hoe, at 30 and 60 days after sowing keep the weeds down. The choice of any herbicide is left to the package and the local KVK. Harvest when the pods are mature and the plants have dried, using a sickle. Do not pull the plants out, so the roots stay in the soil.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram weed control and harvesting (pp. 36-37)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "chickpea-disease-watch",
+    "crop": "Chickpea",
+    "topic": "ascochyta blight chanani wilt grey mould disease symptoms resistant variety",
+    "text": "Ascochyta blight (chanani) shows dark-brown spots with black dot-like bodies on stems, leaves and pods. It is favoured by about 20 degrees C, humidity above 85% and cloudy rain. PAU points growers to the more resistant varieties PBG 10, PBG 7 and PBG 5, disease-free seed, and destruction of diseased plants after harvest. Wilt starts as drooping leaves that turn yellow and then straw-coloured, with a dark brown to black discoloration inside the root. Soil temperatures of 24 to 27 degrees C favour it, and early sowing should be avoided. Sprays, if any are needed, should be taken from the package or the KVK.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram diseases (p. 38)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  }
+]
