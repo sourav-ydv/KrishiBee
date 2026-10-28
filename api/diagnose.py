@@ -5,6 +5,7 @@ import os
 import time
 from collections import defaultdict, deque
 from typing import List, Optional
+from api.wheat_classifier import classify_base64
 
 import requests
 from fastapi import APIRouter, HTTPException, Request
@@ -82,12 +83,20 @@ class Candidate(BaseModel):
     source_title: str
     source_url: str
 
+class WheatNetResult(BaseModel):
+    model: str
+    label: str
+    probability: float
+    abstained: bool
+    threshold: float
+    note: str
 
 class DiagnoseResponse(BaseModel):
     photo_ok: bool
     observations: str
     candidates: List[Candidate]
     message: str
+    classifier: Optional[WheatNetResult] = None
 
 
 def client_ip(request: Request) -> str:
@@ -233,4 +242,17 @@ def diagnose(req: DiagnoseRequest, request: Request):
             "description and confirm with your KVK before acting."
         )
 
-    return DiagnoseResponse(photo_ok=photo_ok, observations=observations, candidates=candidates, message=message)
+    classifier = None
+    if req.crop == "Wheat":
+        try:
+            classifier = classify_base64(req.image_base64)
+        except Exception:
+            classifier = None
+
+    return DiagnoseResponse(
+        photo_ok=photo_ok,
+        observations=observations,
+        candidates=candidates,
+        message=message,
+        classifier=classifier,
+    )
