@@ -171,18 +171,18 @@ The tables above are the evaluation. This section is one pass through the public
 
 The rule figure is the arithmetic of Chapter~\ref{ch:design}. Wheat starts at an optimal depth of 5.0\,cm. Loam adds nothing. Moisture near 24\% adds about $-0.12$\,cm. The result rounds to 4.88\,cm when the rain and temperature terms are zero. The network is 0.07\,cm away. That is inside the 0.151\,cm test MAE of the deployed weights, and it is not a germination measurement. The cached soil is a real degradation: the texture and moisture are from a point 23\,km away, and the card says so.
 
-The forecast on the same date, 28 October 2026, named rain as likely on 30 October and named the next open task as the weed-control window, then running from 20 October to 4 November. That task is not an irrigation, so the card did not add the ``check the field before you irrigate'' sentence. A later week, or a different sowing date, would. The forecast is not scored in Table~\ref{tab:depth-one} and is not an input to the network.
+The forecast on the same date, 28 October 2026, named rain as likely on 30 October and named the next open task as the weed-control window, then running from 20 October to 4 November. That task is not an irrigation, so the task line stayed the weed-control window. It did not change into the sentence that says rain is in the forecast and the field should be checked before irrigating. The card does print a standing footer on every forecast, including this one: the forecast is not a PAU recommendation, and the field should be checked before irrigation. That footer is not the rain-triggered warning, and it appears whether or not the next task is an irrigation. The forecast is not scored in Table~\ref{tab:depth-one} and is not an input to the network.
 
 The chat was asked when to give the first irrigation. The reply placed a light first irrigation after the crop had started to grow, at about three weeks for an early-October sowing and about four weeks for a sowing from mid-October to early November, and it referred to the Punjab loam and the estimated moisture. That is the timetable the ungrounded bot had missed. The page still carries the standing warning that answers are drawn from a small set of notes and that quantities should be confirmed with the KVK. The prose can add a clause that is not in the note. The source line under the answer is what the farmer, and an examiner, should read.
 
 \section{Screens of the Deployed Advisor}
-The following figures record the requirements in Table~\ref{tab:fr} on the running site at \url{https://krishi-bee.vercel.app}.
+The following figures record the requirements in Table~\ref{tab:fr} on the running site at \url{https://krishi-bee.vercel.app}. They are a later visit than the session in Section~6.7, so the depth, the soil and the weed-control dates are different numbers. The depth card still shows the network, the rule and the 4--6\,cm range together. The forecast task line is again a weed-control window, 4 to 19 November, and the rain-triggered irrigation sentence is again absent. The footer under the days is the standing note described above.
 
 \screenshot{figures/depth.png}{Depth advisor for wheat in Punjab. The card shows the network depth, the rule depth and the 4--6\,cm range together.}{fig:depth}
 
 \screenshot{figures/forecast.png}{Seven-day forecast under the map, including the line that names the next open task.}{fig:forecast}
 
-\screenshot{figures/chat.png}{A sourced answer on first irrigation, with the PAU note listed under the reply.}{fig:chat}
+\screenshot{figures/chat.png}{A reply on first irrigation. It places the first light irrigation at about three weeks for an early-October sowing and at about four weeks after that.}{fig:chat}
 
 \screenshot{figures/tracker.png}{Wheat calendar after a sowing date, with task windows counted from that date.}{fig:tracker}
 
