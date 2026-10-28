@@ -1,6 +1,6 @@
 # KrishiBee
 
-A farm advisory web app for Indian farmers. It recommends a sowing depth from the soil, weather and crop at a location, answers farming questions from a small set of sourced notes, tracks wheat, chickpea, mustard or rice through the season, and lets a farmer check a wheat photo against a published list of wheat diseases, pests and nutrient deficiencies. It shows its work throughout instead of handing back a bare number.
+A farm advisory web app for Indian farmers. It recommends a sowing depth from the soil, weather and crop at a location, shows the next week of rain and temperature for that field, answers farming questions from a small set of sourced notes, tracks wheat, chickpea, mustard or rice through the season, and lets a farmer check a wheat photo against a published list of wheat diseases, pests and nutrient deficiencies. It shows its work throughout instead of handing back a bare number.
 
 ## Live demo
 
@@ -15,9 +15,9 @@ The backend runs on Render's free tier, so the first request after a quiet perio
 - **Ask KrishiBee.** A chatbot that knows which crop and field the farmer just looked up. It answers from short notes taken from a published package of practices and lists the sources under each answer. When it has no sourced answer, it says so. It understands Hindi, Hinglish and English.
 - **My crop.** For wheat, chickpea, mustard or rice, the farmer enters a date and gets a calendar of irrigation, fertilizer, weeding, scouting and harvest windows, with a done checkbox per task. For rice, that date is the transplanting date. Field photos are kept in a dated timeline on the phone.
 - **Photo check.** On a wheat plan, any photo in the timeline can be checked against a list of wheat problems. The app shows the closest matches with what to compare, what the package advises and where it says so. On the other three tracked crops the timeline stays, and the page says the photo check is for wheat only.
-The depth advisor covers eight crops. The chatbot and the crop tracker cover wheat, chickpea, mustard and rice. The photo check covers wheat only. 
-Every note and schedule entry is traced to a source.
-- **7-day forecast.** Once a field is picked on the map, the app shows daily rain and temperature for the next week from Open-Meteo, and names the next open task on a saved wheat, chickpea, mustard, or rice plan. If that task is irrigation and rain is likely this week, it tells the farmer to check the field first. The forecast does not change the sowing depth.
+- **7-day forecast.** Once a field is picked on the map, the app shows daily rain and temperature for the next week from Open-Meteo, and names the next open task on a saved wheat, chickpea, mustard, or rice plan. If that task is irrigation, it falls within seven days, and rain is likely, the card tells the farmer to check the field before irrigating. The forecast does not change the sowing depth.
+
+The depth advisor covers eight crops. The chatbot and the crop tracker cover wheat, chickpea, mustard and rice. The photo check covers wheat only. Every note and schedule entry is traced to a source.
 
 ## The problem
 
@@ -51,6 +51,10 @@ The schedules in frontend/src/data/schedules.json follow PAU's tables for wheat,
 
 The plan is stored in the browser and photos in IndexedDB, compressed to a maximum of 1280 px. Nothing about the tracker is stored on a server, which keeps it simple and private, but it also means a plan lives on one device and clearing browser data erases it.
 
+### Week forecast
+
+The forecast card asks Open-Meteo directly from the browser for seven daily rows: sky, minimum and maximum temperature, rainfall, and the chance of rain. The free Render server cannot reach that API reliably, so the live site does not use the `/forecast` route. The card reads the crop plan saved on the device and names the next task that is not done and whose window has not passed. If that task is irrigation, it starts within seven days, and rain is likely, the card tells the farmer to check the field before irrigating. It does not tell them to skip the irrigation, and it does not change the sowing depth.
+
 ### Photo check
 
 Each photo can be checked against a list of 14 wheat problems (8 diseases, 2 pests and 4 nutrient deficiencies) written from the package, in data/problems/. A vision model on Groq looks at the photo and may only return ids from that list. The server discards any other id, and everything shown about a match (what to compare against, what PAU advises, the source page) comes from the sourced list, not from the model. If the photo is not wheat, is unreadable, or matches nothing, the app says so. Results are ranked and carry no confidence percentage, since the model cannot produce calibrated ones. In the tracker the check button is shown only when the plan is wheat.
@@ -78,9 +82,10 @@ On this pilot the vision model’s 20 of 30 sits below both means. That comparis
 ## Tech stack
 
 - **Data collection:** Python, SoilGrids REST API, NASA POWER API
-- **ML:** scikit-learn (Random Forest), XGBoost, PyTorch (custom neural network)
+- **ML:** scikit-learn (Random Forest), XGBoost, PyTorch (AgroDynamicNet and a fine-tuned ResNet18 wheat classifier)
 - **Backend:** FastAPI, uvicorn, hosted on Render
 - **Chatbot and photo check:** Groq-hosted language and vision models, BM25 retrieval over a sourced knowledge base
+- **Forecast:** Open-Meteo, called from the browser
 - **Frontend:** React (Vite), Leaflet, Axios, hosted on Vercel
 ## Project structure
 
