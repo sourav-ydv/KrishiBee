@@ -176,5 +176,399 @@
         ]
       }
     ]
+  },
+  "Chickpea": {
+    "sowingWindow": {
+      "from": "10-10",
+      "to": "11-10",
+      "message": "This sowing date is outside PAU's optimum window for gram. Rainfed desi gram is sown from 10 to 25 October, and irrigated desi and kabuli gram from 25 October to 10 November. Sowing earlier risks wilt from high temperature and too much leafy growth. A later crop makes weak growth; for desi varieties other than PBG 10 and PBG 5, PAU raises the seed rate to 27 kg per acre in the second fortnight of November and 36 kg per acre in the first fortnight of December. Check this plan with your KVK."
+    },
+    "tasks": [
+      {
+        "id": "chickpea-sowing",
+        "type": "At sowing",
+        "stage": "Sowing",
+        "title": "Sowing depth, seed and basal fertilizer",
+        "reference": true,
+        "startDay": 0,
+        "endDay": 0,
+        "note": "Sow by the pora method in rows 30 cm apart, with the seed 10 to 12.5 cm deep. PAU places it that deep because a shallow sowing is more liable to wilt. Seed rate is 30 kg per acre for PBG 10, 24 kg for PBG 5, 15 to 18 kg for other desi varieties, and 37 kg for kabuli. Give a heavy pre-sowing irrigation where irrigation is available. Without a soil test, drill all the fertilizer at sowing: for desi gram, 6 kg nitrogen and 8 kg phosphorus (P2O5) per acre, about 13 kg urea and 50 kg single superphosphate; for irrigated kabuli, 6 kg nitrogen and 16 kg P2O5, about 13 kg urea and 100 kg single superphosphate. Moisten the seed for one acre, mix one packet each of Mesorhizobium (LGR-33) and Rhizobacterium (RB-1), dry it in the shade and sow within one hour. After rice on medium to heavy soils, sow on beds 67.5 cm apart (37.5 cm bed top and a 30 cm furrow), two rows per bed at 20 cm. To reduce gram caterpillar, PAU sows two rows of linseed, 30 cm apart, after every 20 rows of gram.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram sowing, seed and fertilizer (pp. 35-36)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "chickpea-hoeing-1",
+        "type": "Weeding",
+        "stage": "Early growth",
+        "title": "First hand hoeing",
+        "startDay": 30,
+        "endDay": 30,
+        "note": "Give a hand hoeing, preferably with a wheel hoe, at 30 days after sowing. A second hoeing follows at 60 days. Any herbicide should be chosen from the package or with your KVK.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram weed control (p. 36)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "chickpea-hoeing-2",
+        "type": "Weeding",
+        "stage": "Mid growth",
+        "title": "Second hand hoeing",
+        "startDay": 60,
+        "endDay": 60,
+        "note": "Give the second hand hoeing at 60 days after sowing if weeds are still present. One or two hoeings are PAU's practice for gram.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram weed control (p. 36)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "chickpea-irrigation",
+        "type": "Irrigation",
+        "stage": "Winter irrigation",
+        "title": "One irrigation, mid-December to end of January",
+        "fromDate": "12-15",
+        "note": "Where irrigation is available, give one irrigation between mid-December and the end of January. The date shown is mid-December, the start of that window. Do not give it earlier than 4 weeks after sowing, and delay it if early rain has fallen. Too much irrigation pushes leafy growth and cuts grain yield. Do not irrigate gram sown after rice on heavy soils. On raised beds after rice, irrigate only under water stress, especially at pod initiation.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram irrigation (p. 37)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "chickpea-urea-1",
+        "type": "Fertilizer",
+        "stage": "Pod filling",
+        "title": "Urea spray at 90 days",
+        "startDay": 90,
+        "endDay": 90,
+        "note": "For a higher yield, on top of the fertilizer drilled at sowing, PAU sprays 2% urea (3 kg urea in 150 litres of water per acre) at 90 days after sowing, and the same spray again at 110 days. The same two dates can carry a tank mix of 0.5% zinc sulphate heptahydrate (750 g per acre) with that urea spray if you want to raise the zinc in the grain. This follows a soil test for the basal dose.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram fertilizer (p. 36)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "chickpea-urea-2",
+        "type": "Fertilizer",
+        "stage": "Pod filling",
+        "title": "Urea spray at 110 days",
+        "startDay": 110,
+        "endDay": 110,
+        "note": "Repeat the 2% urea spray (3 kg urea in 150 litres of water per acre) at 110 days after sowing. This is the second of the two sprays PAU gives for a higher yield.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram fertilizer (p. 36)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "chickpea-harvest",
+        "type": "Harvest",
+        "stage": "Maturity",
+        "title": "Harvest when pods are mature and plants are dry",
+        "startDay": 153,
+        "endDay": 170,
+        "note": "Varieties in the package mature in about 153 to 170 days (PBG 10 about 153, L 552 about 157, PBG 8 about 158, PBG 7 about 159, PDG 4 about 160, PBG 5 about 165, GPF 2 about 170), so check your variety. Harvest when the pods are mature and the plants have dried, using a sickle. Do not pull the plants out, so the roots stay in the soil.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: gram varieties (pp. 34-35) and harvesting (p. 37)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      }
+    ]
+  },
+  "Mustard": {
+    "sowingWindow": {
+      "from": "09-01",
+      "to": "11-15",
+      "message": "This sowing date is outside PAU's direct-sowing times for rapeseed and mustard. Toria is sown through September, taramira through October, gobhi sarson from 10 to 30 October, and raya and African sarson from mid-October to mid-November. Gobhi sarson and African sarson can be transplanted from November to mid-December if direct sowing would be late. Check this plan with your KVK."
+    },
+    "tasks": [
+      {
+        "id": "mustard-sowing",
+        "type": "At sowing",
+        "stage": "Sowing",
+        "title": "Sowing depth, seed and basal fertilizer",
+        "reference": true,
+        "startDay": 0,
+        "endDay": 0,
+        "note": "As a sole crop, 1.5 kg seed per acre is enough, sown 4 to 5 cm deep. If the soil is dry, mix the seed with moist soil and keep it overnight so it spreads evenly. Toria, raya, African sarson and taramira go in rows 30 cm apart, and gobhi sarson in rows 45 cm apart. For canola gobhi sarson GSC 6 sown in November, PAU reduces that spacing to 30 cm. Moisten the seed with 50 to 100 mL of water, mix 250 g of Pseudomonas putida (MLE8), dry it in the shade and sow as soon as you can. Fertilizer should follow a soil test. Without one, on medium-fertility soil, toria gets 25 kg nitrogen and 8 kg phosphorus (P2O5) per acre, about 55 kg urea and 50 kg single superphosphate, all drilled just before sowing. Raya, gobhi sarson and African sarson get 40 kg nitrogen and 12 kg P2O5, about 90 kg urea and 75 kg single superphosphate; on loamy sand, gobhi sarson gets 60 kg nitrogen, about 130 kg urea. Drill half of that nitrogen and all the phosphorus before sowing, and the remaining nitrogen with the first irrigation. Rainfed raya gets 15 kg nitrogen and 8 kg P2O5, about 33 kg urea and 50 kg single superphosphate, all drilled before sowing. Rainfed taramira gets 12 kg nitrogen, about 26 kg urea, drilled before sowing. Where urea goes on before sowing, PAU applies it just before the pre-sowing irrigation. Add 10 kg muriate of potash per acre only on soils that test low in potassium. On soils low in zinc, add 10 kg zinc sulphate heptahydrate (21%) per acre for raya, gobhi sarson and African sarson. Give a heavy pre-sowing irrigation; for raya and gobhi sarson PAU puts that at 10 to 12 cm.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard sowing (p. 50) and fertilizer (p. 52)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "mustard-thinning",
+        "type": "Thinning",
+        "stage": "Three weeks",
+        "title": "Thin the stand",
+        "startDay": 21,
+        "endDay": 21,
+        "note": "Thin a direct-sown crop three weeks after sowing. Keep 10 to 15 cm between plants for toria, raya and African sarson, 10 cm for gobhi sarson, and 15 cm for taramira. A transplanted crop is already spaced at planting, so this step is for the direct-sown stand. If you transplanted gobhi sarson or African sarson, enter the transplanting date as the start of this plan; the nursery is sown about 30 days before that.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard thinning (p. 51)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "mustard-irrigation-1",
+        "type": "Irrigation",
+        "stage": "First irrigation",
+        "title": "First irrigation for raya and gobhi sarson",
+        "startDay": 21,
+        "endDay": 28,
+        "note": "Raya and gobhi sarson sown after a heavy pre-sowing irrigation of 10 to 12 cm should be irrigated 3 to 4 weeks after sowing, so the roots go deeper. Toria does not follow this date: sow it after a heavy pre-sowing irrigation and, if needed, irrigate once at flower initiation. A second irrigation for raya, if needed, is at flowering, or earlier if frost threatens. For timely gobhi sarson the second irrigation is at the end of December or the beginning of January, and the last one is in the second fortnight of February. Do not irrigate gobhi sarson after that, or it may lodge. Avoid water stress at flowering, pod formation and seed filling. The first irrigation at 3 to 4 weeks also cuts the painted-bug population. Any spray should be taken from the package or your KVK.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard irrigation (p. 53)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "mustard-urea-1",
+        "type": "Fertilizer",
+        "stage": "First irrigation",
+        "title": "Remaining nitrogen with the first irrigation",
+        "sameWindowAs": "mustard-irrigation-1",
+        "note": "For irrigated raya, gobhi sarson and African sarson, apply the remaining half of the nitrogen with the first irrigation. Where the full dose is 90 kg urea per acre, that half is about 45 kg urea; on loamy sand, gobhi sarson's full dose is about 130 kg urea, so the half is about 65 kg. Toria, rainfed raya and taramira already received their full nitrogen before sowing, so they do not get this top dressing. Follow a soil test if you have one.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard fertilizer (p. 52)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "mustard-hoeing-1",
+        "type": "Weeding",
+        "stage": "Early growth",
+        "title": "First hoeing",
+        "startDay": 21,
+        "endDay": 28,
+        "note": "One hoeing of toria at three weeks after sowing is enough. For raya, gobhi sarson, African sarson and taramira, the first hoeing is 3 to 4 weeks after sowing, preferably with a wheel hoe. Any herbicide should be chosen from the package or with your KVK.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard weed control (p. 52)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "mustard-hoeing-2",
+        "type": "Weeding",
+        "stage": "Mid growth",
+        "title": "Second hoeing, if needed",
+        "startDay": 42,
+        "endDay": 49,
+        "note": "For raya, gobhi sarson, African sarson and taramira, a second hoeing is given only if needed, three weeks after the first. Toria does not need this second hoeing.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard weed control (p. 52)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "mustard-aphid",
+        "type": "Scouting",
+        "stage": "Winter",
+        "title": "Check for mustard aphid",
+        "fromDate": "01-01",
+        "ongoing": true,
+        "note": "Start looking in the first week of January on crops that are still standing, and check widely scattered plants twice a week. Toria is usually harvested before this. PAU's thresholds are 50 to 60 aphids on 10 cm of the central shoot, an average of 0.5 to 1 cm of that shoot covered by aphids, or 40 to 50% of plants infested. The spray should be taken from the package or your KVK, and done in the afternoon when pollinators are less active.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard aphid (p. 54)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      },
+      {
+        "id": "mustard-harvest",
+        "type": "Harvest",
+        "stage": "Maturity",
+        "title": "Harvest when the siliquae turn yellow",
+        "variants": [
+          { "sowUpTo": "09-30", "startDay": 88, "endDay": 90 },
+          { "sowUpTo": "05-31", "startDay": 136, "endDay": 162 }
+        ],
+        "note": "Harvest when the siliquae turn yellow. A September sowing is toria, which matures in about 88 to 90 days. For later sowings the window spans the other varieties in the package: raya about 136 to 152 days, gobhi sarson about 145 to 162, African sarson about 157 and taramira about 150. Raya and taramira mature in March. Gobhi sarson and African sarson mature in the first fortnight of April. Gobhi sarson shatters, so cut it at the right time. Stack the harvested crop for 7 to 10 days before threshing.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard varieties (pp. 47-49) and harvesting (p. 53)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+          }
+        ]
+      }
+    ]
+  },
+  "Rice": {
+    "sowingWindow": {
+      "from": "06-01",
+      "to": "07-15",
+      "message": "This date is outside PAU's field dates for rice. Enter the transplanting date, or the direct-seeding date, not the day the nursery was sown. Unpuddled direct seeding is 1 to 15 June, and direct-seeded basmati is 15 to 30 June. Transplant from 20 June to 10 July. Do not transplant PR 126 after 15 July. CSR 30 and Pusa Basmati 1509 are transplanted in the second fortnight of July. Check this plan with your KVK."
+    },
+    "tasks": [
+      {
+        "id": "rice-establishment",
+        "type": "At sowing",
+        "stage": "Transplanting",
+        "title": "Transplanting depth, spacing and basal fertilizer",
+        "reference": true,
+        "startDay": 0,
+        "endDay": 0,
+        "note": "Enter the transplanting date as the start of this plan. The day counts below are days after that date. The nursery is sown from 20 May to 20 June, and 8 kg of heavy seed is enough for one acre. Use 30 to 35 day old seedlings for medium-duration varieties and 25 to 30 day old seedlings for PR 126. In a puddled field, transplant two seedlings per hill, upright and about 2 to 3 cm deep. Spacing is 20 by 15 cm at the normal time, and 15 by 15 cm for late transplanting of varieties other than PR 126. Dip the roots for one acre for 45 minutes in one half-kilogram packet of Azospirillum mixed in 100 litres of water, and transplant straight away. Fertilizer should follow a soil test. Skip phosphorus if the previous wheat crop received the recommended dose. Apply phosphorus and potash only when the test shows they are short, and put them in before puddling. Without a test, varieties other than PR 132 get about 42 kg nitrogen, 12 kg phosphorus (P2O5) and 12 kg potash (K2O) per acre: about 90 kg neem-coated urea, 27 kg DAP or 75 kg single superphosphate, and 20 kg muriate of potash. PR 132 gets 25% less nitrogen, about 67.5 kg urea. When 27 kg DAP is used, reduce the urea by 10 kg. Do not use this 90 kg schedule on basmati. If the basmati field was green manured, apply no urea. Otherwise basmati urea per acre is 18 kg for CSR 30, 36 kg for Punjab Basmati 7 and 5 and for Pusa Basmati 1121 and 1718, and 54 kg for Pusa Basmati 1847 and 1509, in two equal splits at 3 and 6 weeks. If this date is a direct-seeding date rather than a transplanting date, the day counts on the tasks below are for transplanted rice. Direct seeding is for medium to heavy soils, from 1 to 15 June, at 8 to 10 kg seed per acre: 3 to 4 cm deep in tar-wattar fields and 2 to 3 cm deep in dry fields, in rows 20 cm apart. Direct-seeded basmati is sown from 15 to 30 June.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice transplanting (p. 7) and fertilizer (p. 10)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+          },
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: basmati (pp. 21-22) and direct seeded rice (pp. 25-26)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+          }
+        ]
+      },
+      {
+        "id": "rice-water-establish",
+        "type": "Irrigation",
+        "stage": "Establishment",
+        "title": "Keep water standing for two weeks",
+        "startDay": 0,
+        "endDay": 14,
+        "note": "After transplanting, keep water standing for two weeks so the seedlings establish. After that, irrigate two days after the ponded water has soaked in. Do not let the standing water get deeper than 10 cm, and do not let the soil crack. Stop irrigation about a fortnight before maturity. Basmati is managed the same way and should not be short of water at flowering. For tar-wattar direct seeding, the first irrigation is about 21 days after sowing and later ones are 5 to 7 days apart. For dry-field direct seeding, irrigate immediately after sowing, again at 4 to 5 days, then every 5 to 7 days. Stop direct-seeded irrigation about 10 days before harvest.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice irrigation (pp. 11, 22, 27)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+          }
+        ]
+      },
+      {
+        "id": "rice-urea-1",
+        "type": "Fertilizer",
+        "stage": "First split",
+        "title": "First urea split within 7 days",
+        "startDay": 0,
+        "endDay": 7,
+        "note": "For transplanted varieties other than basmati, apply one third of the urea within 7 days of transplanting. That is about 30 kg where the full dose is 90 kg urea, and about 22.5 kg for PR 132. Basmati does not get this split: its urea goes on at 3 and 6 weeks, or not at all after green manure. If you use the PAU leaf colour chart, follow the chart instead of these fixed splits. Direct-seeded rice is also different: 130 kg urea per acre in three equal splits at 4, 6 and 9 weeks after sowing, cut to 90 kg after sunnhemp green manure or 6 tonnes of farmyard manure per acre. Direct-seeded basmati gets 54 kg urea per acre at 3, 6 and 9 weeks, cut to 18 kg after sunnhemp. No urea goes on at direct seeding if a leaf colour chart is being used.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice fertilizer (p. 10) and direct seeded rice (pp. 26-28)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+          }
+        ]
+      },
+      {
+        "id": "rice-weeder-1",
+        "type": "Weeding",
+        "stage": "Early growth",
+        "title": "First pass with the paddy weeder",
+        "startDay": 15,
+        "endDay": 15,
+        "note": "Run a paddy weeder 15 days after transplanting. Where it cannot pass, pull the weeds by hand. Herbicide choice and timing belong in the package and with your KVK.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice weed control (p. 8)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+          }
+        ]
+      },
+      {
+        "id": "rice-deficiency",
+        "type": "Scouting",
+        "stage": "Early growth",
+        "title": "Watch for zinc and iron deficiency",
+        "startDay": 14,
+        "endDay": 21,
+        "note": "Zinc deficiency often shows 2 to 3 weeks after transplanting: lower leaves turn rusty brown near the base and the plants stay stunted and tillerless. If the previous crop in this field showed it, PAU applies 25 kg zinc sulphate heptahydrate (21%) or 16 kg zinc sulphate monohydrate (33%) per acre at puddling. If it appears in the standing crop, apply that dose as soon as you can. Iron deficiency shows as chlorosis of the youngest leaf about three weeks after transplanting, usually when water is short. Give plenty of irrigation and 2 or 3 sprays of 1% ferrous sulphate (1 kg in 100 litres of water per acre) at weekly intervals.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice zinc and iron (p. 11)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+          }
+        ]
+      },
+      {
+        "id": "rice-urea-2",
+        "type": "Fertilizer",
+        "stage": "Second split",
+        "title": "Urea at 21 days",
+        "startDay": 21,
+        "endDay": 21,
+        "note": "For transplanted varieties other than basmati, this is the second of the three equal urea splits, the same amount as the first. For basmati it is the first of the two equal splits: half of 18, 36 or 54 kg urea, depending on the variety, and none of it if the field was green manured. Apply it when water is not standing, and irrigate on the third day. Direct-seeded basmati also takes a split at 3 weeks; unpuddled direct-seeded rice waits until 4 weeks.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice fertilizer (p. 10) and basmati fertilizer (pp. 21-22)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+          }
+        ]
+      },
+      {
+        "id": "rice-weeder-2",
+        "type": "Weeding",
+        "stage": "Tillering",
+        "title": "Second pass with the paddy weeder",
+        "startDay": 29,
+        "endDay": 29,
+        "note": "Run the paddy weeder again a fortnight after the first pass. Where it cannot pass, pull the weeds by hand.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice weed control (p. 8)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+          }
+        ]
+      },
+      {
+        "id": "rice-urea-3",
+        "type": "Fertilizer",
+        "stage": "Third split",
+        "title": "Last urea split",
+        "startDay": 35,
+        "endDay": 42,
+        "note": "Apply this split once. PR 126 gets it at 35 days after transplanting. Other transplanted varieties get it at 42 days. Basmati's second and last split is at 6 weeks, which is day 42, using the remaining half of its own urea dose. Apply it when water is not standing, and irrigate on the third day. Direct-seeded rice takes its later splits at 6 and 9 weeks after sowing, not as an extra dose on top of the transplanted schedule.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice fertilizer (p. 10) and basmati fertilizer (p. 22)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+          }
+        ]
+      },
+      {
+        "id": "rice-harvest",
+        "type": "Harvest",
+        "stage": "Maturity",
+        "title": "Harvest when ears are nearly ripe",
+        "startDay": 93,
+        "endDay": 117,
+        "note": "These days are counted from transplanting. Varieties in the package mature about 93 to 117 days after transplanting: PR 126 about 93, and PR 122 about 117. Basmati varieties fall inside that span, about 95 days for Pusa Basmati 1509 to about 114 days for Pusa Basmati 1718. Check your variety. Harvest when the ears are nearly ripe and the straw has just turned yellow. Waiting until the crop is dead ripe shatters grain and hurts milling quality. Thresh basmati the same day or the next day. The package does not give a separate day count from sowing for direct-seeded rice; harvest it at the same grain stage, and stop its irrigation about 10 days before harvest.",
+        "sources": [
+          {
+            "title": "PAU Package of Practices for Crops of Punjab, Kharif 2026: rice varieties (pp. 2-3), harvesting (p. 12) and basmati (pp. 19-22)",
+            "url": "https://www.pau.edu/content/ccil/pf/pp_kharif.pdf"
+          }
+        ]
+      }
+    ]
   }
 }
