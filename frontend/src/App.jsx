@@ -84,14 +84,16 @@ export default function App() {
 
       {view === "tracker" && <CropTracker />}
 
-      <div className="main-grid" hidden={view !== "advisor"}>
-        <div className="map-panel">
-          <LocationMap position={position} onSelect={handleSelect} />
+      <div className="advisor" hidden={view !== "advisor"}>
+        <div className="advisor-col">
+          <div className="map-panel">
+            <LocationMap position={position} onSelect={handleSelect} />
+          </div>
+          <ForecastCard latitude={position?.[0]} longitude={position?.[1]} />
         </div>
 
-        <div className="side-panel">
+        <div className="advisor-col">
           <PredictionForm position={position} onSubmit={runPrediction} loading={loading} />
-          {position && <ForecastCard latitude={position[0]} longitude={position[1]} />} 
 
           {error && (
             <div className="error-box">
