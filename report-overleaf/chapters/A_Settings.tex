@@ -66,5 +66,31 @@ Seed-0 ECE, raw then scaled & 0.0831, then 0.0712 \\
 
 The threshold of 0.9 has a lower accuracy than 0.8 on this particular split (0.949 against 0.959). That is a small-sample reversal, not a reason to claim that a stricter threshold is worse in general. The app uses 0.8 because that was the chosen operating point, not because 0.9 failed.
 
+\section{Fitting Settings}
+\begin{table}[H]
+\centering
+\caption{Settings of the training programs. The depth file loaded by the API is an earlier run with these depth settings. The classifier file is ResNet18 seed 0.}
+\label{tab:fit}
+\small
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Item} & \textbf{Value} \\
+\midrule
+Depth loss & Mean squared error on the noisy depth, in centimetres \\
+Depth optimiser & Adam, learning rate $10^{-3}$, weight decay $10^{-5}$ \\
+Depth batch and stopping & Batch 32, at most 300 epochs, patience 25 on validation MAE \\
+Label noise & Gaussian, standard deviation 0.15\,cm, then clipped; synthesis seed 42 \\
+Forest baseline & 300 trees, maximum depth 12 \\
+Boosted baseline & 300 trees, maximum depth 6, learning rate 0.05 \\
+Classifier loss & Weighted cross-entropy, label smoothing 0.05 \\
+Classifier optimiser & AdamW, backbone $10^{-4}$, head $10^{-3}$, weight decay $10^{-4}$ \\
+Classifier schedule & Cosine annealing, at most 20 epochs, patience 6 on validation macro-F1 \\
+Classifier split & Stratified, split seed 42, after the pilot hash is removed \\
+Temperature fit & One positive scalar, LBFGS on validation cross-entropy \\
+Calibration bins & 10 equal-width bins for expected calibration error \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \section{Interface Constants}
 Chat and photo-check rate limits are held in the API process. The photo check allows a small number of requests per address in a ten-minute window, and a larger daily cap. The exact caps are constants in the server and reset on restart. Forecast rows treat rain as likely at 1\,mm or at 50\% probability. Photographs are resized in the browser so the long side is at most 1280 pixels before they are stored or uploaded for a check.

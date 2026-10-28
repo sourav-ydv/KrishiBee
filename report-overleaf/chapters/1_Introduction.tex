@@ -29,6 +29,15 @@ The photo check is wheat only. A hosted vision model may return only identifiers
 
 The live application is at \url{https://krishi-bee.vercel.app}. The API documentation is at \url{https://krishibee-api.onrender.com/docs}. The backend is a free-tier service, so the first request after a quiet period can take up to a minute.
 
+\section{What One Session Has to Show}
+The test of the design is not a single accuracy number. It is whether one sitting at the site can see each claim with its limit still attached.
+
+Consider a wheat field in Punjab, selected on the map in the Rabi season. The depth card has to show three depths, not one: the network, the rule, and the 4--6\,cm band for drill sowing. If SoilGrids does not answer, the card has to say that a cached point was used and how far away it was. The week forecast sits under the map and names the next open task on a saved plan. It may say that rain is likely. It must not rewrite the depth.
+
+The chat is then asked when the first irrigation should be given. A correct session cites the PAU note and places the first irrigation about three to four weeks after sowing, not at 7 to 10 days. A question the notes do not cover has to end in a refusal and a pointer to the KVK, rather than a fluent guess.
+
+My crop is opened with a sowing date. The calendar has to change its wheat irrigation windows when that date moves from October into December, because the package does. A photograph is added only after the plan is wheat. Two pilot photographs are the demonstration of the classifier: one named because its probability is above 0.8, and one withheld because the top class is right but the probability is not. Chapter~\ref{ch:results} records one such session from the deployed site, including a wheat depth of 4.95\,cm beside a rule depth of 4.88\,cm, both inside 4--6\,cm.
+
 \section{Objectives}
 \begin{enumerate}[leftmargin=1.4em]
     \item Build a sowing-depth model that uses soil, weather and crop identity, and report it next to the rule that generated its labels.

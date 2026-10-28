@@ -5,10 +5,37 @@ Extension material commonly prints one depth interval per crop. That interval is
 
 KrishiBee treats published ranges as constraints, not as training labels by themselves. The PAU packages were used to audit the ranges already in the rule table \cite{pau2025rabi,pau2026kharif}. Wheat drill sowing stayed at 4--6\,cm. Chickpea moved to 10--12.5\,cm, mustard to 4--5\,cm, maize to 3--5\,cm, and rice to 2--4\,cm, with the basmati section distinguishing dry seeding from tar-wattar fields. Pearl millet is given as a single PAU value, so the $\pm 0.5$\,cm band around about 2.5\,cm is an assumption. Pigeon pea has no depth in the package that was consulted, so its 4--5\,cm band remains general guidance. This audit is a literature check against one state's package. It is not a multi-state agronomic trial.
 
+Table~\ref{tab:bands} is the table the rule engine uses after that check. The optimal column is the starting depth. Texture, moisture, rain and temperature then move it, and the result is clipped to the printed band extended by 0.3\,cm. The band itself is what the depth card calls the safe range. Two rows need a louder caveat than the others. Pearl millet is a single value in the package, so the 2--3\,cm band is an assumption of half a centimetre on either side of about 2.5\,cm. Pigeon pea has spacing in the package and no depth, so 4--5\,cm is general guidance kept so that the crop can still be selected on the map. Quoting either row as a PAU interval would misread the table.
+
+\begin{table}[H]
+\centering
+\caption{Base sowing depths in the rule engine, in centimetres, after the check against the PAU packages. The optimal value is the start of the adjustment. The minimum and maximum are the safe range shown in the app.}
+\label{tab:bands}
+\small
+\begin{tabular}{llrrr}
+\toprule
+\textbf{Crop} & \textbf{Season} & \textbf{Optimal} & \textbf{Minimum} & \textbf{Maximum} \\
+\midrule
+Wheat & Rabi & 5.0 & 4.0 & 6.0 \\
+Chickpea & Rabi & 11.25 & 10.0 & 12.5 \\
+Mustard & Rabi & 4.5 & 4.0 & 5.0 \\
+Rice & Kharif & 3.0 & 2.0 & 4.0 \\
+Maize & Kharif & 4.0 & 3.0 & 5.0 \\
+Soybean & Kharif & 3.75 & 2.5 & 5.0 \\
+Pearl millet & Kharif & 2.5 & 2.0 & 3.0 \\
+Pigeon pea & Kharif & 4.5 & 4.0 & 5.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The spread in that table is the reason a high $R^{2}$ is easy to obtain and easy to over-read. Chickpea starts more than 6\,cm deeper than mustard. A model that learns only the crop name already separates those rows. The literature question worth asking is the smaller one: once the crop is known, do texture, moisture and the sowing-window climate still move the depth in the direction the rule intends? Chapter~\ref{ch:results} answers that with the crop-only ablation, not with the headline $R^{2}$.
+
 \section{Soil and Climate Data Products}
 SoilGrids 2.0 provides global predictions of soil properties on a spatial grid, with an accompanying statement of uncertainty \cite{poggio2021soilgrids}. The properties used here are sand, clay, silt, pH, organic carbon, bulk density and nitrogen, read at 145 coordinates in the five states. Phosphorus and potassium are not in that product. They are estimated from texture and organic carbon and checked against the level of published district fertility figures, so the estimate cannot wander to a value those studies would not support.
 
-Weather for the depth model is a climatology, not a forecast. NASA POWER provides satellite-derived and modelled meteorology for a point \cite{nasapower}. Temperature, humidity, rainfall, solar radiation and wind were summarised for the Rabi and Kharif sowing windows at the same 145 coordinates. A live seven-day forecast is a separate feature and is not an input to AgroDynamicNet. Mixing the two would let a rainy week change a depth that was meant to reflect the usual sowing window.
+Weather for the depth model is a climatology, not a forecast. NASA POWER provides satellite-derived and modelled meteorology for a point \cite{nasapower}. Temperature, humidity, rainfall, solar radiation and wind were summarised for the Rabi and Kharif sowing windows at the same 145 coordinates. Each location therefore contributes one soil vector and two climate vectors, one per season. A crop is attached only to the season in which it is grown, which is why the labelled table has 1{,}160 rows rather than a full grid of locations, crops and seasons.
+
+A live seven-day forecast is a separate product and is not an input to AgroDynamicNet \cite{openmeteo}. The two numbers answer different questions. The climatology asks what the sowing window at that coordinate is usually like, and that is the weather the rule engine saw when the training labels were built. The forecast asks whether rain is likely in the next few days, which matters for an irrigation that is already on the calendar. Feeding the forecast into the depth network would let one wet week change a recommendation that was meant to reflect the season. The interface keeps them on different parts of the page for that reason: the depth card uses the stored climatology, and the forecast card, loaded by the browser, never writes back into the depth.
 
 \section{Tree Models and a Small Neural Network}
 Random Forests average a collection of decision trees and are a standard baseline for tabular agronomic data \cite{breiman2001}. XGBoost adds regularised gradient boosting and is often stronger on the same kind of table \cite{chen2016xgboost}. Both are used here as baselines, not as the model the app serves.
@@ -21,6 +48,13 @@ Long, Hartley, Morris and Brown assembled wheat photographs taken in fields and 
 That paper is the reason a residual network is a reasonable second model, and it is also the reason the numbers in Chapter~\ref{ch:results} must not be lined up against 97.05\%. CerealConv was evaluated on the authors' split of a much larger set. KrishiBee fine-tunes ImageNet-initialised ResNet18 and MobileNetV3-Small \cite{he2016resnet,howard2019mobilenetv3} on 959 of the public images, with 40 images removed by file hash before the split. The protocols differ, the training sets differ, and a higher headline accuracy on a different test is not evidence that one system is better.
 
 Two further choices follow from the same literature. First, a disease name shown to a farmer in Punjab should not rest only on a model trained in the United Kingdom and Ireland. The interface therefore keeps a PAU problem list, and the network score is labelled as a score rather than as a PAU diagnosis. Second, modern networks are often over-confident \cite{guo2017calibration}. Temperature scaling on a validation set, followed by a hard threshold, is a small and standard way to refuse weak calls.
+
+\section{Why the Headline Accuracies Are Not Comparable}
+CerealConv's 97.05\% and KrishiBee's five-seed ResNet18 accuracy of about 89\% answer different questions. CerealConv was trained and tested by the dataset authors on their larger collection, and part of the reported comparison was against pathologists on a subset chosen for that paper \cite{long2023wheat}. KrishiBee never received the 19{,}172-image collection. It fine-tunes an ImageNet ResNet18 on 671 of the 999 public images, validates on 144, and tests on 144, after removing 40 images by file hash so that a later pilot cannot leak into training \cite{long2023data}. MobileNetV3-Small is trained on that same split only as a smaller baseline \cite{howard2019mobilenetv3}.
+
+The operating point is also different. CerealConv is reported as a classifier that names a class. KrishiBee names a class only when the temperature-scaled probability is at least 0.8 \cite{guo2017calibration}. Coverage then falls to about 68\% of the seed-0 test images, and accuracy on the images that remain is about 96\%. A system that is forced to answer every photograph will post a higher coverage and, on this split, a lower accuracy. The farmer-facing choice was the second of those.
+
+A further difference is what the name is allowed to mean. In KrishiBee the ResNet18 line is a score over five folder names from Britain and Ireland. The sentences about what the leaf should be compared with, and what the package suggests, come only from the PAU list. A higher accuracy on a different test would not remove the need for that split.
 
 \section{Grounded Answers rather than a Free Language Model}
 A hosted language model can phrase an answer in Hindi, Hinglish or English, and it can also invent a timetable. The 7-to-10-day irrigation error in the first chatbot was not a retrieval bug. There was no knowledge base. A second version, built from individual papers, still disagreed with the PAU timetable, which is the document an extension officer in Punjab would actually open. The design that remained is retrieval over short paraphrases, with the model instructed to use a number only when that number is in the retrieved notes, and to say when nothing matched.

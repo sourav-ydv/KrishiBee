@@ -20,5 +20,12 @@ Predictions are binned by reported probability. In each bin the absolute gap bet
 \section{Coverage at a Threshold}
 Coverage at threshold $t$ is the fraction of test images whose highest probability is at least $t$. Accuracy at that threshold uses only those images. The two numbers move together: a higher $t$ usually names fewer images and is right more often on the images it still names. Table~\ref{tab:coverage} is the empirical version of that statement for seed 0.
 
+\section{Repeating the Reported Checks}
+The depth split, the scaler and the seed reports are in the repository under \path{data/processed/} and \path{data/final/}. The wheat seed reports are the files \path{classifier_report_resnet18_seed0.json} through seed 4, and the five-seed summary is \path{classifier_multiseed_resnet18.txt}. The depth summary is \path{nn_multiseed.txt}. Reloading the API does not retrain these models. The weights in \path{models/} are the ones the tables describe.
+
+The 40-image pilot can be drawn again with \path{scripts/sample_eval.py} after the Zenodo archive is downloaded, and sent through a local API with \path{scripts/eval_diagnose.py}. The local photo-check limit has to be turned off for that run. The four-file check in Table~\ref{tab:spot} does not need the whole pilot. It needs one file from each of \path{brown-rust}, \path{yellow-rust}, \path{healthy} and \path{powdery-mildew}. Septoria is not in that folder. It is only in the 144-image test split.
+
+A demonstration of the site, as opposed to a retraining, is the session in Section~6.7. The depth numbers will match for the same point only while the cached soil and the climatology match. The forecast will not match on a later day, because Open-Meteo is a live forecast. The classifier probabilities in Table~\ref{tab:spot} should match, because they come from fixed weights and fixed files.
+
 \section{Reading a Small Pilot}
 Twenty correct answers out of thirty diseased images is 67\%. The 95\% interval quoted with it, 49--81\%, is wide because thirty is a small denominator. The same caution applies to 7 of 10 inside one disease. The pilot supports a comparison with the classifier's mean of about 25 of 30 on the same images. It does not support a ranking of diseases.

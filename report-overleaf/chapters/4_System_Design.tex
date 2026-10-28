@@ -29,7 +29,44 @@ KrishiBee is a browser client and a small HTTP API. The client holds the map, th
 \section{Depth Data and the Rule Engine}
 One hundred and forty-five coordinates were sampled across the five states. At each coordinate the soil properties listed in Chapter~\ref{ch:lit} were stored, and a Rabi row and a Kharif row of climatology were stored. Not every crop is grown in both seasons, so the synthesised table has 1{,}160 rows rather than $145 \times 8 \times 2$. Each row is passed through \texttt{crop\_database.py}, which holds a base depth interval and additive adjustments for texture, moisture, expected rain and temperature. A small amount of noise is added so that the labels are not a perfect function of the inputs. The safe range shown in the app is the audited base interval, not the noisy label.
 
-The adjustment for texture runs from $+0.5$\,cm on sand to $-0.5$\,cm on clay, with loam at zero. Moisture, rain and temperature contribute further continuous terms. The network is trained to predict the resulting label. At inference the API also evaluates the rule on the same inputs and returns both. If they disagree, the user can see it.
+The adjustment for texture is a fixed step: $+0.5$\,cm on sand, $+0.3$\,cm on sandy loam, zero on loam, $-0.3$\,cm on clay loam, and $-0.5$\,cm on clay. The other three adjustments are functions, written here so that a depth on the card can be recomputed without opening the code. Let $m$ be the estimated moisture in percent. The moisture term is
+\begin{equation}
+\delta_{m} =
+\begin{cases}
+0.6 & m \le 5, \\[2pt]
+0.6 \cdot (20-m)/15 & 5 < m \le 20, \\[2pt]
+-0.4 \cdot (m-20)/15 & 20 < m \le 35, \\[2pt]
+-0.4 & m > 35.
+\end{cases}
+\label{eq:moisture}
+\end{equation}
+It is $+0.6$\,cm on a very dry surface, zero at 20\%, and $-0.4$\,cm once the estimate reaches 35\%. Let $r$ be the seven-day rainfall in millimetres. Rain contributes nothing unless the rain flag is set. When it is set,
+\begin{equation}
+\delta_{r} = \max\big(-0.55,\; -0.2 - \min(0.35,\; (r-5)\cdot 0.35/25)\big).
+\label{eq:rain}
+\end{equation}
+Once the seven-day rainfall rises above 5\,mm the shallowing gets stronger, and it stops at $-0.55$\,cm. Temperature adds a cold term and a hot term. The cold term is used only in Rabi and only below 18\,$^{\circ}$C:
+\begin{equation}
+\delta_{\mathrm{cold}} = \max\big(-0.4,\; (T-18)\cdot(-0.4)/(5-18)\big).
+\label{eq:cold}
+\end{equation}
+It is zero at 18\,$^{\circ}$C and reaches $-0.4$\,cm at 5\,$^{\circ}$C. Above 32\,$^{\circ}$C, in either season,
+\begin{equation}
+\delta_{\mathrm{hot}} = \min\big(0.5,\; (T-32)\cdot 0.5/(45-32)\big),
+\label{eq:hot}
+\end{equation}
+which reaches $+0.5$\,cm at 45\,$^{\circ}$C and does not grow after that. The recommended depth is the optimal depth plus the four terms, clipped to the audited band extended by 0.3\,cm:
+\begin{equation}
+d = \mathrm{clip}\big(d_{\mathrm{opt}} + \delta_{\mathrm{texture}} + \delta_{m} + \delta_{r} + \delta_{T},\; d_{\min}-0.3,\; d_{\max}+0.3\big).
+\label{eq:depth}
+\end{equation}
+Wheat uses $d_{\mathrm{opt}}=5.0$, $d_{\min}=4$ and $d_{\max}=6$, so the clip allows 3.7\,cm to 6.3\,cm. The number printed as the safe range remains 4--6\,cm. The rule depth is allowed to sit up to 0.3\,cm outside that printed range when the adjustments pile up. Showing both numbers is the point of the card: the range is the package interval, and the rule depth is the interval after soil and weather.
+
+The training label is not $d$ itself. After $d$ is computed, a Gaussian draw with mean zero and standard deviation 0.15\,cm is added and the same clip is applied. The synthesis uses a fixed seed, so the table is reproducible. The noise stops the network from being scored as if it had to copy a deterministic formula to the last hundredth of a centimetre. It also means the irreducible error on this table sits near 0.15\,cm before the clip removes some of the variance. At inference the API evaluates the clean rule, with no new draw of noise, and returns that depth beside the network. A gap between them is expected even when the network has learned the table well.
+
+That arithmetic is why a live card can be checked by hand. On the deployed example in Chapter~\ref{ch:results}, the field was reported as loam with estimated moisture 24.43\%. Texture contributes 0. Equation~\eqref{eq:moisture} at 24.43\% contributes $4.43 \times (-0.4)/15$, which is about $-0.12$\,cm. Starting from 5.0\,cm, the rule lands at 4.88\,cm when rain and temperature contribute nothing further. The network returned 4.95\,cm. Both sit inside 4--6\,cm. The gap of 0.07\,cm is smaller than the 0.15\,cm noise and smaller than the deployed test MAE of 0.151\,cm. It is the sort of disagreement the card is meant to show.
+
+A second numerical example, not taken from the live site, shows the clip working. Take wheat on sand, with estimated moisture 10\%, no rain flag, and a Rabi temperature of 14\,$^{\circ}$C. Texture contributes $+0.5$\,cm. Moisture contributes $+0.4$\,cm. Equation~\eqref{eq:cold} contributes $-0.123$\,cm. The sum is 5.78\,cm, still inside 3.7--6.3\,cm, so the clip does nothing and the rule depth is 5.78\,cm against a printed range of 4--6\,cm. Change the same crop to clay, moisture 40\%, rain expected with 30\,mm in the window, and temperature 22\,$^{\circ}$C. Texture contributes $-0.5$\,cm, moisture $-0.4$\,cm and rain $-0.55$\,cm. The raw sum is 3.55\,cm, and the clip raises it to 3.70\,cm. The card would then show a rule depth of 3.70\,cm beside a safe range of 4--6\,cm. That is a legal output of Equation~\eqref{eq:depth}. It is also a reason not to hide the range behind a single ``recommended'' number.
 
 When SoilGrids does not answer, the API computes the great-circle distance to every cached soil point and uses the nearest one. The response states the distance in kilometres. A point outside the bounding box of the selected state is rejected before any lookup. That check is deliberately simple. It stops a Punjab query from being evaluated on a click in another state. It is not a cadastral boundary.
 
@@ -57,6 +94,8 @@ AgroDynamicNet has three branches, each ending in a 32-unit representation. The 
 \end{figure}
 
 The forward pass takes three flags, \texttt{use\_soil}, \texttt{use\_weather} and \texttt{use\_crop}. Setting a flag to false replaces that branch with zeros. The ablation is therefore the same code path as the deployed model, not a separately designed network. The weights loaded by the API are from one training run. The five-seed study was run without replacing those weights.
+
+The loss is mean squared error on the noisy depth in centimetres. Training uses Adam with learning rate $10^{-3}$, weight decay $10^{-5}$ and batches of 32. A run may last 300 epochs. It stops earlier when the validation MAE has not improved for 25 epochs, and the weights that are kept are the ones with the best validation MAE, not the weights of the final epoch. The same loop fits the combined network and the three ablations. Only the flags change. Because the deployed file is an earlier run, its test MAE of 0.151\,cm is reported separately from the five-seed mean. It happens to sit inside the range of those seeds. It is not defined to be one of them.
 
 \section{Retrieval and the Chatbot}
 Notes live in JSON, one file per crop. A note has an identifier, a crop, a topic string, a short paraphrase, a source title and a source URL where one exists. At startup the API builds a BM25 index and a small map from Hindi and Hinglish words onto the English terms used in the notes. A query is expanded, then searched inside the current crop. The top three notes, if any score highly enough, are placed in the prompt with the latest depth context: crop, state, season, recommended depth, safe range, texture and estimated moisture.
