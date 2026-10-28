@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import schedules from "../data/schedules.json";
-import { getForecast } from "../api";
 
 const FIELD_KEY = "krishibee_field_v1";
 const PLOT_KEY = "krishibee_plot_v1";
@@ -132,6 +131,59 @@ function taskLine(task, rainLikely) {
   return `Next on your plan: ${task.title}, ${task.when}.`;
 }
 
+function skyLabel(code) {
+  if (code == null) return "Unknown";
+  if (code === 0) return "Clear";
+  if ([1, 2, 3].includes(code)) return "Cloudy";
+  if ([45, 48].includes(code)) return "Fog";
+  if ([51, 53, 55, 56, 57].includes(code)) return "Drizzle";
+  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "Rain";
+  if ([71, 73, 75, 77, 85, 86].includes(code)) return "Snow";
+  if ([95, 96, 99].includes(code)) return "Thunderstorm";
+  return "Mixed";
+}
+
+function shortDate(isoDate) {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+}
+
+async function loadForecast(latitude, longitude) {
+  const params = new URLSearchParams({
+    latitude: String(latitude),
+    longitude: String(longitude),
+    daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max",
+    forecast_days: "7",
+    timezone: "auto",
+  });
+  const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`);
+  if (!response.ok) throw new Error("forecast failed");
+  const payload = await response.json();
+  const daily = payload.daily || {};
+  const dates = daily.time || [];
+  if (dates.length < 7) throw new Error("forecast incomplete");
+
+  const days = dates.slice(0, 7).map((isoDate, i) => ({
+    date: isoDate,
+    label: shortDate(isoDate),
+    sky: skyLabel(daily.weather_code[i]),
+    temp_min_c: daily.temperature_2m_min[i] == null ? null : Math.round(daily.temperature_2m_min[i] * 10) / 10,
+    temp_max_c: daily.temperature_2m_max[i] == null ? null : Math.round(daily.temperature_2m_max[i] * 10) / 10,
+    rain_mm: daily.precipitation_sum[i] == null ? null : Math.round(daily.precipitation_sum[i] * 10) / 10,
+    rain_probability_pct: daily.precipitation_probability_max[i] == null ? null : Math.round(daily.precipitation_probability_max[i]),
+  }));
+  const rainy = days.filter((day) => (day.rain_mm || 0) >= 1 || (day.rain_probability_pct || 0) >= 50);
+  return {
+    days,
+    rain_likely: rainy.length > 0,
+    rain_line: rainy.length
+      ? `Rain is likely on ${rainy.map((day) => day.label).join(", ")}.`
+      : "Little or no rain is forecast for the next 7 days.",
+    source: "Open-Meteo",
+    note: "This is a weather forecast, not a PAU recommendation. Check the field before you irrigate.",
+  };
+}
+
 export default function ForecastCard({ latitude, longitude }) {
   const saved = latitude == null ? loadField() : null;
   const lat = latitude ?? saved?.latitude;
@@ -145,7 +197,7 @@ export default function ForecastCard({ latitude, longitude }) {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    getForecast(lat, lon)
+    loadForecast(lat, lon)
       .then((data) => {
         if (!cancelled) setForecast(data);
       })
