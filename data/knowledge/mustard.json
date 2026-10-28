@@ -1,0 +1,58 @@
+[
+  {
+    "id": "mustard-sowing-time",
+    "crop": "Mustard",
+    "topic": "sowing time date September October November raya toria gobhi sarson African taramira",
+    "text": "PAU groups toria, gobhi sarson and taramira as rapeseed, and raya and African sarson as mustard. The optimum sowing time is the whole of September for toria, 10 to 30 October for gobhi sarson, mid-October to mid-November for raya and African sarson, and the whole of October for taramira. Gobhi sarson and African sarson can be transplanted from November to mid-December if sowing would otherwise be late. When the crop is mixed with another crop, the sowing date follows the main crop.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard time of sowing (p. 50)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "mustard-sowing-depth-seed",
+    "crop": "Mustard",
+    "topic": "sowing depth cm seed rate row spacing thinning drill raya",
+    "text": "As a sole crop, 1.5 kg seed per acre is enough for rapeseed and mustard, sown 4 to 5 cm deep. If the soil is dry, mix the seed with moist soil and keep it overnight before sowing so it spreads evenly. Toria, raya, African sarson and taramira go in rows 30 cm apart, and gobhi sarson in rows 45 cm apart. Thin the stand three weeks after sowing. Keep 10 to 15 cm between plants for toria, raya and African sarson, 10 cm for gobhi sarson, and 15 cm for taramira.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard seed rate and sowing (p. 50)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "mustard-fertilizer",
+    "crop": "Mustard",
+    "topic": "fertilizer urea phosphorus superphosphate dose per acre soil test raya toria nitrogen split",
+    "text": "Fertilizer should follow a soil test. Without one, on medium-fertility soil under irrigation, PAU gives toria 25 kg nitrogen and 8 kg phosphorus (P2O5) per acre, about 55 kg urea and 50 kg single superphosphate, drilled just before sowing. Raya, gobhi sarson and African sarson get 40 kg nitrogen and 12 kg P2O5, about 90 kg urea and 75 kg single superphosphate. On loamy sand, gobhi sarson gets 60 kg nitrogen (about 130 kg urea) instead. Drill half the nitrogen and all the phosphorus before sowing, and the remaining nitrogen with the first irrigation. Rainfed raya gets 15 kg nitrogen and 8 kg P2O5, about 33 kg urea and 50 kg single superphosphate, drilled before sowing. Muriate of potash, 10 kg per acre, is added only on soils that test low in potassium.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard fertilizer (p. 52)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "mustard-irrigation",
+    "crop": "Mustard",
+    "topic": "irrigation rauni flowering December February frost raya gobhi sarson toria water stress",
+    "text": "Sow toria after a heavy pre-sowing irrigation and, if needed, irrigate once at flower initiation. Raya and gobhi sarson sown after a heavy pre-sowing irrigation of 10 to 12 cm should be irrigated 3 to 4 weeks after sowing so the roots go deeper. A second irrigation for raya, if needed, is at flowering, or earlier if frost threatens. For timely gobhi sarson the second irrigation is at the end of December or the beginning of January, and the last one in the second fortnight of February. Do not irrigate gobhi sarson after that, or it may lodge. Avoid water stress at flowering, pod formation and seed filling.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard irrigation (p. 53)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "mustard-weeds",
+    "crop": "Mustard",
+    "topic": "weeding hand hoeing weeks after sowing weed control",
+    "text": "One hoeing of toria three weeks after sowing is enough. For raya, gobhi sarson, African sarson and taramira, one or two hoeings with a wheel hoe are enough: the first 3 to 4 weeks after sowing and the second, if needed, three weeks after the first. Any herbicide should be chosen from the package or with the KVK.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard weed control (p. 52)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "mustard-harvest",
+    "crop": "Mustard",
+    "topic": "harvest maturity yellow siliquae March April shattering threshing raya gobhi sarson",
+    "text": "Harvest when the siliquae turn yellow. Raya and taramira mature in March. Gobhi sarson and African sarson mature in the first fortnight of April. Gobhi sarson shatters, so cut it at the right time. Stack the harvested crop for 7 to 10 days before threshing.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard harvesting (p. 53)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  },
+  {
+    "id": "mustard-aphid-watch",
+    "crop": "Mustard",
+    "topic": "aphid pest monitoring January flowering threshold infestation",
+    "text": "Mustard aphid builds up in cold, cloudy weather and covers the flowers and siliquae, so seeds do not fill. Start looking from the first week of January, checking widely scattered plants twice a week. PAU's thresholds are 50 to 60 aphids on 10 cm of the central shoot, an average of 0.5 to 1 cm of that shoot covered by aphids, or 40 to 50% of plants infested. Sowing by the third week of October and using the recommended fertilizer are part of the programme. The spray itself should be taken from the package or the KVK, and done in the afternoon when pollinators are less active.",
+    "source_title": "PAU Package of Practices for Crops of Punjab, Rabi 2025-26: rapeseed and mustard aphid (p. 54)",
+    "source_url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf"
+  }
+]

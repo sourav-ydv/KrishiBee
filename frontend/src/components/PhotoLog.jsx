@@ -160,14 +160,18 @@ export default function PhotoLog({ dayCount, crop }) {
                 {p.note && <span>{p.note}</span>}
               </div>
               <div className="photo-actions">
-                <button
-                  type="button"
-                  className="check-btn"
-                  onClick={() => handleCheck(p)}
-                  disabled={checkingId !== null}
-                >
-                  {checkingId === p.id ? "Checking..." : "Check this photo"}
-                </button>
+                {crop === "Wheat" ? (
+                  <button
+                    type="button"
+                    className="check-btn"
+                    onClick={() => handleCheck(p)}
+                    disabled={checkingId !== null}
+                  >
+                    {checkingId === p.id ? "Checking..." : "Check this photo"}
+                  </button>
+                ) : (
+                  <p className="photo-tip">Photo check is available for wheat only.</p>
+                )}
                 <button type="button" className="link-btn" onClick={() => handleDelete(p.id)}>
                   Delete
                 </button>

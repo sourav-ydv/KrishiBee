@@ -169,8 +169,6 @@ These scores measure agreement with the rule engine, not with field outcomes. RÂ
 
 ## Future work
 
-- Grad-CAM on the ResNet18 wheat classifier
-- An external test on Indian field photos, or an explicit statement that none was possible
 - Sourced schedules and chatbot notes for chickpea, mustard and rice; photo check stays wheat-only until there is labelled data
 - A depth interval from an ensemble and split conformal prediction, with coverage stated against the rule labels
 - Putting the trained classifier inside photo check, after a memory check on the 512 MB server
