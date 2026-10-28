@@ -17,6 +17,7 @@ The backend runs on Render's free tier, so the first request after a quiet perio
 - **Photo check.** On a wheat plan, any photo in the timeline can be checked against a list of wheat problems. The app shows the closest matches with what to compare, what the package advises and where it says so. On the other three tracked crops the timeline stays, and the page says the photo check is for wheat only.
 The depth advisor covers eight crops. The chatbot and the crop tracker cover wheat, chickpea, mustard and rice. The photo check covers wheat only. 
 Every note and schedule entry is traced to a source.
+- **7-day forecast.** Once a field is picked on the map, the app shows daily rain and temperature for the next week from Open-Meteo, and names the next open task on a saved wheat, chickpea, mustard, or rice plan. If that task is irrigation and rain is likely this week, it tells the farmer to check the field first. The forecast does not change the sowing depth.
 
 ## The problem
 
@@ -161,6 +162,8 @@ These scores measure agreement with the rule engine, not with field outcomes. RÂ
 - Chat and photo-check rate limits are kept in memory and reset when the free backend restarts, so Groq's own limits are the real backstop
 - Tracker plans and photos live only in the browser on one device
 - SoilGrids lookups can fall back to a cached nearby point when the external API is down
+- The 7-day forecast comes from Open-Meteo, not from PAU, and it can be wrong for a particular field
+
 ## Future work
 
 - A depth interval from an ensemble and split conformal prediction, with coverage stated against the rule labels
@@ -169,7 +172,8 @@ These scores measure agreement with the rule engine, not with field outcomes. RÂ
 - Sourced schedules and notes for maize, pearl millet, soybean and pigeon pea
 - A photo-check list for another crop, once there is a labelled set for it
 - Field validation of the depth model against real sowing outcomes
-- Rain-aware reminders from a live forecast, plus local-language interface and voice input
+- A local-language interface and voice input
+
 ## Data and sources
 
 - Soil properties: SoilGrids (ISRIC World Soil Information)
@@ -177,6 +181,7 @@ These scores measure agreement with the rule engine, not with field outcomes. RÂ
 - Wheat, chickpea and mustard schedules and knowledge notes, and the wheat problem list: PAU, Package of Practices for Crops of Punjab, Rabi 2025-26. Rice schedule and knowledge notes: PAU, Package of Practices for Crops of Punjab, Kharif 2026. Both packages are PAU's copyright. This repository contains only short paraphrased notes with page references, not the documents themselves, and the notes should be checked against the current edition.
 - Photo-check evaluation: John Innes Centre, Wheat disease images (small dataset), Zenodo record 7573133, associated with Long et al., Plant Pathology, 2023 (doi:10.1111/ppa.13684). The photos are used only for evaluation and are not included here.
 - Map tiles: OpenStreetMap contributors
+- 7-day forecast: Open-Meteo, https://open-meteo.com/
 ## Author
 
 Sourav Yadav
