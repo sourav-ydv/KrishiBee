@@ -6,20 +6,21 @@ KrishiBee is a browser client and a small HTTP API. The client holds the map, th
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    box/.style={draw, rounded corners, align=center, minimum height=0.9cm, font=\small, inner sep=4pt},
+    node distance=0.85cm and 1.1cm,
+    box/.style={draw, rounded corners, align=center, minimum height=1cm, font=\small, inner sep=5pt},
     arr/.style={-{Stealth}, thick}
 ]
     \node[box] (ui) {React client\\ map, calendar, photos};
-    \node[box, below=0.7cm of ui] (api) {FastAPI\\ depth, chat, photo check};
-    \node[box, below left=0.8cm and 0.2cm of api] (soil) {SoilGrids\\ and cache};
-    \node[box, below=0.8cm of api] (power) {NASA POWER\\ climatology};
-    \node[box, below right=0.8cm and 0.2cm of api] (groq) {Groq\\ text and vision};
-    \node[box, right=0.9cm of ui] (meteo) {Open-Meteo\\ 7-day forecast};
+    \node[box, right=of ui] (meteo) {Open-Meteo\\ 7-day forecast};
+    \node[box, below=of ui] (api) {FastAPI\\ depth, chat, photo check};
+    \node[box, below left=of api] (soil) {SoilGrids\\ and cache};
+    \node[box, below=of api] (power) {NASA POWER\\ climatology};
+    \node[box, below right=of api] (groq) {Groq\\ text and vision};
     \draw[arr] (ui) -- (api);
+    \draw[arr] (ui) -- (meteo);
     \draw[arr] (api) -- (soil);
     \draw[arr] (api) -- (power);
     \draw[arr] (api) -- (groq);
-    \draw[arr] (ui) -- (meteo);
 \end{tikzpicture}
 \caption{The client calls the API for depth, chat and photo check. The week forecast is requested by the browser.}
 \label{fig:arch}
@@ -38,16 +39,18 @@ AgroDynamicNet has three branches, each ending in a 32-unit representation. The 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    box/.style={draw, rounded corners, align=center, font=\small, minimum width=3.4cm, minimum height=0.85cm},
+    node distance=0.55cm and 1.8cm,
+    box/.style={draw, rounded corners, align=center, font=\small, minimum width=5.2cm, minimum height=0.85cm, inner sep=4pt},
+    mergebox/.style={draw, rounded corners, align=center, font=\small, minimum width=3.6cm, minimum height=0.95cm},
     arr/.style={-{Stealth}, thick}
 ]
     \node[box] (s) {Soil features $\rightarrow$ 32};
-    \node[box, below=0.35cm of s] (w) {Weather features $\rightarrow$ 32};
-    \node[box, below=0.35cm of w] (c) {Crop and state embeddings $\rightarrow$ 32};
-    \node[box, right=1.3cm of w] (m) {Merge $\rightarrow$ 64 $\rightarrow$ 32 $\rightarrow$ cm};
-    \draw[arr] (s.east) -- (m.north west);
+    \node[box, below=of s] (w) {Weather features $\rightarrow$ 32};
+    \node[box, below=of w] (c) {Crop and state embeddings $\rightarrow$ 32};
+    \node[mergebox, right=of w] (m) {Merge\\ 64 $\rightarrow$ 32 $\rightarrow$ cm};
+    \draw[arr] (s.east) -- (m.north);
     \draw[arr] (w.east) -- (m.west);
-    \draw[arr] (c.east) -- (m.south west);
+    \draw[arr] (c.east) -- (m.south);
 \end{tikzpicture}
 \caption{AgroDynamicNet. Any branch can be replaced by zeros for the ablation. There is no recurrent layer, because the weather input is one climatology vector per season.}
 \label{fig:net}
@@ -61,7 +64,7 @@ Notes live in JSON, one file per crop. A note has an identifier, a crop, a topic
 The system instruction tells the model to use a number only when it appears in those notes, to avoid pesticide and fertiliser doses from memory, and to send the farmer to the KVK when the notes are silent. The API returns the sources separately, so the page can render them even if the prose forgets to. Weak matches are dropped rather than passed in as if they were evidence. Crops with no file produce an up-front notice instead of a pretended answer.
 
 \section{Crop Calendar}
-The calendar is a table, not a model. For each of wheat, chickpea, mustard and rice, \texttt{schedules.json} stores tasks with a start and end counted from the entered date, or a calendar date such as the opening of yellow-rust scouting. Wheat irrigation has variants: the interval depends on whether sowing was in October, early November, late November or December. A task can share the window of another task, which is how the urea applications stay tied to the irrigations. Rice uses the entered date as transplanting, and the direct-seeded timings are written in the task note.
+The calendar is a table, not a model. For each of wheat, chickpea, mustard and rice, the file \path{schedules.json} stores tasks with a start and end counted from the entered date, or a calendar date such as the opening of yellow-rust scouting. Wheat irrigation has variants: the interval depends on whether sowing was in October, early November, late November or December. A task can share the window of another task, which is how the urea applications stay tied to the irrigations. Rice uses the entered date as transplanting, and the direct-seeded timings are written in the task note.
 
 A task is due when today falls inside its window, upcoming before that, and passed after the window plus a grace period. The farmer can mark a task done. The plan is stored under one browser key. Removing the plan clears the photographs as well.
 
@@ -73,13 +76,14 @@ The ResNet18 path is independent. The image is decoded, resized to $224 \times 2
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    box/.style={draw, rounded corners, align=center, font=\small, minimum width=3.6cm, minimum height=0.8cm},
+    node distance=1.05cm and 0.7cm,
+    box/.style={draw, rounded corners, align=center, font=\small, minimum width=4.3cm, minimum height=1cm, inner sep=4pt},
     arr/.style={-{Stealth}, thick}
 ]
     \node[box] (photo) {Wheat photograph};
-    \node[box, below left=0.7cm and 0.1cm of photo] (groq) {Vision model\\ IDs from 14 PAU problems};
-    \node[box, below right=0.7cm and 0.1cm of photo] (net) {ResNet18\\ 5 classes, withhold below 0.8};
-    \node[box, below=1.5cm of photo] (out) {Both shown\\ neither replaces the other};
+    \node[box, below left=of photo] (groq) {Vision model\\ IDs from 14 PAU problems};
+    \node[box, below right=of photo] (net) {ResNet18\\ 5 classes, withhold below 0.8};
+    \node[box, below=1.35cm of photo] (out) {Both shown\\ neither replaces the other};
     \draw[arr] (photo) -- (groq);
     \draw[arr] (photo) -- (net);
     \draw[arr] (groq) -- (out);

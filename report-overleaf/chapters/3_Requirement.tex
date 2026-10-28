@@ -20,18 +20,19 @@ The primary user is a farmer who needs a sowing depth for a field, a dated list 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    box/.style={draw, rounded corners, align=center, minimum width=3.3cm, minimum height=1cm, font=\small},
+    node distance=1.4cm and 2.1cm,
+    box/.style={draw, rounded corners, align=center, minimum width=4.4cm, minimum height=1.05cm, font=\small, inner sep=6pt},
     arr/.style={-{Stealth}, thick}
 ]
     \node[box] (farmer) {Farmer};
-    \node[box, right=1.1cm of farmer] (app) {KrishiBee};
-    \node[box, above right=0.4cm and 1.1cm of app] (kvk) {KVK / package};
-    \node[box, below right=0.4cm and 1.1cm of app] (models) {Depth net\\ and ResNet18};
-    \draw[arr] (farmer) -- node[above, font=\scriptsize] {field, date, photo} (app);
-    \draw[arr] (app) -- node[above, font=\scriptsize, sloped] {sourced answer} (kvk);
-    \draw[arr] (app) -- node[below, font=\scriptsize, sloped] {score beside the rule} (models);
+    \node[box, right=of farmer] (app) {KrishiBee};
+    \node[box, right=of app] (kvk) {KVK / package};
+    \node[box, below=of app] (models) {Depth net and ResNet18};
+    \draw[arr] (farmer) -- (app);
+    \draw[arr] (app) -- (kvk);
+    \draw[arr] (app) -- (models);
 \end{tikzpicture}
-\caption{The farmer acts on KrishiBee. The package and the KVK remain the authority for practice. The models supply a depth and a wheat-photo score, each shown with its limit.}
+\caption{The farmer sends a field, a date, or a photograph to KrishiBee. The package and the KVK remain the authority for practice. The models supply a depth and a wheat-photo score, each shown with its limit.}
 \label{fig:stakeholders}
 \end{figure}
 
@@ -42,7 +43,8 @@ Table~\ref{tab:fr} lists the behaviours the deployed system is required to provi
 \centering
 \caption{Functional requirements.}
 \label{tab:fr}
-\begin{tabular}{lp{0.72\textwidth}}
+\small
+\begin{tabularx}{\textwidth}{lX}
 \toprule
 \textbf{ID} & \textbf{Requirement} \\
 \midrule
@@ -55,7 +57,7 @@ FR6 & On a wheat plan, match a photograph only to identifiers in the PAU problem
 FR7 & Withhold the ResNet18 name when the calibrated probability is below 0.8. \\
 FR8 & After a field is chosen, show seven days of rain and temperature and name the next open task on a saved plan. \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \section{Non-Functional Requirements}

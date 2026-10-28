@@ -77,6 +77,7 @@ ResNet18 and MobileNetV3-Small were fine-tuned on the other 959 images. The pilo
 \centering
 \caption{Five-seed classifier results. Pilot columns count the 30 diseased and 10 healthy held-out photographs. Macro-F1 is on the 144-image test split.}
 \label{tab:clf}
+\small
 \begin{tabular}{lrrrr}
 \toprule
 \textbf{Model} & \textbf{Accuracy} & \textbf{Macro-F1} & \textbf{Pilot, first} & \textbf{Pilot, healthy} \\
@@ -112,12 +113,12 @@ The 40-image pilot has no septoria folder. Septoria remains one of the five clas
 
 The powdery-mildew case is the important row. The top class matches the folder and the page still refuses to name it. On that same photograph the PAU-list path described white floury spots and matched powdery mildew. The two paths are allowed to disagree in confidence. The farmer sees both.
 
-\screenshot{figures/photo-named.png}{Photo check on a brown-rust pilot image. The ResNet18 name is shown because the probability is above 0.8. Replace the placeholder by exporting this screen from the live site.}{fig:photo-named}
+\screenshot{figures/photo-named.png}{Photo check on a brown-rust pilot image. The ResNet18 name is shown because the probability is above 0.8.}{fig:photo-named}
 
 \screenshot{figures/photo-withheld.png}{Photo check on the powdery-mildew pilot image. The top class is correct and the probability is 0.606, so the name is withheld.}{fig:photo-withheld}
 
 \section{Screens of the Deployed Advisor}
-The following figures are part of the result in the sense that the requirements in Table~\ref{tab:fr} are claims about a running site. Export them from \url{https://krishi-bee.vercel.app} after the API has woken, and drop the files into \texttt{figures/} under the names in the captions.
+The following figures record the requirements in Table~\ref{tab:fr} on the running site at \url{https://krishi-bee.vercel.app}.
 
 \screenshot{figures/depth.png}{Depth advisor for wheat in Punjab. The card shows the network depth, the rule depth and the 4--6\,cm range together.}{fig:depth}
 

@@ -12,33 +12,29 @@
 \usepackage[table,xcdraw]{xcolor}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{fouriernc}
 \usepackage{subcaption}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta, positioning, fit}
+\usetikzlibrary{arrows.meta, positioning}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 \usepackage{longtable}
 \usepackage[nottoc]{tocbibind}
 \usepackage{url}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{enumitem}
-\usepackage{hyperref}
-
-\hypersetup{
-    colorlinks=true,
-    linkcolor=black,
-    citecolor=black,
-    urlcolor=blue
-}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage[hidelinks]{hyperref}
 
 \newcommand{\includelogo}[2][5cm]{%
     \IfFileExists{#2}{%
         \includegraphics[width=#1]{#2}%
     }{%
-        \fbox{\parbox{#1}{\centering\vspace{8mm}Place the institute logo at\\ \texttt{#2}\vspace{8mm}}}%
+        \fbox{\parbox{#1}{\centering\vspace{8mm}Institute logo\vspace{8mm}}}%
     }%
 }
 
@@ -48,7 +44,7 @@
         \IfFileExists{#1}{%
             \includegraphics[width=0.92\textwidth]{#1}%
         }{%
-            \fbox{\parbox{0.88\textwidth}{\centering\vspace{14mm}Screenshot to be inserted\\ \texttt{#1}\vspace{14mm}}}%
+            \fbox{\parbox{0.88\textwidth}{\centering\vspace{16mm}Live screen to be placed here\vspace{16mm}}}%
         }%
         \caption{#2}
         \label{#3}
@@ -61,40 +57,49 @@
     \centering
     \vspace*{\baselineskip}
     \vspace{0.75\baselineskip}
-    {\LARGE KrishiBee: A Machine-Learning Farm Advisory\\[0.4em] for Sowing Depth and Wheat Disease Screening}
+
+    {\LARGE KrishiBee: A Machine-Learning Farm Advisory for Sowing Depth and Wheat Disease Screening}
+
     \vspace{0.75\baselineskip}
     \vspace{2\baselineskip}
+
     A report submitted for the course named Project-II (CSXXXX)
+
     \vspace*{5\baselineskip}
+
     Submitted By
+
     \vspace{0.5\baselineskip}
-    {\scshape\Large Sourav Yadav\\ Semester~VII\\ 230101043\\ \normalsize sour230101043@iiitmanipur.ac.in}
+
+    {\scshape\Large Sourav Yadav\\ SEMESTER -- 7th \\ 230101043}
+
     \vspace{0.5\baselineskip}
+
     Under the Guidance of
+
     \vspace{0.5\baselineskip}
-    {\scshape\Large Dr.\ Rajkumari Bidyalakshmi Devi}
+
+    {\scshape\Large Dr.\ Rajkumari Bidyalakshmi Devi\\ \small (Department of Computer Science and Engineering, IIIT Manipur)}
+
     \vspace{0.5\baselineskip}
     \vfill
+
     \begin{center}
         \includelogo{figures/iiitmanipur.png}
     \end{center}
-    {\scshape\small Department of Computer Science and Engineering\\ Indian Institute of Information Technology Senapati, Manipur\\ November 2026}
+
+    {\scshape\small Department of Computer Science and Engineering\\ Indian Institute of Information Technology Senapati, Manipur\\ November, 2026}
 \end{titlepage}
 
 \begin{center}
     {\LARGE \textbf{Declaration}}
 \end{center}
 
-I hereby declare that the project work entitled ``KrishiBee: A Machine-Learning Farm Advisory for Sowing Depth and Wheat Disease Screening'' has been carried out by me under the supervision of Dr.\ Rajkumari Bidyalakshmi Devi, Assistant Professor, Department of Computer Science and Engineering, IIIT Senapati, Manipur.
+In this submission, I have expressed my idea in my own words, and I have adequately cited and referenced any ideas or words that were taken from another source. I also declare that I adhere to all principles of academic honesty and integrity and that I have not misrepresented or falsified any ideas, data, facts, or sources in this submission. If any violation of the above is made, I understand that the institute may take disciplinary action. Such a violation may also engender disciplinary action from the sources which were not properly cited or permission not taken when needed.
 
-In this submission, I have expressed my idea in my own words, and I have adequately cited and referenced any ideas or words that were taken from another source. I also declare that I adhere to all principles of academic honesty and integrity and that I have not misrepresented or falsified any ideas, data, facts, or sources in this submission. I affirm that this project report has not been submitted, either in part or in full, for the award of any other degree or diploma. If any violation of the above is made, I understand that the institute may take disciplinary action.
-
-\vspace{1.2cm}
-\hspace{7cm} Sourav Yadav \\
-\vspace{0.4cm}
-\hspace{7cm} 230101043 \\
-\vspace{0.8cm}
-\hspace{7cm} Date: 05-November-2026
+\vspace{1cm}\hspace{7cm} SOURAV YADAV \\
+\vspace{1cm}\hspace{9cm} 230101043 \\
+\vspace{1cm}\hspace{9cm} DATE:
 
 \newpage
 
@@ -102,7 +107,7 @@ In this submission, I have expressed my idea in my own words, and I have adequat
     \thispagestyle{empty}
     \begin{table}
         \centering
-        \includelogo[2.2cm]{figures/iiitmanipur.png}\\[0.4cm]
+        \includelogo[1.8cm]{figures/iiitmanipur.png}\\[0.3cm]
         \begin{tabular}{l}
             Department of Computer Science and Engineering \\
             Indian Institute of Information Technology Senapati, Manipur \\
@@ -113,22 +118,22 @@ In this submission, I have expressed my idea in my own words, and I have adequat
     Dr.\ Rajkumari Bidyalakshmi Devi
     \hspace*{\fill} Email: \href{mailto:bidyalakshmi@iiitmanipur.ac.in}{bidyalakshmi@iiitmanipur.ac.in}\\
     Assistant Professor
-    \hspace*{\fill} Contact No: +91-7005126046\\[1.6cm]
+    \hspace*{\fill} Contact No: +91-7005126046\\[1.1cm]
 
-    {\Huge \textbf{\emph{To Whom It May Concern}}}\\[1.4cm]
+    {\LARGE \textbf{\emph{To Whom It May Concern}}}\\[0.9cm]
 
     \large
-    This is to certify that the project report entitled \textbf{``KrishiBee: A Machine-Learning Farm Advisory for Sowing Depth and Wheat Disease Screening''}, submitted to the Department of Computer Science and Engineering, Indian Institute of Information Technology Senapati, Manipur, in partial fulfilment of the requirements for the award of the degree of Bachelor of Technology in Computer Science and Engineering, is a record of bona fide work carried out by \textbf{Sourav Yadav}, bearing roll number \textbf{230101043}.
+    This is to certify that the project report entitled \textbf{``KrishiBee: A Machine-Learning Farm Advisory for Sowing Depth and Wheat Disease Screening,''} submitted to the Department of Computer Science and Engineering, Indian Institute of Information Technology Senapati, Manipur, in partial fulfilment of the requirements for the award of the degree of Bachelor of Technology in Computer Science and Engineering, is a record of bona fide work carried out by \textbf{Sourav Yadav}, bearing roll number 230101043.
 
-    \vspace{1.6cm}
-    \hspace*{2.4in} Signature of Faculty Advisor\\[0.3cm]
-    \hspace*{2.3in} \textbf{(Dr.\ Rajkumari Bidyalakshmi Devi)}\\[0.8cm]
+    \vspace{1.1cm}
+    \hspace*{2.2in} Signature of Faculty Advisor\\[0.25cm]
+    \hspace*{1.7in} \textbf{(Dr.\ Rajkumari Bidyalakshmi Devi)}\\[0.45cm]
 \end{center}
 
-Signature of the Examiner 1 \dotfill\\[0.8cm]
-Signature of the Examiner 2 \dotfill\\[0.8cm]
-Signature of the Examiner 3 \dotfill\\[0.8cm]
-Signature of the Examiner 4 \dotfill\\[0.8cm]
+Signature of the Examiner 1 \dotfill\\[0.55cm]
+Signature of the Examiner 2 \dotfill\\[0.55cm]
+Signature of the Examiner 3 \dotfill\\[0.55cm]
+Signature of the Examiner 4 \dotfill
 
 \newpage
 

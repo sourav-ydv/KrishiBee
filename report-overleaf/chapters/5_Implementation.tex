@@ -3,7 +3,7 @@
 \section{Development Environment}
 Training was done in Python with PyTorch, scikit-learn and XGBoost. The API dependency file is shorter: FastAPI, Uvicorn, a CPU build of PyTorch and TorchVision, pandas, requests and Pydantic. The client is React, bundled with Vite, with Leaflet for the map and Axios for the API. Photographs are stored with the browser's IndexedDB. Versions are pinned for the torch packages in the deploy file so the hosted build does not drift.
 
-Locally, the API is started with \texttt{uvicorn api.main:app --reload --port 8000} after \texttt{GROQ\_API\_KEY} is set in the shell. The client reads \texttt{VITE\_API\_BASE} and otherwise uses \texttt{http://localhost:8000}. A separate flag, \texttt{DIAGNOSE\_DISABLE\_LIMITS}, turns off the in-memory photo-check cap for a local evaluation only. It is not set on the host.
+Locally, the API is started with \path{uvicorn api.main:app --reload --port 8000} after \path{GROQ_API_KEY} is set in the shell. The client reads \texttt{VITE\_API\_BASE} and otherwise uses \texttt{http://localhost:8000}. A separate flag, \texttt{DIAGNOSE\_DISABLE\_LIMITS}, turns off the in-memory photo-check cap for a local evaluation only. It is not set on the host.
 
 \section{Data and Training Programs}
 \texttt{scripts/collect\_soil\_data.py} and \texttt{scripts/collect\_weather\_data.py} write the raw point tables. \texttt{scripts/synthesize\_dataset.py} joins them to crops and applies the rule engine. \texttt{scripts/validate\_dataset.py} checks the joined table. \texttt{scripts/prepare\_final\_dataset.py} writes the train, validation and test splits and the scaler. \texttt{scripts/train\_baseline\_models.py} fits Random Forest and XGBoost. \texttt{scripts/train\_nn.py} fits AgroDynamicNet, including the branch ablations. Repeated seeds write a report per seed and do not overwrite the weights the API loads.
@@ -13,7 +13,7 @@ Locally, the API is started with \texttt{uvicorn api.main:app --reload --port 80
 \texttt{scripts/sample\_eval.py} draws the 40-image pilot, ten images each of yellow rust, brown rust, powdery mildew and healthy leaves. Septoria is one of the five training classes and is not in the pilot folders. \texttt{scripts/eval\_diagnose.py} sends the pilot through the photo-check endpoint once, without any change to the prompt in response to the scores.
 
 \section{API Modules}
-\texttt{api/main.py} loads AgroDynamicNet, exposes \texttt{/health}, \texttt{/crops}, \texttt{/predict} and \texttt{/predict\_by\_location}, and includes the other routers. \texttt{/predict} accepts soil and weather fields directly, which is how a developer can bypass the live lookups. \texttt{/predict\_by\_location} is what the page uses.
+\path{api/main.py} loads AgroDynamicNet. It exposes \path{/health}, \path{/crops}, \path{/predict} and \path{/predict_by_location}, and includes the other routers. \texttt{/predict} accepts soil and weather fields directly, which is how a developer can bypass the live lookups. \texttt{/predict\_by\_location} is what the page uses.
 
 \texttt{api/retrieval.py} tokenises notes, expands the Hindi and Hinglish map, and ranks with BM25. \texttt{api/chat.py} applies the rate limit, builds the prompt and returns the answer with the notes that were used. \texttt{api/diagnose.py} loads the problem list, calls the vision model, filters identifiers, and, when the crop is wheat, calls \texttt{api/wheat\_classifier.py}. That module decodes the image, applies the ImageNet transform, scales the logits by the stored temperature, and sets \texttt{abstained} when the top probability is below 0.8. \texttt{api/forecast.py} is the server-side forecast used in local tests. The page no longer calls it.
 
@@ -31,7 +31,8 @@ Table~\ref{tab:storage} is the privacy boundary of the system. It is also the re
 \centering
 \caption{Where each piece of farmer data lives.}
 \label{tab:storage}
-\begin{tabular}{lp{0.62\textwidth}}
+\small
+\begin{tabularx}{\textwidth}{lX}
 \toprule
 \textbf{Data} & \textbf{Where it is kept} \\
 \midrule
@@ -42,7 +43,7 @@ Field photographs & IndexedDB on the device, long side at most 1280\,px \\
 Last map point & \texttt{localStorage}, so the forecast can reload \\
 Groq credential & Host environment variable, not in the repository \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \section{Repository Layout}
