@@ -30,6 +30,7 @@ Thumbs.db
 models/*.pkl
 models/*.pt
 !models/agrodynamicnet_combined.pt
+!models/wheat_classifier_resnet18_seed0.pt
 
 frontend/node_modules/
 frontend/dist/

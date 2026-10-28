@@ -13,6 +13,22 @@ export default function DiagnosisResult({ result, onClose }) {
 
       <p className="diagnosis-message">{data.message}</p>
 
+      {data.classifier && (
+        <div className="classifier-result">
+          <h5>Trained wheat network</h5>
+          {data.classifier.abstained ? (
+            <p>
+              Not confident enough to name it. Top guess was {data.classifier.label} at {Math.round(data.classifier.probability * 100)}%.
+            </p>
+          ) : (
+            <p>
+              {data.classifier.label}, {Math.round(data.classifier.probability * 100)}% after calibration.
+            </p>
+          )}
+          <p>{data.classifier.note}</p>
+        </div>
+      )}
+
       {data.candidates.map((c, i) => (
         <div key={c.id} className="candidate">
           <div className="candidate-top">
@@ -31,8 +47,8 @@ export default function DiagnosisResult({ result, onClose }) {
       <p className="diagnosis-warning">
         The AI can be wrong. In a small pilot on public photos from the UK and Ireland it named the right disease first
         in about 2 of 3 cases, and it has not been tested in Punjab fields. Use this only as a prompt to look closer,
-        and confirm with your KVK before spraying anything. The photo is sent to Groq's AI service for analysis
-        and is not stored by KrishiBee.
+        and confirm with your KVK before spraying anything. The trained network scores the photo on the KrishiBee
+        server. Groq is still used for the PAU list. The photo is not stored by KrishiBee.
       </p>
     </div>
   );

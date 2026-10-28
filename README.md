@@ -72,7 +72,7 @@ This is a small pilot, not a validation. The only photo evidence is the 40-photo
 |---|---:|---:|---:|---:|
 | ResNet18 | 89.4% ± 2.2% | 0.880 ± 0.023 | 25.2 ± 1.3 of 30 | 9 of 10 on every seed |
 | MobileNetV3-Small | 75.3% ± 1.9% | 0.735 ± 0.015 | 24.4 ± 1.8 of 30 | 8.8 ± 0.4 of 10 |
-On this pilot the vision model’s 20 of 30 sits below both means. That comparison favours the classifiers: they trained on the same dataset the pilot photos come from, and the vision model did not. With 30 diseased photos the gap is suggestive. Abstaining below a calibrated confidence of 0.8 keeps roughly 70% of the ResNet18 test photos and puts their accuracy near 95%. Neither classifier is wired into the app. The seed reports are data/processed/classifier_multiseed_resnet18.txt and data/processed/classifier_multiseed_mobilenet_v3_small.txt.
+On this pilot the vision model’s 20 of 30 sits below both means. That comparison favours the classifiers: they trained on the same dataset the pilot photos come from, and the vision model did not. With 30 diseased photos the gap is suggestive. Abstaining below a calibrated confidence of 0.8 keeps roughly 70% of the ResNet18 test photos and puts their accuracy near 95%. The wheat photo check reports the seed-0 ResNet18 class beside the PAU list. A calibrated probability below 0.8 is shown as not confident enough to name. MobileNetV3-Small is not in the app. The seed reports are data/processed/classifier_multiseed_resnet18.txt and data/processed/classifier_multiseed_mobilenet_v3_small.txt.
 
 ## Tech stack
 
@@ -164,7 +164,6 @@ These scores measure agreement with the rule engine, not with field outcomes. R�
 ## Future work
 
 - A depth interval from an ensemble and split conformal prediction, with coverage stated against the rule labels
-- Putting the trained classifier inside photo check, after a memory check on the 512 MB server
 - A retrieval comparison of BM25 against embeddings
 - Accounts and cloud sync so a plan and its photos follow the farmer across devices
 - Sourced schedules and notes for maize, pearl millet, soybean and pigeon pea
