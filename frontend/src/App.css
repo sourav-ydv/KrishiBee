@@ -25,10 +25,18 @@ header h1 {
   margin-bottom: 4px;
 }
 
-.main-grid {
+.advisor {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 24px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.advisor-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
 }
 
 .map-panel {
@@ -141,7 +149,7 @@ header h1 {
 }
 
 @media (max-width: 800px) {
-  .main-grid {
+  .advisor {
     grid-template-columns: 1fr;
   }
 }
@@ -379,7 +387,7 @@ header h1 {
   }
 }
 
-.main-grid[hidden] {
+.advisor[hidden] {
   display: none;
 }
 
