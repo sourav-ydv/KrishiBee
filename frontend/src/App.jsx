@@ -4,6 +4,7 @@ import PredictionForm from "./components/PredictionForm";
 import ResultsCard, { ResultsSkeleton } from "./components/ResultsCard";
 import ChatPanel from "./components/ChatPanel";
 import CropTracker from "./components/CropTracker";
+import ForecastCard, { saveField } from "./components/ForecastCard";
 import { predictByLocation } from "./api";
 import "leaflet/dist/leaflet.css";
 import "./App.css";
@@ -29,7 +30,10 @@ export default function App() {
   const [lastPayload, setLastPayload] = useState(null);
   const [view, setView] = useState("advisor");
 
-  const handleSelect = (lat, lng) => setPosition([lat, lng]);
+  const handleSelect = (lat, lng) => {
+    setPosition([lat, lng]);
+    saveField(lat, lng);
+  };
 
   const runPrediction = async (payload) => {
     setLoading(true);
@@ -87,6 +91,7 @@ export default function App() {
 
         <div className="side-panel">
           <PredictionForm position={position} onSubmit={runPrediction} loading={loading} />
+          {position && <ForecastCard latitude={position[0]} longitude={position[1]} />} 
 
           {error && (
             <div className="error-box">
